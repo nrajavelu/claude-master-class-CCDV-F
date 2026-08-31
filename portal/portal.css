@@ -170,6 +170,29 @@ footer{background:var(--navy-950); color:var(--ink-300); padding:40px 0; font-si
 footer .wrap{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap}
 footer a{color:var(--cyan-300)}
 
+/* ---------- markdown reader (view.html) ---------- */
+.md-body{font-size:.96rem; color:var(--ink-900); line-height:1.65; padding-bottom:40px}
+.md-body h1{font-size:2.1rem; margin:.2em 0 .5em}
+.md-body h2{font-size:1.5rem; margin:1.6em 0 .5em; padding-bottom:.3em; border-bottom:1px solid var(--line)}
+.md-body h3{font-size:1.15rem; margin:1.4em 0 .4em; color:var(--ink-900)}
+.md-body h4{font-size:1rem; margin:1.2em 0 .3em; color:var(--ink-700)}
+.md-body p{margin:.7em 0}
+.md-body ul,.md-body ol{margin:.6em 0 .9em 1.4em}
+.md-body li{margin:.3em 0}
+.md-body li>input[type=checkbox]{margin-right:.5em; accent-color:var(--blue-500)}
+.md-body a{color:var(--blue-500); text-decoration:underline; text-underline-offset:2px}
+.md-body code{font-family:var(--font-mono); font-size:.85em; background:var(--paper-100); border:1px solid var(--line); border-radius:5px; padding:1px 5px}
+.md-body pre{background:#0b0d10; color:#d6e2f0; border:1px solid var(--navy-800); border-left:3px solid var(--blue-500); border-radius:10px; padding:14px 16px; overflow-x:auto; margin:1em 0}
+.md-body pre code{background:none; border:none; padding:0; color:inherit; font-size:.86rem}
+.md-body blockquote{margin:1em 0; padding:.4em 1em; border-left:3px solid var(--blue-400); background:var(--paper-100); border-radius:0 8px 8px 0; color:var(--ink-700)}
+.md-body blockquote p{margin:.4em 0}
+.md-body table{border-collapse:collapse; width:100%; margin:1em 0; font-size:.9rem; display:block; overflow-x:auto}
+.md-body th,.md-body td{border:1px solid var(--line); padding:8px 12px; text-align:left; vertical-align:top}
+.md-body th{background:var(--paper-100); font-family:var(--font-head); font-weight:600}
+.md-body tr:nth-child(even) td{background:var(--paper-50)}
+.md-body hr{border:none; border-top:1px solid var(--line); margin:2em 0}
+.md-body img{border-radius:8px; border:1px solid var(--line)}
+
 /* ---------- misc ---------- */
 .note{background:var(--paper-100); border:1px solid var(--line); border-radius:12px; padding:14px 18px; font-size:.9rem; color:var(--ink-700)}
 .note b{color:var(--ink-900)}

@@ -9,6 +9,7 @@ server code — plain HTML/CSS/JS. Works opened from disk **or** hosted.
 | `candidate.html` | candidates | Personal hub. `?c=Name` greets them and namespaces their progress (localStorage). Pre-work checklist + a card per day with per-lab tick-boxes + a progress bar. Internal links carry `?c=` forward. |
 | `trainer.html` | trainers | Links to every guide / deck / logistics doc / question file, **and a candidate-link generator** (paste a roster → get one personal link per candidate, copy or CSV). |
 | `practice.html` | everyone | Interactive exam-style questions from `questions.js` — pick, check, read the per-distractor rationale. Running score + per-domain tally, saved per candidate. Deep-links: `?day=1`, `?domain=D2`. |
+| `view.html` | everyone | **Markdown reader.** `view.html?f=../path/to/file.md` fetches the `.md` and renders it themed (headings, tables, code, task-lists). All `.md` links in the portal route through it. In-doc `.md` links open in the reader too. **Requires the portal to be served over http(s)** — see Hosting; on `file://` it shows the raw file instead. Uses `marked` from cdnjs. |
 | `portal.css` | — | Shared theme (Aizentify tokens, Sora/Inter, light with a dark hero). Uses the real logo in `../assets/`. |
 | `app.js` | — | Shared helpers: query params, per-candidate storage, checklist wiring, progress bars, `?c=` propagation. |
 | `questions.js` | — | The practice question bank as data. **Day 1 set (20 items) is in;** append Day 2–5 items in the same shape as those days are built. |
@@ -43,10 +44,18 @@ meant to be read in an editor during the session. The **decks** (`day1-foundatio
 and all portal pages render fully.
 
 ### Local (no hosting)
-Just open `portal/index.html` in a browser. Everything works; the trainer generator will
-produce `file://` links which also work on the same machine. For a shared local network,
-`python -m http.server` from the `aizentify-cdf-bootcamp/` folder and browse to
-`http://<your-ip>:8000/portal/`.
+Open `portal/index.html` directly and the landing / candidate / trainer / practice pages all
+work. **The Markdown reader (`view.html`) needs http**, though — Chrome blocks a `file://`
+page from reading sibling files. So for the full experience (rendered guides/quizzes) run a
+one-line server from the `aizentify-cdf-bootcamp/` folder:
+
+```
+python3 -m http.server 8000
+# then open  http://localhost:8000/portal/
+```
+
+Share on your LAN with `http://<your-ip>:8000/portal/`. Generate candidate links on
+`trainer.html` with that base URL.
 
 ---
 

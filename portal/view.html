@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reader · Aizentify CDF-F Bootcamp</title>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" data-keepc aria-label="Aizentify"></a>
+    <div class="links">
+      <a href="index.html" data-keepc>Overview</a>
+      <a href="candidate.html" data-keepc>Candidate portal</a>
+      <a href="trainer.html">Trainer</a>
+      <a href="practice.html" data-keepc>Practice</a>
+    </div>
+  </div>
+</nav>
+
+<section style="padding-top:28px">
+  <div class="wrap-narrow">
+    <p class="muted" style="font-family:var(--font-mono); font-size:.8rem"><a href="#" onclick="history.back();return false">&larr; back</a>
+      &nbsp;·&nbsp; <span id="path"></span></p>
+    <div id="md" class="md-body"><p class="muted">Loading…</p></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Aizentify · Claude Certified Developer – Foundations · © 2026 Aizentify LLP</span>
+    <span><a href="index.html" data-keepc>portal home</a></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  const f = AIZ.qp("f");
+  const target = document.getElementById("md");
+  document.getElementById("path").textContent = f || "(no file)";
+
+  if (!f) { target.innerHTML = '<p class="note">No file specified. Use <code>view.html?f=../path/to/file.md</code>.</p>'; return; }
+  if (location.protocol === "file:") {
+    target.innerHTML = '<p class="note"><b>Preview needs the portal to be served over http(s).</b> ' +
+      'Chrome blocks a page on <code>file://</code> from reading sibling files. ' +
+      'Run <code>python -m http.server</code> from <code>aizentify-cdf-bootcamp/</code> and open ' +
+      '<code>http://localhost:8000/portal/</code>, or publish via GitHub Pages. ' +
+      'Meanwhile, open the file directly: <a href="' + f + '">' + f + '</a></p>';
+    return;
+  }
+
+  const dir = f.replace(/[^/]*$/, "");  // dirname of f, keeps trailing slash
+
+  fetch(f).then(function (r) {
+    if (!r.ok) throw new Error(r.status + " " + r.statusText);
+    return r.text();
+  }).then(function (src) {
+    marked.setOptions({ gfm: true, breaks: false });
+    target.innerHTML = marked.parse(src);
+    // make in-doc links to other .md files open in this reader
+    target.querySelectorAll('a[href$=".md"]').forEach(function (a) {
+      const h = a.getAttribute("href");
+      if (/^https?:|^view\.html/.test(h)) return;
+      a.setAttribute("href", "view.html?f=" + encodeURIComponent(dir + h));
+    });
+    // carry candidate id forward on those
+    if (typeof AIZ.greet === "function") AIZ.greet();
+    document.title = (src.match(/^#\s+(.+)$/m) || [,"Reader"])[1] + " · Aizentify CDF-F";
+  }).catch(function (e) {
+    target.innerHTML = '<p class="note"><b>Could not load</b> <code>' + f + '</code> — ' + e.message +
+      '. Check the path, or open it directly: <a href="' + f + '">' + f + '</a></p>';
+  });
+})();
+</script>
+</body>
+</html>
