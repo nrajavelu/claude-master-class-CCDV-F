@@ -90,15 +90,29 @@ Multiple-response items tell you how many to select — select exactly that many
 
 ---
 
-## 4. Distractor patterns (name the bucket)
+## 4. Distractor species (name at least two before you answer)
 
-| Bucket | Tell | Examples |
+The question skeleton is **situation → symptom → ask**. Five wrong-answer species prowl the
+paper. On every practice item, **pick your answer, then name the species of ≥ 2 distractors
+before the reveal** — the real paper won't label them for you, and this reflex *is* the
+comfortable-pass feeling.
+
+| Species | Tell | Examples |
 |---|---|---|
-| **Stale API** | true of an older model/SDK | `budget_tokens`, `output_format`, assistant prefill, `temperature` on newest models, `claude-code-sdk`, `web_search_20250305` |
-| **Generic knob** | a dial that isn't built for the named constraint | "raise temperature", "bigger model", "lower `max_tokens`", "raise the timeout" |
-| **Guidance dressed as control** | words asking something to behave | "tell the model to ignore injected text", "write a setup doc", "ask users not to paste instructions" |
-| **Right word, wrong place** | correct term used incorrectly | a message with `role: "system"` (no such thing on the API); a WebSocket for streaming (it's SSE); your rules inside a `tool_result` |
+| **Overbuild** ⚑ | solves the problem with more machinery than it deserves — "building more feels like competence" | tool misrouting → "add a routing model / fine-tune" (fix: **better tool descriptions**); repeated-context cost → "re-architect the pipeline" (fix: **turn on caching**); fixed 3-step flow → "an autonomous agent with 12 tools" (fix: **a routed workflow**); truncation → "a second pass that stitches outputs" (fix: **raise the token cap**) |
+| **Symptom-treater** | patches the symptom, leaves the cause | "add *please respond correctly* to the prompt"; "make the summaries shorter" while the architecture wastes dollars; "a sterner system prompt saying ignore malicious instructions" |
+| **Extremist** | an all-or-nothing move | "refuse to process external content"; "manually review every record"; "switch providers" |
+| **True-but-irrelevant** | a correct statement that answers nothing asked | a real fact about agent frameworks / MCP independence, dropped where it decides nothing |
+| **Stale API** | true of an older model/SDK | `budget_tokens`, `output_format`, assistant prefill, `temperature` on newest models, `claude-code-sdk` |
+| **Right word, wrong place** | correct term used incorrectly | a message with `role:"system"`; a WebSocket for streaming (it's SSE); your rules inside a `tool_result` |
 | **Wrong system** | an OpenAI-ism | `function_call`, `content_filter`, `/v1/chat/completions`, `tool_call` as a `stop_reason` |
+
+> **The overbuild is the developer exam's specialty.** Engineers are the most vulnerable to
+> it. On this paper the **elegant minimal fix wins, consistently** — because in production
+> the elegant minimal fix is what a senior engineer actually ships.
+
+**When two answers both look right:** hunt the planted tie-breaker — a **constraint**:
+latency, budget, data sensitivity, or scale. It's always there.
 
 ---
 

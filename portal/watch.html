@@ -21,20 +21,16 @@
   </div>
 </nav>
 
-<header class="hero" style="padding:40px 0 44px">
+<header class="hero" style="padding:38px 0 42px">
   <div class="wrap">
     <div class="kicker">Video companion · in-page player</div>
     <h1 id="now">CCDV-F <span class="gradient">video</span></h1>
-    <p class="lead">Two series, played here — no trip to YouTube. Pick a chapter or an episode and it
-      loads in place.</p>
-    <div class="btn-row" style="margin-top:14px">
-      <button class="btn btn-primary" id="tab-walk">Exam walkthrough</button>
-      <button class="btn btn-light" id="tab-build">Build-along course</button>
-    </div>
+    <p class="lead">Three series, played here — no trip to YouTube. Pick a chapter or an episode.</p>
+    <div class="btn-row" id="tabs" style="margin-top:14px"></div>
   </div>
 </header>
 
-<section style="padding-top:24px">
+<section style="padding-top:22px">
   <div class="wrap">
     <div class="watch-grid">
       <div>
@@ -58,148 +54,168 @@
 <script src="app.js"></script>
 <script>
 (function () {
-  // ---------- data ----------
-  // A) the exam-strategy walkthrough: one video, 17 chapters (seek)
-  var WALK = {
-    vid: "Lan-CbQ2IKM",
-    blurb: "The CCDV-F exam walkthrough — four decisions + two elimination rules, built across one support-desk story.",
-    ch: [
-      [1,"Every Question Is One of Four Decisions",0,"method"],
-      [2,"One Ticket, One Call",597,"Day 1"],
-      [3,"Streaming, Vision, Thinking",1120,"Day 1 · 5"],
-      [4,"The Quarter That Isn't About Claude",1716,"Day 4"],
-      [5,"The Three Surfaces",2358,"Day 2 · 3"],
-      [6,"Same Repo, Three Different Claudes",3001,"Day 4 · 3"],
-      [7,"Asking Is Not Making Sure",3652,"Day 2"],
-      [8,"A Bigger Window Makes It Worse",4236,"Day 4"],
-      [9,"The Three Places a Call Can Break",4798,"Day 1 · 4"],
-      [10,"input_tokens Is Not Your Input",5442,"Day 1 · 5"],
-      [11,"Batch: Results in Any Order",6056,"Day 5"],
-      [12,"The Description Is the Interface",6710,"Day 2"],
-      [13,"An MCP Server Is Not a Bag of Tools",7363,"Day 3"],
-      [14,"Usually Fewer Agents",7979,"Day 3"],
-      [15,"Self-Hosted Is Not Air-Gapped",8654,"Day 3 · 5"],
-      [16,"The Attack Arrives as a Ticket",9319,"Day 5"],
-      [17,"Exam Day: Name the Decision First",10002,"method · Day 5"]
-    ]
+  // ---------- series data ----------
+  // type "chapters": one video, seek between markers.  type "episodes": one video per row, load.
+  var SERIES = {
+    walk: {
+      label: "Exam walkthrough", type: "chapters", vid: "Lan-CbQ2IKM",
+      blurb: "The CCDV-F exam walkthrough — four decisions + two elimination rules, one support-desk story.",
+      rows: [
+        [1,"Every Question Is One of Four Decisions",0,"method"],[2,"One Ticket, One Call",597,"Day 1"],
+        [3,"Streaming, Vision, Thinking",1120,"Day 1·5"],[4,"The Quarter That Isn't About Claude",1716,"Day 4"],
+        [5,"The Three Surfaces",2358,"Day 2·3"],[6,"Same Repo, Three Different Claudes",3001,"Day 4·3"],
+        [7,"Asking Is Not Making Sure",3652,"Day 2"],[8,"A Bigger Window Makes It Worse",4236,"Day 4"],
+        [9,"The Three Places a Call Can Break",4798,"Day 1·4"],[10,"input_tokens Is Not Your Input",5442,"Day 1·5"],
+        [11,"Batch: Results in Any Order",6056,"Day 5"],[12,"The Description Is the Interface",6710,"Day 2"],
+        [13,"An MCP Server Is Not a Bag of Tools",7363,"Day 3"],[14,"Usually Fewer Agents",7979,"Day 3"],
+        [15,"Self-Hosted Is Not Air-Gapped",8654,"Day 3·5"],[16,"The Attack Arrives as a Ticket",9319,"Day 5"],
+        [17,"Exam Day: Name the Decision First",10002,"method·Day 5"]
+      ]
+    },
+    guide: {
+      label: "Exam guide (blueprint)", type: "chapters",
+      vid: "REPLACE_WITH_GUIDE_VIDEO_ID",   // theAIBlueprint4all CCDV-F complete guide — paste the YouTube id
+      blurb: "Full v1.0 blueprint walkthrough: the weight trap (D2+D5 = half the exam), every domain, and the 4th distractor species — the OVERBUILD.",
+      rows: [
+        [0,"The Builder's Credential",0,"intro"],[0,"Who This Exam Is For",78,"audience"],
+        [0,"The Exam at a Glance",169,"mechanics"],[0,"The Blueprint, and the Trap",255,"weights"],
+        [0,"How Developer Questions Think (+ the overbuild)",361,"method"],[1,"D1 · Agents and Workflows",471,"Day 3"],
+        [2,"D2 · Applications + Integration",628,"Days 1·2·4"],[3,"D3 · Claude Code",935,"Day 3"],
+        [4,"D4 · Eval, Testing, Debugging",1006,"Days 1·4"],[5,"D5 · Model Selection + Optimization",1096,"Days 1·5"],
+        [6,"D6 · Prompt + Context Engineering",1299,"Days 2·4"],[7,"D7 · Security and Safety",1436,"Days 3·5"],
+        [8,"D8 · Tools and MCPs",1569,"Days 2·3"],[0,"Five Ways to Fail This Exam",1710,"study"],
+        [0,"Your Free Study Stack",1799,"study"],[0,"The Four-Week Build Plan",1874,"study"],
+        [0,"Exam Day, and the Road to Architect",1996,"exam day"]
+      ]
+    },
+    build: {
+      label: "Build-along course", type: "episodes",
+      blurb: "The hands-on build-along — one PR-review agent grown across the episodes; mirrors the epNN/ folders.",
+      rows: [
+        [0,"Course Overview","R3hHhqIOjA0","Start here"],[1,"Your First Agent on the Raw Messages API","RheXq2HKJmY","Day 1·Lab 4"],
+        [2,"Same Job on the Claude Agent SDK",null,"Day 3·M3"],[3,"Custom Tool: Docstring Coverage Checker",null,"Day 2·L2"],
+        [4,"Hooks & Guardrails",null,"Day 3·Lab 2"],[5,"Subagents & the Coordinator",null,"Day 3·Lab 1"],
+        [6,"Memory, Sessions & Context That Survives",null,"Day 4·M6"],[7,"Structured Output You Can Trust",null,"Day 2·L3"],
+        [8,"Skills: Reusable Agent Capabilities",null,"Day 3·M6"],[9,"MCP in the Real World",null,"Day 3·Lab 4"],
+        [10,"Choosing Your Model",null,"Day 5·M1"],[11,"Cost, Tokens & Reliability in Production",null,"Day 5·M2"],
+        [12,"Managed Agents",null,"Day 5"]
+      ]
+    }
   };
-  // B) the hands-on build-along course: one video PER episode.
-  //    Paste the YouTube id for each as they're confirmed (playlist not yet mapped).
-  var BUILD = {
-    blurb: "The hands-on build-along — one PR-review agent grown across the episodes; mirrors the epNN/ folders in the parent repo.",
-    ep: [
-      [0,  "Course Overview",                              "R3hHhqIOjA0", "—",     "Start here"],
-      [1,  "Your First Agent on the Raw Messages API",     "RheXq2HKJmY", "ep01",  "Day 1 · Lab 4"],
-      [2,  "Same Job on the Claude Agent SDK",             null,          "ep02",  "Day 3 · M3"],
-      [3,  "Custom Tool: Docstring Coverage Checker",      null,          "ep03",  "Day 2 · L2 / Day 3"],
-      [4,  "Hooks & Guardrails",                           null,          "ep04",  "Day 3 · M4 · Lab 2"],
-      [5,  "Subagents & the Coordinator",                  null,          "ep05",  "Day 3 · M5 · Lab 1"],
-      [6,  "Memory, Sessions & Context That Survives",     null,          "ep06",  "Day 4 · M5-6"],
-      [7,  "Structured Output You Can Trust",              null,          "ep07",  "Day 2 · L3"],
-      [8,  "Skills: Reusable Agent Capabilities",          null,          "ep08",  "Day 3 · M6 / Day 4"],
-      [9,  "MCP in the Real World",                        null,          "ep09",  "Day 3 · M7 · Lab 4"],
-      [10, "Choosing Your Model",                          null,          "ep10",  "Day 5 · M1"],
-      [11, "Cost, Tokens & Reliability in Production",     null,          "ep11",  "Day 5 · M2-5"],
-      [12, "Managed Agents",                               null,          "ep12",  "Day 5 · M... "]
-    ]
-  };
+  var ORDER = ["walk", "guide", "build"];
+  var DEFAULT_VID = { walk: "Lan-CbQ2IKM", guide: "Lan-CbQ2IKM", build: "RheXq2HKJmY" };
 
   function fmt(s){var h=(s/3600)|0,m=((s%3600)/60)|0,x=s%60;return (h?h+":":"")+(h&&m<10?"0":"")+m+":"+(x<10?"0":"")+x;}
   function esc(t){return String(t).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+  function missing(id){return !id || /^REPLACE_/.test(id);}
 
   // ---------- state ----------
-  var series = (AIZ.qp("s") === "build") ? "build" : "walk";
+  var key = (function(){var s=AIZ.qp("s"); return SERIES[s] ? s : "walk";})();
   var startT = parseInt(AIZ.qp("t") || "", 10);
   var epN = parseInt(AIZ.qp("e") || "", 10);
-  var lp  = parseInt(AIZ.qp("l") || "", 10);
-  if (isNaN(startT) && !isNaN(lp)) { var r = WALK.ch.find(function(x){return x[0]===lp;}); if (r) startT = r[2]; }
+  var lp = parseInt(AIZ.qp("l") || "", 10);
+  if (isNaN(startT) && !isNaN(lp)) { var r = SERIES.walk.rows.find(function(x){return x[0]===lp;}); if (r) startT = r[2]; }
   if (isNaN(startT)) startT = 0;
 
   var player=null, ready=false, curVid=null;
 
   window.onYouTubeIframeAPIReady = function () {
-    var v = (series === "build") ? currentBuildVid() : WALK.vid;
-    curVid = v;
+    var S = SERIES[key];
+    curVid = (S.type === "episodes") ? currentEpVid() : (missing(S.vid) ? DEFAULT_VID[key] : S.vid);
     player = new YT.Player("player", {
-      videoId: v,
-      host: "https://www.youtube-nocookie.com",
-      playerVars: { start: (series==="walk"?startT:0), rel:0, modestbranding:1, playsinline:1 },
-      events: { onReady: function(){ ready = true; sync(); },
-                onStateChange: function(){ sync(); } }
+      videoId: curVid, host: "https://www.youtube-nocookie.com",
+      playerVars: { start: (S.type === "chapters" ? startT : 0), rel:0, modestbranding:1, playsinline:1 },
+      events: { onReady: function(){ ready = true; sync(); }, onStateChange: function(){ sync(); } }
     });
   };
-  var s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api";
-  document.head.appendChild(s);
+  var s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(s);
 
-  function currentBuildEp(){ return BUILD.ep.find(function(r){return r[0]===epN;}) || BUILD.ep[1]; }
-  function currentBuildVid(){ var e=currentBuildEp(); return e[2] || "RheXq2HKJmY"; }
+  function currentEpRow(){ return SERIES.build.rows.find(function(r){return r[0]===epN;}) || SERIES.build.rows[1]; }
+  function currentEpVid(){ var r=currentEpRow(); return r[2] || "RheXq2HKJmY"; }
 
-  // ---------- render rail ----------
-  function renderRail(){
-    var box = document.getElementById("rail");
-    if (series === "walk") {
-      box.innerHTML = WALK.ch.map(function(r){
+  // ---------- tabs ----------
+  var tabsEl = document.getElementById("tabs");
+  ORDER.forEach(function (k) {
+    var b = document.createElement("button");
+    b.className = "btn " + (k===key ? "btn-primary" : "btn-light");
+    b.textContent = SERIES[k].label; b.dataset.k = k;
+    b.addEventListener("click", function(){ setSeries(k); });
+    tabsEl.appendChild(b);
+  });
+
+  function setSeries(next) {
+    if (next === key) return;
+    key = next;
+    tabsEl.querySelectorAll("button").forEach(function(b){ b.className = "btn " + (b.dataset.k===key ? "btn-primary" : "btn-light"); });
+    renderRail();
+    var S = SERIES[key];
+    var v = (S.type === "episodes") ? currentEpVid() : (missing(S.vid) ? DEFAULT_VID[key] : S.vid);
+    if (ready) { curVid = v; player.loadVideoById({ videoId: v, startSeconds: (S.type==="chapters"?startT:0) }); }
+    setUrl(S.type === "episodes" ? {s:key, e:isNaN(epN)?1:epN} : {s:key});
+    sync();
+  }
+
+  // ---------- rail ----------
+  function renderRail() {
+    var S = SERIES[key], box = document.getElementById("rail");
+    if (missing(S.vid) && S.type === "chapters") {
+      box.insertAdjacentHTML("afterbegin",
+        '<p class="muted" style="font-size:.8rem;border:1px solid var(--line);border-radius:10px;padding:8px 12px">' +
+        '⚠ paste this video\'s YouTube id into <code>SERIES.' + key + '.vid</code> in <code>watch.html</code>. ' +
+        'Chapters below already seek to the right timestamp once it\'s set.</p>');
+    }
+    if (S.type === "chapters") {
+      box.innerHTML = (missing(S.vid) ? box.querySelector("p")?.outerHTML || "" : "") + S.rows.map(function(r){
+        var tag = r[0] ? "D"+r[0] : "▸";
         return '<button class="ch" data-sec="'+r[2]+'"><span class="t">'+fmt(r[2])+'</span>'+
-          '<span class="ttl">L'+r[0]+' · '+esc(r[1])+'</span><span class="day">'+r[3]+'</span></button>';
+          '<span class="ttl">'+esc(r[1])+'</span><span class="day">'+esc(r[3])+'</span></button>';
       }).join("");
     } else {
-      box.innerHTML = BUILD.ep.map(function(r){
+      box.innerHTML = S.rows.map(function(r){
         var has = !!r[2];
         return '<button class="ch'+(has?'':' off')+'" data-ep="'+r[0]+'"'+(has?'':' disabled')+'>'+
           '<span class="t">'+(r[0]===0?"▶":"Ep"+r[0])+'</span>'+
           '<span class="ttl">'+esc(r[1])+(has?'':' <em style="color:var(--ink-300)">— add id</em>')+'</span>'+
-          '<span class="day">'+esc(r[4])+'</span></button>';
+          '<span class="day">'+esc(r[3])+'</span></button>';
       }).join("");
     }
   }
 
   document.getElementById("rail").addEventListener("click", function(e){
     var b = e.target.closest(".ch"); if (!b || b.disabled) return;
-    if (series === "walk") {
-      var sec = +b.dataset.sec;
-      if (ready) { player.seekTo(sec, true); player.playVideo(); } else { startT = sec; }
-      setUrl({ s:"walk", t:sec });
+    var S = SERIES[key];
+    if (S.type === "chapters") {
+      var sec = +b.dataset.sec; startT = sec;
+      if (ready && !missing(S.vid)) { player.seekTo(sec, true); player.playVideo(); }
+      setUrl({ s:key, t:sec });
     } else {
       epN = +b.dataset.ep;
-      var v = currentBuildVid();
+      var v = currentEpVid();
       if (ready && v !== curVid) { curVid = v; player.loadVideoById(v); }
-      setUrl({ s:"build", e:epN });
+      setUrl({ s:key, e:epN });
     }
     sync();
   });
 
-  // ---------- tabs ----------
-  function setSeries(next){
-    if (next === series) return;
-    series = next;
-    document.getElementById("tab-walk").className = "btn " + (series==="walk"?"btn-primary":"btn-light");
-    document.getElementById("tab-build").className = "btn " + (series==="build"?"btn-primary":"btn-light");
-    document.getElementById("blurb").textContent = series==="walk" ? WALK.blurb : BUILD.blurb;
-    renderRail();
-    var v = series==="build" ? currentBuildVid() : WALK.vid;
-    if (ready) { curVid = v; player.loadVideoById({ videoId:v, startSeconds: series==="walk"?startT:0 }); }
-    setUrl(series==="walk" ? {s:"walk"} : {s:"build", e:isNaN(epN)?1:epN});
-    sync();
-  }
-  document.getElementById("tab-walk").addEventListener("click", function(){ setSeries("walk"); });
-  document.getElementById("tab-build").addEventListener("click", function(){ setSeries("build"); });
-
-  // ---------- sync header + highlight + fallback link ----------
-  function sync(){
-    if (series === "walk") {
-      var sec = (ready && player.getCurrentTime) ? (player.getCurrentTime()|0) : startT;
-      var cur = WALK.ch.slice().reverse().find(function(r){return sec>=r[2];}) || WALK.ch[0];
+  // ---------- sync ----------
+  function sync() {
+    var S = SERIES[key];
+    if (S.type === "chapters") {
+      var sec = (ready && player.getCurrentTime && !missing(S.vid)) ? (player.getCurrentTime()|0) : startT;
+      var cur = S.rows.slice().reverse().find(function(r){return sec>=r[2];}) || S.rows[0];
       document.querySelectorAll("#rail .ch").forEach(function(b){ b.classList.toggle("on", +b.dataset.sec===cur[2]); });
-      document.getElementById("now").innerHTML = "L"+cur[0]+" · <span class='gradient'>"+esc(cur[1])+"</span>";
-      document.getElementById("ytfallback").href = "https://www.youtube.com/watch?v="+WALK.vid+"&t="+cur[2]+"s";
+      document.getElementById("now").innerHTML = "<span class='gradient'>"+esc(cur[1])+"</span>";
+      var vid = missing(S.vid) ? DEFAULT_VID[key] : S.vid;
+      document.getElementById("ytfallback").href = "https://www.youtube.com/watch?v="+vid+"&t="+cur[2]+"s";
     } else {
-      var e = currentBuildEp();
-      document.querySelectorAll("#rail .ch").forEach(function(b){ b.classList.toggle("on", +b.dataset.ep===e[0]); });
-      document.getElementById("now").innerHTML = (e[0]?"Ep "+e[0]+" · ":"")+"<span class='gradient'>"+esc(e[1])+"</span>";
-      document.getElementById("ytfallback").href = "https://www.youtube.com/watch?v="+(e[2]||"RheXq2HKJmY");
+      var r = currentEpRow();
+      document.querySelectorAll("#rail .ch").forEach(function(b){ b.classList.toggle("on", +b.dataset.ep===r[0]); });
+      document.getElementById("now").innerHTML = (r[0]?"Ep "+r[0]+" · ":"")+"<span class='gradient'>"+esc(r[1])+"</span>";
+      document.getElementById("ytfallback").href = "https://www.youtube.com/watch?v="+(r[2]||"RheXq2HKJmY");
     }
+    document.getElementById("blurb").textContent = S.blurb;
   }
-  setInterval(function(){ if (series==="walk" && ready && player.getCurrentTime) sync(); }, 3000);
+  setInterval(function(){ if (SERIES[key].type==="chapters" && ready && player.getCurrentTime) sync(); }, 3000);
 
   function setUrl(o){
     var q = Object.keys(o).map(function(k){return k+"="+encodeURIComponent(o[k]);});
@@ -207,11 +223,8 @@
     history.replaceState(null, "", "watch.html?"+q.join("&"));
   }
 
-  // ---------- init ----------
-  document.getElementById("tab-walk").className = "btn " + (series==="walk"?"btn-primary":"btn-light");
-  document.getElementById("tab-build").className = "btn " + (series==="build"?"btn-primary":"btn-light");
-  document.getElementById("blurb").textContent = series==="walk" ? WALK.blurb : BUILD.blurb;
   renderRail();
+  document.getElementById("blurb").textContent = SERIES[key].blurb;
 })();
 </script>
 </body>

@@ -166,9 +166,25 @@
       <li><b>Name the decision</b> (①–④). Wrong-decision options fall away.</li>
       <li><b>Find the constraint word</b> — "overnight", "must never", "any engineer can roll back", "visible immediately".</li>
       <li><b>Apply Rule 1 / Rule 2</b> — kill the generic knobs; if there's a <i>must/never</i>, kill the guidance.</li>
-      <li><b>Pick the mechanism</b> that matches. Two options both work? Choose the cheaper / simpler / SDK-native one.</li>
+      <li><b>Pick the mechanism</b> that matches. Two options both work? Hunt the planted <b>constraint</b> — latency, budget, data sensitivity, scale.</li>
     </ol>
-    <p class="muted">Full method + memory anchors: <code>logistics/05-exam-method.md</code>. In-page player + map: <code>portal/watch.html</code>.</p>
+    <p class="muted">Full method + memory anchors: <code>logistics/05-exam-method.md</code>. In-page player: <code>portal/watch.html</code>.</p>
+  </section>
+
+  <!-- 6b · distractor species -->
+  <section class="slide">
+    <span class="chip exam">Exam method</span>
+    <h2>Five wrong-answer <span class="accent">species</span> — name two before you answer</h2>
+    <table class="k">
+      <tr><th>Species</th><th>Tell</th><th>Example → the fix that scores</th></tr>
+      <tr><td><b>Overbuild</b> ⚑</td><td>more machinery than the problem deserves — "building feels like competence"</td><td>tool misrouting → "add a routing model" &nbsp;⟶&nbsp; <b>better tool descriptions</b></td></tr>
+      <tr><td>Symptom-treater</td><td>patches the symptom, leaves the cause</td><td>"add <i>please respond correctly</i>" &nbsp;⟶&nbsp; structure + examples</td></tr>
+      <tr><td>Extremist</td><td>all-or-nothing</td><td>"refuse to process external content" &nbsp;⟶&nbsp; layered defence</td></tr>
+      <tr><td>True-but-irrelevant</td><td>a real fact that answers nothing asked</td><td>a correct note about MCP that decides nothing here</td></tr>
+      <tr><td>Stale API / wrong system</td><td>true of an older SDK, or an OpenAI-ism</td><td><code>budget_tokens</code>, <code>function_call</code>, a <code>role:"system"</code> message</td></tr>
+    </table>
+    <p class="muted"><b>The overbuild is the developer exam's specialty</b> — engineers are the most vulnerable. The elegant minimal fix wins, consistently.</p>
+    <a class="watch-chip" href="../../portal/watch.html?s=guide&t=361" target="_blank">Guide · 6:01</a>
   </section>
 
   <!-- Module 1 -->

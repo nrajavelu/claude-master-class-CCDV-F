@@ -21,10 +21,13 @@
 |---|---|
 | Items | **53** |
 | Question types | multiple-choice **and** multiple-response; each item states how many to select |
-| Time | **120 minutes** |
-| Passing score | **scaled 720** on a 100–1000 scale |
+| Time | **120 minutes** (~2 min 15 s / item — the most generous of the four exams) |
+| Passing score | **scaled 720** on a 100–1000 scale (not a percentage — don't convert). Report shows pass/fail, scaled score, **and % correct per domain** — a miss still hands you a map. |
 | Cost | **US $125 / attempt** |
-| Credential validity | 12 months |
+| Proctoring | Pearson VUE, online **or** test centre; identity verified before the clock starts |
+| Registration path | Claude Partner Network → Partner Academy → Pearson VUE |
+| Credential validity | 12 months · **free on-time renewal** via a lighter non-proctored assessment · full fee again if it lapses |
+| Retake ladder | **14 days → 30 → 90**; **4 attempts per rolling year** — a miss is a delay, not a verdict |
 | Stated audience | AI engineers/developers, 1–5 yrs experience, **6+ months hands-on Claude**, Python/TypeScript + REST/CLI fluency |
 
 > Our cohort baseline ("some coding, new to Python & LLMs") is **below** the exam's stated
@@ -127,9 +130,48 @@ the lab, and the anchor episode.
 
 ---
 
-## 7. After the bootcamp
+## 7. Five ways candidates fail (warn them on Day 1)
 
-Each candidate leaves with: their sub-area scorecard; a revision plan (weakest 2–3
-sub-areas → `question-bank/` sections + anchor episodes + relevant `shared/` docs from the
-`claude-api` skill); and the advice to **re-sit the Day 5 mock the day before** and **book
+1. **Study by affection, not by weight.** Claude Code gets a weekend and is worth **3.1%**;
+   Configuration Management feels boring and is worth *more than Claude Code + Debugging
+   combined*. The blueprint is a price list — spend accordingly.
+2. **Over-study prompting.** It's **11%**, and the most seductive trap on the paper.
+3. **Agent-everything brain.** If your default answer is "an autonomous agent", the
+   **overbuild** distractor feeds on you all afternoon. The exam rewards the simplest
+   sufficient structure.
+4. **Prepare without an API key.** This paper is written from the builder's chair.
+   Candidates who only *read* about caching, stop reasons and tool schemas lose points to
+   those who *watched them happen in a terminal* — which is why every day has runnable labs.
+5. **Dumps.** A rules violation stapled to wrong answers; the scenarios punish memorisation
+   anyway (they test reasoning about a system you've never seen).
+
+## 8. Post-course revision — the 4-week build plan
+
+Hand this to every candidate. **5–6 focused hours/week** (6 weeks if newer to the API). The
+organising idea: **ship one small thing and let it drag you through the blueprint** — a
+little **support assistant**: an API integration with **two tools (a lookup + an action)**, a
+system prompt, and a cost budget. Trivial in scope, complete in structure, touches every
+heavyweight domain.
+
+| Week | Build | Blueprint it earns |
+|---|---|---|
+| **1 · foundations + the API** | rate yourself on all 8 domains; set up key + repo; build the plain conversation loop (messages, system, streaming); then **deliberately break it** — hit the token cap and read `stop_reason`, trip the rate limit and write the backoff | D2 (API mechanics) · D4 (debugging) |
+| **2 · the heavyweights** | add the two tools; watch the model choose them; **sabotage your own tool descriptions** and watch it misroute; add caching to the system prefix and check `usage` before/after; price the assistant at 3 tiers and pick deliberately | D2 (33%) · D5 (16.8%) · D8 |
+| **3 · the judgement domains** | convert one flow into a **routed workflow** and argue out loud why it shouldn't be an autonomous agent; **paste an injection** into a fake customer message and fix the design (structure · least privilege · output validation); skim Claude Code essentials — one honest session | D1 · D7 · D3 |
+| **4 · rehearsal** | re-read the guide as a checklist ("can I do this in code?"); timed practice; weakest domain gets the final hours; **book the exam while the project is fresh — your recent commits are the best flashcards** | all |
+
+## 9. Free study stack (the fee is the only mandatory cost)
+
+1. The **official exam guide** (25 weighted sub-skills — your syllabus *and* your final
+   checklist). Download the current version from the Partner Academy **before booking**.
+2. The **official documentation** — for this exam it outranks any course (API reference,
+   tool-use guide, agent guidance). The exam is built from the same well.
+3. **Anthropic Academy** developer courses — free, self-paced.
+4. **A working project** — an API key, a scratch repo, and code you actually ran.
+
+## 10. After the bootcamp
+
+Each candidate leaves with: their sub-area scorecard; the 4-week plan above with their weak
+domains circled; a revision list (`question-bank/` sections + anchor episodes +
+`code-snippets/`); and the advice to **re-sit the Day 5 mock the day before** and **book
 within 2–3 weeks** while it's fresh.

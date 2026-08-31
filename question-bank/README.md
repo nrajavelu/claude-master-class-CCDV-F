@@ -54,15 +54,24 @@ diff it, re-weight the mock sample. If domains are renamed/merged, keep the item
 
 ---
 
-## Distractor design (what we deliberately train against)
+## Distractor species (name at least two before answering)
 
-Teach candidates to name the bucket a wrong option falls in:
+Teach candidates to name the species a wrong option falls in. Full treatment + examples:
+`../logistics/05-exam-method.md §4`.
 
-1. **Stale API** — true of an older model/SDK: `budget_tokens`, `output_format`, assistant
-   prefill, `claude-code-sdk`, `web_search_20250305`.
-2. **Right but not best** — works, but a cheaper / simpler / SDK-native option exists
-   (`max_retries` vs a hand-rolled loop; `get_final_message()` vs a second call).
-3. **Plausible-but-backwards** — volatile content *before* the cache breakpoint;
-   `tool_result` in an assistant message; retrying a 400.
-4. **Wrong system** — an OpenAI-ism in Claude clothing (`tool_call`, `content_filter`,
-   `function_call`, `/v1/chat/completions`).
+1. **Overbuild** ⚑ — more machinery than the problem deserves ("add a routing model" when
+   the fix is a better tool description; "re-architect the pipeline" when the fix is
+   caching). **The developer exam's specialty — engineers are the most vulnerable.** The
+   elegant minimal fix wins, consistently.
+2. **Symptom-treater** — patches the symptom, leaves the cause ("add *please respond
+   correctly*"; "make the summaries shorter").
+3. **Extremist** — all-or-nothing ("refuse to process external content"; "review every
+   record by hand").
+4. **True-but-irrelevant** — a correct statement that answers nothing asked.
+5. **Stale API** — `budget_tokens`, `output_format`, assistant prefill, `claude-code-sdk`.
+6. **Right word, wrong place** — a `role:"system"` message; a WebSocket for streaming;
+   `tool_result` in an assistant message; volatile content before the cache breakpoint.
+7. **Wrong system** — an OpenAI-ism (`tool_call`, `content_filter`, `function_call`,
+   `/v1/chat/completions`).
+
+Every item's `> Distractors:` line should tag each wrong option with its species.

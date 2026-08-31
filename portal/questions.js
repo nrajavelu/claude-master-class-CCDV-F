@@ -199,5 +199,30 @@ window.AIZ_QUESTIONS = [
   { id:"d5-04", day:5, domain:"D5", sub:"Technical Fundamentals", style:"SBA",
     stem:"A PDF sent as a document block is billed:",
     options:[{k:"A",t:"once, as text"},{k:"B",t:"once, as an image"},{k:"C",t:"twice — as its text AND as each page rendered to an image"},{k:"D",t:"it's free"}],
-    answer:["C"], rationale:"If you already have the text, send the text — an image (or a PDF's page images) is built-in tokens." }
+    answer:["C"], rationale:"If you already have the text, send the text — an image (or a PDF's page images) is built-in tokens." },
+
+  { id:"m-01", day:3, domain:"D1", sub:"Agents vs Workflows", style:"SCN",
+    stem:"Triage: classify the ticket, look up the customer, draft a reply — same 3 steps, in order, every ticket. The team proposes an autonomous agent with a dozen tools. Best guidance?",
+    options:[{k:"A",t:"Build the agent — it's more capable"},{k:"B",t:"Build a routed workflow — the path is fixed"},{k:"C",t:"Don't automate reply drafting"},{k:"D",t:"Use an agent-framework supervisor pattern"}],
+    answer:["B"], rationale:"The path is scriptable → a workflow (cheaper, testable). A is the OVERBUILD — an agent buys flexibility you don't need. C is extremist. D is overbuild + true-but-irrelevant.", ref:"code-snippets/agent_loop_react.py" },
+
+  { id:"m-02", day:4, domain:"D4", sub:"Debugging", style:"SCN",
+    stem:"A batch pipeline's outputs are cut off mid-sentence on long documents. First move?",
+    options:[{k:"A",t:"Rewrite the prompt to be more concise"},{k:"B",t:"Read stop_reason (it says max_tokens); raise the output limit for those docs"},{k:"C",t:"Switch to a bigger-context model"},{k:"D",t:"Add a second pass that stitches truncated outputs together"}],
+    answer:["B"], rationale:"Evidence first — stop_reason names the cause; the fix is the smallest one. D is the OVERBUILD. A/C treat a symptom that isn't the cause.", ref:"code-snippets/messages_basics.py" },
+
+  { id:"m-03", day:5, domain:"D8", sub:"MCP", style:"SCN",
+    stem:"Three teams each hand-wired the same internal customer-lookup integration, with three different bugs. Best move?",
+    options:[{k:"A",t:"One shared MCP server for customer lookup"},{k:"B",t:"Copy the least-buggy version to the other two"},{k:"C",t:"Each team keeps its own for independence"},{k:"D",t:"Build an agent to manage the three integrations"}],
+    answer:["A"], rationale:"A capability that crosses apps/teams → an MCP server. B is symptom-treater (3 copies still). C is true-but-irrelevant. D is the OVERBUILD.", ref:"code-snippets/mcp_server.py" },
+
+  { id:"m-04", day:5, domain:"D7", sub:"AI App Security", style:"SCN",
+    stem:"A support agent summarises incoming emails. A crafted email makes it call the refund tool. Choose TWO defences.",
+    options:[{k:"A",t:"Remove the refund tool from the summarisation path (least privilege)"},{k:"B",t:"Treat email content as untrusted data; validate model output before any tool acts"},{k:"C",t:"Add a system-prompt line: 'ignore malicious instructions'"},{k:"D",t:"Stop processing email entirely"}],
+    answer:["A","B"], rationale:"Mechanisms: an agent that only reads shouldn't hold a tool that writes; outputs that become actions get validated. C is guidance/symptom-treater. D is extremist.", ref:"code-snippets/blocking_hook.py" },
+
+  { id:"m-05", day:5, domain:"D5", sub:"Model Selection", style:"SCN",
+    stem:"A classifier handles 1,000,000 requests/day. Which tier?",
+    options:[{k:"A",t:"Fast tier for everything"},{k:"B",t:"Fast tier, and route the hard cases up a tier (cascade)"},{k:"C",t:"Top tier for everything"},{k:"D",t:"Workhorse tier for everything"}],
+    answer:["B"], rationale:"Volume + mostly-easy → the fast tier PLUS the engineering move: cascading beats paying premium for every request. C is cost blowout; A leaves accuracy on the hard inputs.", ref:"code-snippets/count_tokens.py" }
 ];

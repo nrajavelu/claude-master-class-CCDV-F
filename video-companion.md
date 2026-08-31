@@ -97,6 +97,39 @@ candidate wants to *watch someone build* the thing a lab asks them to build.
 
 ---
 
+## Third series — the **CCDV-F exam guide** (blueprint walkthrough)
+
+An independent ~35-minute guide (*theAIBlueprint4all*) that reads the **v1.0 blueprint like
+an engineer**: the weight trap, every domain with a worked exam-style scenario, the five ways
+candidates fail, and a 4-week build plan. It also names the **4th distractor species — the
+overbuild** — now baked into `logistics/05-exam-method.md §4` and the Day 1 deck.
+
+> **Video id not yet wired.** Paste the YouTube id into `SERIES.guide.vid` in
+> `portal/watch.html` and the chapter links below light up in the in-page player. Until then
+> the "Exam guide" tab shows a note and the chapter timestamps.
+
+| Chapter | Time | Maps to |
+|---|---|---|
+| The Builder's Credential | [▶ 0:00](watch.html?s=guide&t=0) | intro |
+| Who This Exam Is For | [▶ 1:18](watch.html?s=guide&t=78) | `logistics/03 §1` |
+| The Exam at a Glance | [▶ 2:49](watch.html?s=guide&t=169) | `logistics/03 §1` (53 Q · 120 min · 720 · retake ladder) |
+| The Blueprint, and the Trap | [▶ 4:15](watch.html?s=guide&t=255) | `logistics/03 §2` · D2+D5 = half the exam |
+| How Developer Questions Think (+ the overbuild) | [▶ 6:01](watch.html?s=guide&t=361) | **`logistics/05 §4`** · Day 1 M0 |
+| D1 · Agents and Workflows | [▶ 7:51](watch.html?s=guide&t=471) | Day 3 M1–M2 |
+| D2 · Applications + Integration | [▶ 10:28](watch.html?s=guide&t=628) | Days 1–2, **Day 4** |
+| D3 · Claude Code | [▶ 15:35](watch.html?s=guide&t=935) | Day 3 M5 |
+| D4 · Eval, Testing, Debugging | [▶ 16:46](watch.html?s=guide&t=1006) | Day 1 M4 · Day 4 M7 |
+| D5 · Model Selection + Optimization | [▶ 18:16](watch.html?s=guide&t=1096) | Day 1 M1·M5 · **Day 5 M1–M4** |
+| D6 · Prompt + Context Engineering | [▶ 21:39](watch.html?s=guide&t=1299) | Day 2 M1 · Day 4 M5 |
+| D7 · Security and Safety | [▶ 23:56](watch.html?s=guide&t=1436) | Day 2 M3 · Day 5 M7 |
+| D8 · Tools and MCPs | [▶ 26:09](watch.html?s=guide&t=1569) | Day 2 M4 · Day 3 M6 |
+| Five Ways to Fail This Exam | [▶ 28:30](watch.html?s=guide&t=1710) | `logistics/03 §7` |
+| Your Free Study Stack | [▶ 29:59](watch.html?s=guide&t=1799) | `logistics/03 §9` |
+| The Four-Week Build Plan | [▶ 31:14](watch.html?s=guide&t=1874) | `logistics/03 §8` |
+| Exam Day, and the Road to Architect | [▶ 33:16](watch.html?s=guide&t=1996) | `logistics/05 §6` · Day 5 M8 |
+
+---
+
 ## Suggested viewing schedule — one-click
 
 | When | Watch (opens at the timestamp, new tab) | Why |
