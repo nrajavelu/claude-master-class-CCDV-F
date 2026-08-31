@@ -64,7 +64,8 @@ html, body {
   display: none;
   flex-direction: column;
   padding: 6vh 8vw 8vh;
-  background: var(--navy-950) var(--gradient-radial);
+  background-color: var(--navy-950);
+  background-image: var(--gradient-radial);
   animation: fade .28s ease;
 }
 .slide.active { display: flex; }

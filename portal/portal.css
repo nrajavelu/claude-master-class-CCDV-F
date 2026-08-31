@@ -68,7 +68,9 @@ h1{font-size:2.6rem} h2{font-size:1.9rem; margin-bottom:1.2rem} h3{font-size:1.1
 
 /* ---------- hero (dark band) ---------- */
 .hero{
-  background:var(--navy-950) var(--radial); color:#fff;
+  background-color:var(--navy-950);
+  background-image:var(--radial);
+  color:#fff;
   padding:72px 0 84px; border-bottom:1px solid var(--navy-800);
 }
 .hero .brand{height:38px; width:calc(38px * 6.096); background:var(--brand-logo-dark) left center/contain no-repeat; margin-bottom:28px}
