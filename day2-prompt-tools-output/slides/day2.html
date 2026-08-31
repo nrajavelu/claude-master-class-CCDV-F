@@ -141,7 +141,8 @@
         <line class="d-flow ghost" x1="355" y1="215" x2="470" y2="215" marker-end="url(#arrowghost)"/><text class="d-sub" x="480" y="220">plain JSON Schema for the args</text>
       </svg>
     </div>
-    <p class="muted">Tool called at the wrong time? Check the <b>description</b> before the model. Parallel <code>tool_use</code> → one user message of <code>tool_result</code> blocks, ids matching.</p>
+    <p class="muted">The description is an <b>interface for a reader</b> (the model), not documentation for a human. Say what it does, <b>when to use it, and when NOT to</b>; name parameters unambiguously.</p>
+    <p class="muted">Tool called at the wrong time? Fix the description before reaching for bigger machinery (a routing model / fine-tune is the <b>overbuild</b>). Parallel <code>tool_use</code> → one user message of <code>tool_result</code> blocks, ids matching.</p>
     <a class="watch-chip" href="../../portal/watch.html?l=12" target="_blank">1:51:50 · L12</a>
   </section>
 
@@ -175,9 +176,9 @@
     </div>
     <ul class="clean">
       <li><code>strict</code> is a field on the <b>tool definition</b>; schema needs <code>additionalProperties:false</code> + everything in <code>required</code>.</li>
-      <li>No "optional" — optional = allow <code>null</code> as a type.</li>
-      <li><b>Unsupported schema features are rejected, not ignored.</b></li>
+      <li>No "optional" — optional = allow <code>null</code> as a type. <b>Unsupported schema features are rejected, not ignored.</b></li>
       <li><code>client.messages.parse()</code> validates the response against your schema for you.</li>
+      <li><span class="chip exam" style="margin:0 .4rem 0 0">Exam watch</span> <b>Prefilling</b> — starting the assistant's answer yourself to force format from the first character — is a classic cheap structured-output trick the exam references; it's <b>rejected on the newest models</b>, where you use <code>output_config.format</code>. Know both.</li>
     </ul>
     <a class="watch-chip" href="../../portal/watch.html?l=7" target="_blank">1:00:52 · L7</a>
   </section>

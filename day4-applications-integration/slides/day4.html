@@ -108,13 +108,38 @@
   <section class="slide section"><div class="num">Module 4</div><h1>Application design &amp; configuration management</h1></section>
 
   <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>Where Claude sits = <span class="accent">which contract applies</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 200" role="img" aria-label="Interface choice as a contract">
+        <rect class="d-node hot" x="20" y="40" width="270" height="120" rx="10"/>
+        <text class="d-label" x="40" y="70">chat interface</text>
+        <text class="d-sub" x="40" y="98">streaming (time-to-first-token)</text>
+        <text class="d-sub" x="40" y="118">+ session state YOUR app keeps</text>
+        <rect class="d-node hot" x="315" y="40" width="270" height="120" rx="10"/>
+        <text class="d-label" x="335" y="70">API endpoint wrapping Claude</text>
+        <text class="d-sub" x="335" y="98">its own timeout + error contract</text>
+        <text class="d-sub" x="335" y="118">validation · retries · fallback</text>
+        <rect class="d-node" x="610" y="40" width="270" height="120" rx="10"/>
+        <text class="d-label" x="630" y="70">background job</text>
+        <text class="d-sub" x="630" y="98">no streaming, no session</text>
+        <text class="d-sub" x="630" y="118">→ probably a <tspan class="d-mono">batch</tspan></text>
+      </svg>
+    </div>
+    <p class="muted">A scenario that describes <b>where</b> Claude sits in a system is really asking <b>which contract</b> applies. Choose by latency requirement; the cost follows.</p>
+    <a class="watch-chip" href="../../portal/watch.html?s=guide&t=1246" target="_blank">Guide · D2</a>
+  </section>
+
+  <section class="slide">
     <span class="chip concept">Concept</span>
-    <h2>Design choices that scale a team</h2>
+    <h2>Application design = requirements <span class="accent">before code</span></h2>
     <ul class="clean">
-      <li><b>Surface</b> — chat vs coding-rules vs API (Day 2). Prototype anywhere; re-prove on the real one.</li>
-      <li><b>Output shape</b> — prose for a human, a <b>schema</b> for a dashboard. Same review, two shapes.</li>
-      <li><b>Session hygiene</b> — one session per task. <code>clear</code> starts fresh · <code>compact</code> summarises · <code>inspect</code> shows what's loaded.</li>
+      <li>What interface — chat / API endpoint / background job? What <b>latency budget</b>?</li>
+      <li>What <b>failure behaviour</b> — the model WILL sometimes return something unusable. A production design says what then: validation · retries with backoff · a fallback path · human escalation.</li>
+      <li>SW-eng foundations back it: <b>idempotency</b> · <b>logging</b> · separate the <b>prompt layer</b> from business logic.</li>
+      <li>Output shape — prose for a human, a schema for a dashboard. Session hygiene — one session per task (<code>clear</code> / <code>compact</code> / <code>inspect</code>).</li>
     </ul>
+    <p class="muted">Application design is the single biggest D2 sub-skill — worth more than Claude Code + Debugging combined.</p>
   </section>
 
   <section class="slide">
@@ -141,6 +166,17 @@
     </div>
     <p class="muted">Pin the model version. Commit the rules. Every behaviour-affecting input in version control or an example config — secrets are not.</p>
     <a class="watch-chip" href="../../portal/watch.html?l=6" target="_blank">50:01 · L6</a>
+  </section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>A prompt edit <span class="accent">IS a deployment</span></h2>
+    <ul class="clean">
+      <li><b>API keys</b> — environment variables or a secrets manager. Never in code, never in the client. Key in a mobile app? → a <b>backend proxy</b>, no exceptions.</li>
+      <li><b>Prompts</b> are versioned artifacts — changed deliberately, tested before rollout. A prompt edit ships to production; treat it like one.</li>
+      <li><b>Model choice</b> is configuration too — pinned and intentional, so an upgrade is <b>a decision with a test pass</b>, not a surprise.</li>
+    </ul>
+    <p class="muted">Configuration Management is ~4% on its own — the guide quietly telling you it shows up.</p>
   </section>
 
   <section class="slide">

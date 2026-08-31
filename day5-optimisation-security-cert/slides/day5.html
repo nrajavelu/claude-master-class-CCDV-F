@@ -58,14 +58,24 @@
       <div>
         <ul class="clean">
           <li><b>Start capable</b> — the most capable model at lower <code>effort</code> often beats a smaller model at high effort.</li>
-          <li><b>Measure</b> — on a sample of real requests, with an eval.</li>
-          <li><b>Step down</b> — only when measurement says quality holds.</li>
-          <li>Not "pick a tier by task type" — that's the distractor.</li>
-          <li><code>effort</code>: low → max. <code>xhigh</code> is the coding / agentic sweet spot on current models.</li>
+          <li><b>Measure</b> on a sample of real requests, with an eval. <b>Step down</b> only when quality holds.</li>
+          <li>The exam <b>prices</b> the decision: a classifier at 1M req/day → the fast tier, <b>and route the hard cases up a tier</b>.</li>
+          <li><b>Cascading</b> — cheap first, escalate on failure — beats paying premium for every request.</li>
         </ul>
       </div>
     </div>
     <a class="watch-chip" href="../../portal/watch.html?s=build&e=10" target="_blank">Build-along · Ep 10</a>
+  </section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>Latency vs <span class="accent">throughput</span> — different corners</h2>
+    <ul class="clean">
+      <li>A <b>chat interface</b> cares how fast the <b>first token</b> arrives. A <b>pipeline</b> cares how many <b>documents per hour</b>.</li>
+      <li><b>Streaming</b> changes <i>perceived</i> latency. <b>Batch</b> changes cost. <b>Neither changes the model's intelligence.</b></li>
+      <li>Every requirement in a scenario — real-time · overnight · high-volume · budget cap — maps to one corner of that trade space. The exam hands you requirements and watches whether you find the corner.</li>
+    </ul>
+    <a class="watch-chip" href="../../portal/watch.html?s=guide&t=1096" target="_blank">Guide · 18:16 · D5</a>
   </section>
 
   <section class="slide section"><div class="num">Module 2</div><h1>Cost &amp; token management</h1></section>
@@ -82,24 +92,25 @@
 
   <section class="slide">
     <span class="chip exam">Exam watch</span>
-    <h2>The cost-optimisation <span class="accent">order</span></h2>
+    <h2>The five <span class="accent">cost levers</span>, in order of power</h2>
     <div class="diagram">
-      <svg viewBox="0 0 900 260" role="img" aria-label="Cost optimisation ladder">
-        <line x1="60" y1="240" x2="60" y2="20" stroke="#2b2e33" stroke-width="2"/>
+      <svg viewBox="0 0 900 240" role="img" aria-label="Five cost levers">
+        <line x1="60" y1="220" x2="60" y2="20" stroke="#2b2e33" stroke-width="2"/>
         <g font-family="var(--font-body)">
-          <rect class="d-node hot" x="70" y="20" width="260" height="34" rx="7"/><text class="d-sub" x="86" y="42">1 · prompt caching</text>
-          <rect class="d-node hot" x="70" y="60" width="300" height="34" rx="7"/><text class="d-sub" x="86" y="82">2 · input-token hygiene</text>
-          <rect class="d-node hot" x="70" y="100" width="340" height="34" rx="7"/><text class="d-sub" x="86" y="122">3 · loop / output hygiene</text>
-          <rect class="d-node hot" x="70" y="140" width="380" height="34" rx="7"/><text class="d-sub" x="86" y="162">4 · batch (~50%, non-urgent)</text>
-          <rect class="d-node warn" x="70" y="180" width="440" height="34" rx="7"/><text class="d-sub" x="86" y="202">5 · budgets → 6 · effort → 7 · model choice → 8 · multi-model</text>
+          <rect class="d-node hot" x="70" y="20" width="360" height="34" rx="7"/><text class="d-sub" x="86" y="42">1 · caching — repeated context, huge saving on the prefix</text>
+          <rect class="d-node hot" x="70" y="62" width="360" height="34" rx="7"/><text class="d-sub" x="86" y="84">2 · batch — anything asynchronous, ~half price</text>
+          <rect class="d-node hot" x="70" y="104" width="360" height="34" rx="7"/><text class="d-sub" x="86" y="126">3 · right-size the model per task</text>
+          <rect class="d-node hot" x="70" y="146" width="360" height="34" rx="7"/><text class="d-sub" x="86" y="168">4 · cap output length — output tokens cost more than input</text>
+          <rect class="d-node" x="70" y="188" width="360" height="34" rx="7"/><text class="d-sub" x="86" y="210">5 · trim the fat from prompts</text>
         </g>
-        <text class="d-sub" x="540" y="45">free wins first —</text>
-        <text class="d-sub" x="540" y="65">caching / hygiene / batch</text>
-        <text class="d-sub" x="540" y="200" fill="#f2b877">quality trade-offs last</text>
+        <text class="d-sub" x="470" y="80">a scenario hands you a bill</text>
+        <text class="d-sub" x="470" y="102">and asks what to pull FIRST</text>
+        <text class="d-sub" x="470" y="140" fill="#f2b877">repeated prefix → cache</text>
+        <text class="d-sub" x="470" y="162" fill="#f2b877">overnight tolerance → batch</text>
       </svg>
     </div>
-    <p class="muted">"Repeated 12 KB system prompt, cost too high" → <b>caching</b>, before touching model choice.</p>
-    <a class="watch-chip" href="../../portal/watch.html?l=10" target="_blank">1:30:42 · L10</a>
+    <p class="muted">Read the workload's shape, then reach for the lever that matches it. "Repeated 12 KB system prompt, cost too high" → <b>caching</b>, before touching model choice.</p>
+    <a class="watch-chip" href="../../portal/watch.html?s=guide&t=1834" target="_blank">Guide · D5</a>
   </section>
 
   <section class="slide section"><div class="num">Module 3</div><h1>Prompt caching</h1></section>

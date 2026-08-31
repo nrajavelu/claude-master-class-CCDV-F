@@ -104,9 +104,9 @@ an engineer**: the weight trap, every domain with a worked exam-style scenario, 
 candidates fail, and a 4-week build plan. It also names the **4th distractor species — the
 overbuild** — now baked into `logistics/05-exam-method.md §4` and the Day 1 deck.
 
-> **Video id not yet wired.** Paste the YouTube id into `SERIES.guide.vid` in
-> `portal/watch.html` and the chapter links below light up in the in-page player. Until then
-> the "Exam guide" tab shows a note and the chapter timestamps.
+- **Watch:** [youtube.com/watch?v=zEH83eIU5-0](https://www.youtube.com/watch?v=zEH83eIU5-0) —
+  wired into the in-page player (`watch.html` → *Exam guide* tab). Chapter links below seek
+  within it.
 
 | Chapter | Time | Maps to |
 |---|---|---|

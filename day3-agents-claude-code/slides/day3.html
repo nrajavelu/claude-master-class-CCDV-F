@@ -42,14 +42,52 @@
 
   <section class="slide">
     <span class="chip concept">Concept</span>
-    <h2>Four checks — all must be <span class="accent">yes</span></h2>
+    <h2>Workflow vs agent — <span class="accent">who decides the path?</span></h2>
     <ul class="clean">
-      <li><b>Complexity</b> — multi-step, hard to fully specify up front?</li>
-      <li><b>Value</b> — does the outcome justify the cost + latency?</li>
-      <li><b>Viability</b> — is Claude actually good at this task type?</li>
-      <li><b>Cost of error</b> — can mistakes be caught &amp; recovered (tests, review, rollback)?</li>
+      <li><b>Workflow</b> — <i>your code</i> decides the path, in a structure you designed.</li>
+      <li><b>Agent</b> — <i>the model</i> decides the path: calls tools in a loop, observes results, chooses next, until it's done.</li>
+      <li>The exam's favourite question isn't "can you build an agent" — it's <b>"should you"</b>. Simplest structure that solves the task.</li>
     </ul>
-    <p class="muted">Any "no" → stay at a simpler tier: one call, or a code-controlled workflow. "Extract the invoice total" is one call, not an agent.</p>
+    <p class="muted">Predictable steps, known sequence → <b>workflow</b>, every time (cheaper, faster, debuggable, testable). Open-ended, path can't be scripted → agent, paying for it in cost + latency + a harder test story.</p>
+    <a class="watch-chip" href="../../portal/watch.html?s=guide&t=471" target="_blank">Guide · 7:51 · D1</a>
+  </section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>Five <span class="accent">workflow patterns</span> (your code, the path)</h2>
+    <ul class="clean">
+      <li><b>Prompt chaining</b> — one step's output feeds the next.</li>
+      <li><b>Routing</b> — a cheap first call classifies, then sends the request down the right branch.</li>
+      <li><b>Parallelisation</b> — fan out, then aggregate.</li>
+      <li><b>Orchestrator–workers</b> — one model plans, others execute.</li>
+      <li><b>Evaluator–optimiser</b> — one model generates, another critiques, in a loop.</li>
+    </ul>
+    <p class="muted">Reaching for an agent when a three-step chain would do is the <b>overbuild</b> in its natural habitat.</p>
+  </section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>Four checks + the <span class="accent">loop guardrails</span></h2>
+    <div class="cols">
+      <div>
+        <p><b>Should you build an agent?</b> All yes:</p>
+        <ul class="clean">
+          <li><b>Complexity</b> — multi-step, hard to specify up front?</li>
+          <li><b>Value</b> — justifies the cost + latency?</li>
+          <li><b>Viability</b> — is Claude good at this task type?</li>
+          <li><b>Cost of error</b> — caught &amp; recovered (tests, review, rollback)?</li>
+        </ul>
+      </div>
+      <div>
+        <p><b>The agent loop, in production, needs:</b></p>
+        <ul class="clean">
+          <li>a <b>cap on iterations</b></li>
+          <li><b>timeouts</b></li>
+          <li>a <b>defined way to fail</b></li>
+        </ul>
+        <p class="muted">Agent spinning forever / burning budget? The answer is <b>loop limits + a termination condition</b> — not a second agent to supervise the first.</p>
+      </div>
+    </div>
     <a class="watch-chip" href="../../portal/watch.html?l=14" target="_blank">2:12:59 · L14</a>
   </section>
 
@@ -209,9 +247,9 @@
     </div>
     <ul class="clean">
       <li>MCP is a <b>protocol</b>, not a library — Claude Code, Desktop, Cursor all speak it.</li>
-      <li>A remote server exposes dozens of tools — <b>scope</b> <code>allowed_tools</code> to the few you need.</li>
-      <li>Secrets via <code>${ENV_VAR}</code> expansion in the config — never hardcoded.</li>
-      <li>A plugin runs code with <b>your privileges</b> — installing one is a trust decision.</li>
+      <li><b>Build an MCP server when a capability should be shared &amp; reused across apps/teams.</b> Keep a plain in-process tool when it's specific to one app.</li>
+      <li>A remote server exposes dozens of tools — <b>scope</b> <code>allowed_tools</code>. Least privilege: an agent that only needs to read should not hold a tool that writes.</li>
+      <li>Secrets via <code>${ENV_VAR}</code> expansion — never hardcoded. A plugin runs code with <b>your privileges</b> — a trust decision.</li>
     </ul>
     <a class="watch-chip" href="../../portal/watch.html?l=13" target="_blank">2:02:43 · L13</a>
   </section>
