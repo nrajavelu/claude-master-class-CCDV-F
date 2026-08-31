@@ -91,10 +91,12 @@ aizentify-cdf-bootcamp/
 ├── requirements.txt ............. pip install -r this
 ├── curriculum-map.md ........... every "Claude way" component → day/module/episode/exam domain
 ├── reasoning-patterns.md ....... Chain-of-Thought vs ReAct vs adaptive thinking (candidates + trainers)
-├── video-companion.md .......... 17-lesson exam walkthrough + build-along course map (deep links)
+├── video-companion.md .......... exam walkthrough + exam guide + build-along, all with frame-level deep links
 ├── start.sh / stop.sh ......... launch the portal locally over http
-├── portal/ .................... index · candidate (?c=Name) · trainer · practice · view (md reader) · watch (video)
-├── code-snippets/ ............. runnable references keyed to exam question types
+├── portal/ .................... index · candidate (?c=Name) · trainer · practice · view (md reader) · watch (3 video series)
+├── code-snippets/ ............. 12 runnable references keyed to exam question types
+├── capstone-support-assistant/  the 4-week build track: a lookup tool + an action tool + a system prompt + a cost budget
+├── evals/ ..................... reusable golden-set harness (checks: contains/regex/json/structural/llm-judge)
 ├── assets/ ..................... shared deck CSS + visual layer, official logo, nav script, img/ (pass B)
 ├── logistics/ ................... FOR THE ORGANISER & TRAINER — read first
 │   ├── 00-environment-setup.md
@@ -136,8 +138,11 @@ your browser; `--lan` to share on Wi-Fi), or host on GitHub Pages — see `porta
 | `code-snippets/` — 12 runnable references keyed to exam question types | ✅ |
 | `day0-prework/` (primer, `check_env.py`, `hello_claude.py`) | ✅ |
 | `day1-foundations/` — **deck (visual layer: chips · SVG diagrams · focus-code · ReAct · CoT)** · `recap.html` · trainer guide · 4 labs · exercises · quiz · exam questions | ✅ |
-| `day2`–`day5` — **decks (pass-A visual) + `recap.html` + outline/lab-specs** | ✅ decks & recaps; 🟡 full trainer guides + quizzes + per-day exam-question sets |
-| `question-bank/` — README (8 domains) + Domain 2 pool (28) + domains 1,3–8 seeded | 🟡 domains 3–8 + scenarios + 53-item mock still to fill |
+| `day2`–`day5` — **decks (pass-A visual) + `recap.html` + trainer-guide + quiz + exam-style-questions** | ✅ |
+| `capstone-support-assistant/` (README+4-week plan · `assistant.py` + `starter/` · `tools.py` · `config.toml` · `golden_set.jsonl`) | ✅ |
+| `evals/` (harness · checks · example golden set · pytest wrapper) | ✅ |
+| `day5-.../mock-exam/` — **`mock-exam-A.md` (53) + key + `exam-day-strategy.md`** | ✅ |
+| `question-bank/` — README (8 domains) + Domain 2 pool (28) + **scenario-questions (16 worked)** + domains 1,3–8 seeded | 🟡 domains 3–8 to full count |
 
 Follow-up build passes are listed at the end of `logistics/03` and in the plan.
 

@@ -174,12 +174,95 @@ D. Only the model version.
 
 ---
 
-## Blueprint for the rest (fill in pass 3)
+### 11. (D2 · decision ②) A report feature streams several thousand tokens to a user's
+screen. Some requests fail with a client timeout before any output appears. Best fix?
 
-| # | Seed | Decision | Species to plant |
-|---|---|---|---|
-| 11 | Long output must show progress + not time out | ② | overbuild ("add a job queue"), stale ("raise the client timeout") |
-| 12 | "Any engineer must be able to deploy and roll back" | ④ | symptom-treater ("write a runbook"), extremist ("freeze deploys") |
-| 13 | Secret key committed to the repo / shipped in a mobile app | ④ | symptom-treater ("rotate it"), the fix: a backend proxy + secrets manager |
-| 14 | Fan-out research filling one context with reading | ① | overbuild ("more subagents"), the fix: a cheaper worker model / one summarising pass |
-| 15 | Prototype works in chat product, breaks via API | ③ | generic-knob ("different model"), wrong-place ("send a role:'system' message") |
+A. Raise the client's request timeout and keep waiting for the whole response.
+B. Stream the response (Server-Sent Events over the same call) with a higher `max_tokens`.
+C. Add a job queue and email the report when it's done.
+D. Lower `max_tokens` so responses finish faster.
+
+> **Answer: B.** Decision ② *how it calls Claude*. Constraint: "must show progress" + "must
+> not time out" → **streaming** is the mechanism. **A — stale-ish / generic knob** (a longer
+> wait still shows nothing, and the SDK caps unbounded waits). **C — overbuild** (re-architects
+> a UX problem). **D** cut Daniel's summary off mid-sentence on Day 1 — a corpse.
+
+---
+
+### 12. (D2·D7 · decision ④) A secret API key is committed to the repo history and also
+shipped inside a mobile app's bundle. First move?
+
+A. Rotate the key.
+B. Obfuscate the key in the client.
+C. A **backend proxy** — the key lives server-side only, in a secrets manager; the app calls
+   your backend, never Claude directly. Then rotate.
+D. Move the key to a config file bundled with the app.
+
+> **Answer: C.** Decision ④ *security*. Constraint: a key in a **client** can always be
+> extracted. **A alone — symptom-treater** (the new key leaks the same way; still needed
+> *after* C). **B / D — symptom-treaters** (the key is still shipped). The mechanism is
+> *never put the secret where an attacker can reach it.*
+
+---
+
+### 13. (D1 · decision ①) A research task fans out across eight sources. One agent loop would
+fill its context window with the raw text of all eight. Best structure?
+
+A. One agent with a bigger-context model.
+B. Sub-agents: a coordinator delegates one source per worker (a cheaper model), each returns
+   a short summary; the coordinator synthesises.
+C. Add more sub-agents — one per paragraph.
+D. Skip the reading and let the model answer from its own knowledge.
+
+> **Answer: B.** Decision ① *what runs*. Constraint: "one loop would fill its context with
+> reading" → fan out reading-heavy sub-tasks to workers that return summaries. **A —
+> overbuild-ish / generic knob** (a bigger window still fills with noise — *a bigger window
+> makes it worse*). **C — overbuild.** **D — extremist / wrong.**
+
+---
+
+### 14. (D6·D2 · decision ③) A prototype behaves perfectly in the chat product. Shipped
+through the API with the *same* instruction text, it ignores half the rules. What best
+explains it?
+
+A. The API serves a weaker model.
+B. The chat product layers **Anthropic's own system prompt** under yours; that floor doesn't
+   exist on the API, and your instruction is landing in a `user` message instead of `system`.
+C. The API's default temperature is higher.
+D. You need to send the instructions as a `role: "system"` message.
+
+> **Answer: B.** Decision ③ *what Claude sees*. The mechanism that differs is the **surface**.
+> **A / C — generic knobs** (swapping models/temperature isn't what changed between a
+> prototype and a shipped call). **D — right-word-wrong-place** (no `role:"system"` message
+> exists; instructions go in the top-level `system` field).
+
+---
+
+### 15. (D5·D4 · decision ②) A batch pipeline's summaries are being cut off on the longest
+documents. A junior engineer proposes a second Claude pass that stitches truncated outputs
+back together. Better move?
+
+A. Ship the stitching pass — it's robust.
+B. Read `stop_reason`; it's `max_tokens`; raise the output limit for those documents.
+C. Switch to a larger-context model.
+D. Shorten the summarisation prompt.
+
+> **Answer: B.** Decision ② + ④ *debugging* — **evidence first**, then the **smallest** fix.
+> **A — the overbuild**, in full costume. **C** treats a symptom that isn't the cause
+> (context window ≠ output cap). **D — symptom-treater.**
+
+---
+
+### 16. (D2 · decision ④ · config mgmt) A team upgrades the model id in production on a
+Friday because a new version shipped; behaviour subtly changes and support tickets spike over
+the weekend. What should have happened?
+
+A. Nothing — always run the newest model.
+B. The model id is **pinned configuration**; an upgrade is a change made deliberately, on a
+   branch, with the **golden set** run before rollout.
+C. Roll back and never upgrade.
+D. Add a disclaimer to the assistant's replies.
+
+> **Answer: B.** Decision ④ *configuration management*. Model choice is config — "a prompt
+> edit (or a model bump) is a deployment". **A — extremist / the cause.** **C — extremist.**
+> **D — symptom-treater.**

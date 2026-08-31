@@ -1,0 +1,30 @@
+# Configuration is a versioned artifact (D2 · Configuration Management).
+# A change here is a deployment: change it deliberately, then run golden_set.jsonl.
+
+[model]
+# Pinned and intentional — an upgrade is a decision with a test pass, not a surprise.
+id = "claude-haiku-4-5"
+
+[budget]
+# Per-run cost ceiling in USD. assistant.py stops with a clear message before it is exceeded.
+usd = 0.02
+
+[limits]
+max_turns = 8          # the agent-loop iteration cap
+timeout_seconds = 30   # per API call
+
+[refund]
+# Guardrail (D7): refunds above this are refused in code regardless of the model's intent.
+auto_approve_max_usd = 50.0
+
+# Cascade / tier map (D5) — week 2 exercise: price the assistant here and choose deliberately.
+[tiers]
+cheap     = "claude-haiku-4-5"
+workhorse = "claude-sonnet-5"
+top       = "claude-opus-5"
+
+# USD per 1,000,000 tokens (input, output). Source: Anthropic pricing.
+[prices]
+"claude-haiku-4-5"  = [1.00, 5.00]
+"claude-sonnet-5"   = [3.00, 15.00]
+"claude-opus-5"     = [5.00, 25.00]
