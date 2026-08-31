@@ -1,0 +1,8 @@
+# Aizentify CDF Bootcamp — never commit these
+.venv/
+.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.rag_index/
+*.local

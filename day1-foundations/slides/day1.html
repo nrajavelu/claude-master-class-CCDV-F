@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Day 1 — Foundations &amp; the Messages API · Aizentify CDF</title>
+  <link rel="stylesheet" href="../../assets/aizentify-theme.css">
+</head>
+<body>
+<div class="deck">
+
+  <!-- 1 -->
+  <section class="slide title">
+    <div class="kicker">Aizentify · Claude Certified Developer – Foundations (CCDV-F) · Day 1</div>
+    <h1>Foundations:<br>LLMs &amp; the Messages API</h1>
+    <div class="rule"></div>
+    <p class="tag">Learn the exam's method. Call Claude directly. Build an agent loop by hand.</p>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <span class="pill">Orientation</span>
+    <h2>Today, in <span class="accent">six moves</span></h2>
+    <table class="k">
+      <tr><th>#</th><th>Module</th><th>You leave able to…</th></tr>
+      <tr><td>0</td><td>How this exam is built</td><td>name the decision, kill wrong options with two rules</td></tr>
+      <tr><td>1</td><td>Claude &amp; the Messages API</td><td>read a request and a response, field by field</td></tr>
+      <tr><td>2</td><td>Prompt-engineering fundamentals</td><td>steer output with the system prompt, structure, examples</td></tr>
+      <tr><td>3</td><td>Streaming</td><td>stream long output without timing out</td></tr>
+      <tr><td>4</td><td>Errors, retries, timeouts</td><td>handle 429 / 5xx / auth like production code</td></tr>
+      <tr><td>5</td><td>Tokens, cost &amp; the agentic loop</td><td>measure spend, and build a tool-using loop by hand</td></tr>
+    </table>
+    <p class="muted">Four labs. Every one runs against your own key. Watch your Console usage climb.</p>
+  </section>
+
+  <!-- Module 0 divider -->
+  <section class="slide section">
+    <div class="num">Module 0</div>
+    <h1>How this exam is built</h1>
+  </section>
+
+  <!-- M0: four decisions -->
+  <section class="slide">
+    <span class="pill exam">Exam method</span>
+    <h2>Every question is <span class="accent">one of four decisions</span></h2>
+    <table class="k">
+      <tr><th>Decision</th><th>It's really asking…</th><th>Domains</th><th>≈/53</th></tr>
+      <tr><td>① What runs?</td><td>workflow vs agent · one loop vs sub-agents · built-in vs your tool vs plugged in</td><td>D1, D8</td><td>~13</td></tr>
+      <tr><td>② How does it call Claude?</td><td>messages · stream vs batch · model tier · token cost</td><td>D2, D5</td><td>~12</td></tr>
+      <tr><td>③ What does Claude see &amp; say?</td><td>context window · prompt build · output shape your code can consume</td><td>D6, D2, D3</td><td>~13</td></tr>
+      <tr><td>④ Will it survive production?</td><td>requirements &amp; lifecycle · debugging · security</td><td>D2, D4, D7</td><td>~15</td></tr>
+    </table>
+    <p class="muted">Name the decision first — half the options belong to a different one. D2 is 33% of the exam;
+      ~a quarter is plain software engineering with no Claude in it (that's Day 4).</p>
+  </section>
+
+  <!-- M0: two rules -->
+  <section class="slide">
+    <span class="pill exam">Exam method</span>
+    <h2>Two rules that <span class="accent">kill wrong answers</span></h2>
+    <div class="cols">
+      <div class="card">
+        <h3>Rule 1 — mechanism &gt; knob</h3>
+        <p>The stem names a <b>constraint</b> ("overnight", "cost is the concern"). The answer is the
+          <b>mechanism built for it</b> (→ Batch). A generic dial — <code>temperature</code>, model tier,
+          <code>max_tokens</code>, "raise the timeout" — is almost always a distractor.</p>
+      </div>
+      <div class="card">
+        <h3>Rule 2 — mechanism &gt; guidance</h3>
+        <p>If the stem says <b>must / never / always / cannot</b>, every option that is only <i>advice</i>
+          ("tell the model to…", "write it down", "ask users to…") is dead.
+          <b>"A polite request is not an enforceable control."</b> Only something that <i>actually stops</i>
+          the bad case survives — isolation, a blocking hook, a schema.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- M0: the attack -->
+  <section class="slide">
+    <span class="pill exam">Exam method</span>
+    <h2>The <span class="accent">four-step attack</span> — on every item</h2>
+    <ol>
+      <li><b>Name the decision</b> (①–④). Wrong-decision options fall away.</li>
+      <li><b>Find the constraint word</b> — "overnight", "must never", "any engineer can roll back", "visible immediately".</li>
+      <li><b>Apply Rule 1 / Rule 2</b> — kill the generic knobs; if there's a <i>must/never</i>, kill the guidance.</li>
+      <li><b>Pick the mechanism</b> that matches. Two options both work? Choose the cheaper / simpler / SDK-native one.</li>
+    </ol>
+    <p class="muted">Full method + memory anchors: <code>logistics/05-exam-method.md</code>. Optional video map:
+      <code>video-companion.md</code>.</p>
+  </section>
+
+  <!-- Module 1 -->
+  <section class="slide section">
+    <div class="num">Module 1</div>
+    <h1>Claude &amp; the Messages API</h1>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <span class="pill">Concept</span>
+    <h2>The model <span class="accent">family</span></h2>
+    <ul class="clean">
+      <li><b>Haiku</b> — fastest, cheapest. High-volume, well-specified tasks: classify, extract, format.</li>
+      <li><b>Sonnet</b> — balanced. Code, review, multi-step tool use.</li>
+      <li><b>Opus</b> — deepest reasoning. Ambiguous, open-ended problems.</li>
+      <li>Newer generation numbers (4.5, 5, …) = smarter at the same tier.</li>
+    </ul>
+    <p><span class="pill exam">Exam watch</span> Default to the <b>most capable</b> model, then step
+      <i>down</i> only when measurement says you can. Not "pick a tier by task type." (Day 5 goes deep.)</p>
+    <p class="muted">Our labs pin <code>claude-haiku-4-5</code> — a classroom of keys, kept cheap.</p>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <span class="pill">Concept</span>
+    <h2>One endpoint: <span class="accent">/v1/messages</span></h2>
+    <ul class="clean">
+      <li>Everything goes through <code>client.messages.create(...)</code> (or <code>.stream(...)</code>).</li>
+      <li>Tools, images, PDFs, structured output, thinking — all are <i>parameters</i> of this one call, not separate APIs.</li>
+      <li>The API is <b>stateless</b>: you resend the whole conversation every turn. There is no "session" on the server.</li>
+    </ul>
+    <pre><code>import anthropic
+client = anthropic.Anthropic()          <span class="tok-com"># reads ANTHROPIC_API_KEY</span>
+
+resp = client.messages.create(
+    model=<span class="tok-str">"claude-haiku-4-5"</span>,
+    max_tokens=<span class="tok-num">400</span>,
+    messages=[{<span class="tok-str">"role"</span>: <span class="tok-str">"user"</span>, <span class="tok-str">"content"</span>: <span class="tok-str">"Hello"</span>}],
+)</code></pre>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <span class="pill">Concept</span>
+    <h2>Anatomy of a <span class="accent">request</span></h2>
+    <table class="k">
+      <tr><th>field</th><th>what it is</th></tr>
+      <tr><td><code>model</code></td><td>which model. An exact id string — <code>claude-haiku-4-5</code>.</td></tr>
+      <tr><td><code>max_tokens</code></td><td>hard ceiling on the <i>response</i>. Hitting it truncates mid-thought.</td></tr>
+      <tr><td><code>system</code></td><td>the durable instruction / role. Not a message — its own top-level field.</td></tr>
+      <tr><td><code>messages</code></td><td>the conversation: a list of <code>{"role": "user"|"assistant", "content": ...}</code>.</td></tr>
+      <tr><td><code>tools</code>, <code>thinking</code>, <code>output_config</code> …</td><td>opt-in capabilities (Modules ahead / Day 2+).</td></tr>
+    </table>
+    <p class="muted">First message must be <code>user</code>. <code>content</code> is a string, or a list of typed blocks.</p>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <span class="pill">Concept</span>
+    <h2>Anatomy of a <span class="accent">response</span></h2>
+    <ul class="clean">
+      <li><code>response.content</code> is a <b>list of blocks</b> — <code>text</code>, <code>thinking</code>, <code>tool_use</code>… Always check <code>block.type</code>.</li>
+      <li><code>response.stop_reason</code> — <i>why</i> generation stopped. You branch on this.</li>
+      <li><code>response.usage</code> — <code>input_tokens</code>, <code>output_tokens</code>, cache counters. This is your bill.</li>
+      <li>You send <b>dicts</b>; you get back <b>objects</b> (dot access): <code>response.usage.input_tokens</code>.</li>
+    </ul>
+    <pre><code>text = <span class="tok-str">""</span>.join(b.text <span class="tok-kw">for</span> b <span class="tok-kw">in</span> response.content <span class="tok-kw">if</span> b.type == <span class="tok-str">"text"</span>)</code></pre>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <span class="pill exam">Exam watch</span>
+    <h2><span class="accent">stop_reason</span> — know all of them</h2>
+    <table class="k">
+      <tr><th>value</th><th>meaning</th><th>you do</th></tr>
+      <tr><td><code>end_turn</code></td><td>finished naturally</td><td>read the text</td></tr>
+      <tr><td><code>max_tokens</code></td><td>hit the ceiling</td><td>raise <code>max_tokens</code> / stream / narrow</td></tr>
+      <tr><td><code>tool_use</code></td><td>wants a tool run</td><td>run it, feed results back (Module 5)</td></tr>
+      <tr><td><code>stop_sequence</code></td><td>hit your stop string</td><td>expected — handle it</td></tr>
+      <tr><td><code>pause_turn</code></td><td>long server-tool turn paused</td><td>resend to continue</td></tr>
+      <tr><td><code>refusal</code></td><td>declined on safety grounds</td><td>check <code>stop_details</code>; don't retry blindly</td></tr>
+    </table>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide">
+    <span class="pill lab">Do this now · 35 min</span>
+    <h2>Lab 1 · <span class="accent">code explainer</span></h2>
+    <p>Build a CLI that explains a source file, then prints <code>usage</code> and <code>stop_reason</code>.</p>
+    <pre><code>cd day1-foundations
+python labs/lab1_explainer/starter/explainer.py labs/lab1_explainer/sample.py</code></pre>
+    <ul class="clean">
+      <li>Use <code>system=</code> for the instruction — not a giant user message.</li>
+      <li>Handle <code>response.content</code> as a <b>list</b>.</li>
+      <li>Print the token usage. You should <i>see</i> what you spent.</li>
+    </ul>
+    <p class="muted">Stuck? <code>labs/lab1_explainer/README.md</code> has the steps and the expected output.</p>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <span class="pill">Recap</span>
+    <h2>Module 1 in <span class="accent">three lines</span></h2>
+    <ul class="clean">
+      <li>One endpoint. Stateless. Capabilities are parameters, not separate APIs.</li>
+      <li>Request = <code>model</code> + <code>max_tokens</code> + <code>system</code> + <code>messages</code>.</li>
+      <li>Response = a <b>list of blocks</b> + <code>stop_reason</code> + <code>usage</code>. Branch on <code>stop_reason</code>.</li>
+    </ul>
+  </section>
+
+  <!-- 11 -->
+  <section class="slide section">
+    <div class="num">Module 2</div>
+    <h1>Prompt-engineering fundamentals</h1>
+  </section>
+
+  <!-- 12 -->
+  <section class="slide">
+    <span class="pill">Concept</span>
+    <h2>The <span class="accent">system prompt</span> is the steering wheel</h2>
+    <ul class="clean">
+      <li>Put the <b>role</b>, the <b>rules</b>, and the <b>output shape</b> here — it persists across every turn.</li>
+      <li>User messages carry the <i>task</i> and the <i>data</i>; the system prompt carries the <i>contract</i>.</li>
+      <li>Rule of thumb: if you'd repeat it every turn, it belongs in <code>system</code>.</li>
+    </ul>
+    <pre><code>system=(
+  <span class="tok-str">"You review Python for a teammate who will maintain it. "</span>
+  <span class="tok-str">"One tight paragraph. No line-by-line. No praise."</span>
+)</code></pre>
+  </section>
+
+  <!-- 13 -->
+  <section class="slide">
+    <span class="pill">Concept</span>
+    <h2>Be explicit · structure · <span class="accent">show don't tell</span></h2>
+    <div class="cols">
+      <div class="card">
+        <h3>Be explicit</h3>
+        <p>State the format, the length, the audience, what to exclude. Ambiguity is answered by the model guessing.</p>
+      </div>
+      <div class="card">
+        <h3>Structure with tags</h3>
+        <p>Wrap inputs in <code>&lt;code&gt;</code>, <code>&lt;doc&gt;</code>, <code>&lt;transcript&gt;</code>. Claude reads structure well; it separates instruction from data.</p>
+      </div>
+      <div class="card">
+        <h3>Few-shot</h3>
+        <p>One or two worked <i>input → output</i> examples beat a paragraph of description for format-following.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 -->
+  <section class="slide">
+    <span class="pill">Concept</span>
+    <h2>Steering the <span class="accent">output shape</span></h2>
+    <ul class="clean">
+      <li>Say the shape in the system prompt: <i>"Reply with exactly three bullets, no preamble."</i></li>
+      <li>Give a skeleton to fill in. Name the sections you want.</li>
+      <li>For <b>guaranteed</b> machine-readable output, that's structured outputs / <code>strict</code> tools — Day 2.</li>
+      <li>Prefill (putting words in Claude's mouth as the last assistant turn) is <b>removed</b> on current models — don't teach it.</li>
+    </ul>
+  </section>
+
+  <!-- 15 -->
+  <section class="slide">
+    <span class="pill exam">Exam watch</span>
+    <h2><span class="accent">Thinking</span> &amp; effort</h2>
+    <ul class="clean">
+      <li>Current models take <code>thinking={"type": "adaptive"}</code> — the model decides how much to think.</li>
+      <li>The old fixed <code>budget_tokens</code> is <b>deprecated / rejected</b> on current models. A classic stale-answer distractor.</li>
+      <li><code>output_config={"effort": "low|medium|high|xhigh|max"}</code> dials overall thoroughness vs cost.</li>
+      <li>Reach for thinking on ambiguous, multi-step problems; skip it for classify/extract.</li>
+    </ul>
+  </section>
+
+  <!-- 16 -->
+  <section class="slide">
+    <span class="pill lab">Drill · 15 min</span>
+    <h2>Exercise · <span class="accent">prompt surgery</span></h2>
+    <p>Open <code>exercises.md</code> → "Prompt surgery". You're given a vague prompt and a bad
+      output. Rewrite the <b>system prompt</b> only, in three passes:</p>
+    <ul class="clean">
+      <li>Pass 1 — make the role &amp; audience explicit.</li>
+      <li>Pass 2 — pin the output shape (length, format, exclusions).</li>
+      <li>Pass 3 — add one few-shot example.</li>
+    </ul>
+    <p class="muted">Run each pass against the same input. Keep the outputs to compare.</p>
+  </section>
+
+  <!-- 17 -->
+  <section class="slide">
+    <span class="pill">Recap</span>
+    <h2>Module 2 in <span class="accent">three lines</span></h2>
+    <ul class="clean">
+      <li>Contract in <code>system</code>; task and data in <code>messages</code>.</li>
+      <li>Explicit &gt; clever. Structure inputs with tags. Show an example.</li>
+      <li><code>thinking: adaptive</code> + <code>effort</code>; <code>budget_tokens</code> and prefill are gone.</li>
+    </ul>
+  </section>
+
+  <!-- 18 -->
+  <section class="slide section">
+    <div class="num">Module 3</div>
+    <h1>Streaming</h1>
+  </section>
+
+  <!-- 19 -->
+  <section class="slide">
+    <span class="pill">Concept</span>
+    <h2>Why <span class="accent">stream</span></h2>
+    <ul class="clean">
+      <li>A non-streaming call holds the HTTP connection until the <i>whole</i> answer is done — big outputs can hit the request timeout and fail.</li>
+      <li>Streaming returns tokens as they're generated: no timeout risk, live UI.</li>
+      <li>Use the SDK helper — don't hand-assemble from events:</li>
+    </ul>
+    <pre><code><span class="tok-kw">with</span> client.messages.stream(model=<span class="tok-str">"claude-haiku-4-5"</span>, max_tokens=<span class="tok-num">400</span>,
+                            messages=msgs) <span class="tok-kw">as</span> stream:
+    <span class="tok-kw">for</span> chunk <span class="tok-kw">in</span> stream.text_stream:
+        print(chunk, end=<span class="tok-str">""</span>, flush=<span class="tok-kw">True</span>)
+final = stream.get_final_message()   <span class="tok-com"># full Message: usage, stop_reason, blocks</span></code></pre>
+  </section>
+
+  <!-- 20 -->
+  <section class="slide">
+    <span class="pill lab">Do this now · 25 min</span>
+    <h2>Lab 2 · <span class="accent">stream it</span></h2>
+    <pre><code>python labs/lab2_streaming/starter/stream_explainer.py labs/lab1_explainer/sample.py</code></pre>
+    <ul class="clean">
+      <li>Convert Lab 1 to the <code>with client.messages.stream(...) as stream:</code> form.</li>
+      <li>Print text as it arrives (<code>flush=True</code>).</li>
+      <li>Get <code>usage</code> from <code>get_final_message()</code> — not by counting characters.</li>
+      <li>Answer: <i>when would you NOT stream?</i></li>
+    </ul>
+  </section>
+
+  <!-- 21 -->
+  <section class="slide section">
+    <div class="num">Module 4</div>
+    <h1>Errors, retries, timeouts</h1>
+  </section>
+
+  <!-- 22 -->
+  <section class="slide">
+    <span class="pill exam">Exam watch</span>
+    <h2>Catch a <span class="accent">chain</span>, most-specific first</h2>
+    <table class="k">
+      <tr><th>exception</th><th>HTTP</th><th>retry?</th></tr>
+      <tr><td><code>BadRequestError</code></td><td>400</td><td>no — your request is malformed</td></tr>
+      <tr><td><code>AuthenticationError</code></td><td>401</td><td>no — fix the key</td></tr>
+      <tr><td><code>PermissionDeniedError</code></td><td>403</td><td>no</td></tr>
+      <tr><td><code>NotFoundError</code></td><td>404</td><td>no — wrong model/endpoint</td></tr>
+      <tr><td><code>RateLimitError</code></td><td>429</td><td><b>yes</b> — back off</td></tr>
+      <tr><td><code>APIStatusError</code></td><td>≥500</td><td><b>yes</b> — back off</td></tr>
+      <tr><td><code>APIConnectionError</code></td><td>—</td><td><b>yes</b> — network blip</td></tr>
+    </table>
+    <p class="muted">A single <code>except Exception</code> throws away the retry / don't-retry distinction.</p>
+  </section>
+
+  <!-- 23 -->
+  <section class="slide">
+    <span class="pill">Concept</span>
+    <h2>The SDK already does <span class="accent">some of this</span></h2>
+    <ul class="clean">
+      <li>Built-in: retries 408 / 409 / 429 / 5xx + connection errors with exponential backoff. <code>max_retries</code> default <b>2</b>.</li>
+      <li>Built-in: 10-minute default <code>timeout</code>; override per client or per request (<code>client.with_options(timeout=30.0)</code>).</li>
+      <li>Hand-roll a loop only when you need custom logic — honour <code>retry-after</code>, a wall-clock budget, structured logging.</li>
+      <li><code>refusal</code> is <b>not</b> an exception — it's a <code>stop_reason</code>. Check it before reading <code>content</code>.</li>
+    </ul>
+  </section>
+
+  <!-- 24 -->
+  <section class="slide">
+    <span class="pill lab">Do this now · 40 min</span>
+    <h2>Lab 3 · <span class="accent">production-shaped call</span></h2>
+    <pre><code>python labs/lab3_resilient/starter/resilient.py labs/lab1_explainer/sample.py
+python labs/lab3_resilient/starter/resilient.py labs/lab1_explainer/sample.py --break-key</code></pre>
+    <ul class="clean">
+      <li>Estimate input cost with <code>count_tokens</code> <i>before</i> sending.</li>
+      <li>Retry 429 / 5xx / connection with exponential backoff + jitter; fail fast on 400 / 401 / 404.</li>
+      <li>Add a per-request timeout.</li>
+      <li>Print real cost from <code>usage</code> afterwards.</li>
+    </ul>
+  </section>
+
+  <!-- 25 -->
+  <section class="slide section">
+    <div class="num">Module 5</div>
+    <h1>Tokens, cost &amp; the agentic loop</h1>
+  </section>
+
+  <!-- 26 -->
+  <section class="slide">
+    <span class="pill">Concept</span>
+    <h2>Count before you <span class="accent">spend</span></h2>
+    <ul class="clean">
+      <li><code>client.messages.count_tokens(model=, system=, messages=, tools=)</code> — a separate, cheap endpoint.</li>
+      <li>Use it to predict spend, or to check a prompt will fit the context window.</li>
+      <li>Cost = tokens × (price per million ÷ 1e6). Input and output are priced differently; output is dearer.</li>
+      <li><code>usage.cache_read_input_tokens</code> ≈ 0.1× price — Day 5's caching lever.</li>
+    </ul>
+    <pre><code>counted = client.messages.count_tokens(model=M, system=S, messages=msgs)
+est = counted.input_tokens * (<span class="tok-num">1.00</span> / <span class="tok-num">1_000_000</span>)   <span class="tok-com"># Haiku input $/tok</span></code></pre>
+  </section>
+
+  <!-- 27 -->
+  <section class="slide">
+    <span class="pill exam">Exam watch</span>
+    <h2>The agentic loop · <span class="accent">two rules</span></h2>
+    <ol>
+      <li>After <i>every</i> response, append <code>{"role": "assistant", "content": response.content}</code> — the <b>whole block list</b>.</li>
+      <li>If <code>stop_reason == "tool_use"</code>: run each <code>tool_use</code> block, then append <b>one</b> user message whose <code>content</code> is a list of <code>tool_result</code> blocks, each with the matching <code>tool_use_id</code>.</li>
+    </ol>
+    <pre><code>user → assistant(tool_use) → user(tool_result) → assistant(text)  <span class="tok-com"># end_turn</span></code></pre>
+    <p class="muted">Loop until <code>end_turn</code>. Handle <code>max_tokens</code> / <code>refusal</code>. Cap the turns.</p>
+  </section>
+
+  <!-- 28 -->
+  <section class="slide">
+    <span class="pill lab">Do this now · 45 min</span>
+    <h2>Lab 4 · <span class="accent">agent loop by hand</span></h2>
+    <pre><code>python labs/lab4_agentic_loop/starter/agent.py "Is there a bug in mini_repo? Cite file and line."</code></pre>
+    <ul class="clean">
+      <li>Open <code>ep01/agent.py</code> (parent repo) alongside — read, don't paste.</li>
+      <li>One <code>read_project_file</code> tool. Guard against <code>../</code> and absolute paths.</li>
+      <li>Get the two rules right: assistant turn appended as-is; one user message of <code>tool_result</code> blocks with correct ids.</li>
+      <li>Return on <code>end_turn</code>; cap the turns so a bad loop can't burn budget.</li>
+    </ul>
+  </section>
+
+  <!-- 29 -->
+  <section class="slide">
+    <span class="pill">Recap</span>
+    <h2>Day 1 · <span class="accent">what you can do now</span></h2>
+    <ul class="clean">
+      <li>Read and write a Messages API call; branch on every <code>stop_reason</code>.</li>
+      <li>Steer output with the system prompt, structure, and examples.</li>
+      <li>Stream long output; handle 429 / 5xx / auth correctly; measure tokens and cost.</li>
+      <li>Build a tool-using agent loop from first principles.</li>
+    </ul>
+    <p class="muted">Tomorrow: tools with <i>schemas</i>, guaranteed structured output, and guardrails.</p>
+  </section>
+
+  <!-- 30 -->
+  <section class="slide">
+    <span class="pill exam">Exam prep</span>
+    <h2>Before you leave · <span class="accent">questions</span></h2>
+    <ul class="clean">
+      <li>Work <code>exam-style-questions.md</code> at your table — argue to consensus before the reveal.</li>
+      <li>Then the 10-question <code>quiz.md</code>, self-marked. Hand your domain scores to the trainer.</li>
+      <li>Weak on Fundamentals? Tonight: re-read <code>ep01/agent.py</code> + <code>question-bank/domain-1-fundamentals.md</code>.</li>
+    </ul>
+    <p class="tag">Identify what matters. Intelligently transform how you work. — © 2026 Aizentify LLP</p>
+  </section>
+
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

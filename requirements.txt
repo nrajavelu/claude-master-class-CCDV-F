@@ -1,0 +1,20 @@
+# Aizentify CDF Bootcamp — Python dependencies
+# Install into a fresh virtual environment:
+#   python -m venv .venv && source .venv/bin/activate   (Windows: .venv\Scripts\activate)
+#   pip install -r requirements.txt
+#
+# Pinned to floors known-good for this curriculum. Bump deliberately, then re-run
+# every lab's solution/ before a cohort.
+
+anthropic>=0.40.0            # Messages API, streaming, strict tools, messages.parse()
+claude-agent-sdk>=0.2.128    # Days 3-5: query(), ClaudeSDKClient, @tool, hooks, subagents, skills
+mcp>=1.2.0                   # Day 3: build a standalone FastMCP server
+python-dotenv>=1.0.1         # every lab reads ANTHROPIC_API_KEY from a local .env
+pytest>=8.0.0               # Day 4: the evaluation harness
+rich>=13.7.0               # nicer terminal output in a couple of labs (optional but used)
+
+# --- Day 4 RAG lab: pick ONE embedding path (see logistics/01-procurement-guide.md) ---
+# Path A — hosted embeddings (needs a free VOYAGE_API_KEY):
+# voyageai>=0.3.0
+# Path B — fully local, no key, ~90 MB model download on first run:
+# sentence-transformers>=3.0.0
