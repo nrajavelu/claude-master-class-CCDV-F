@@ -87,11 +87,15 @@ drilled.
 ```
 aizentify-cdf-bootcamp/
 ├── README.md ..................... you are here
-├── THEME.md ..................... Aizentify brand tokens + deck authoring
+├── THEME.md ..................... Aizentify brand tokens + deck authoring + §4 visual layer
 ├── requirements.txt ............. pip install -r this
-├── video-companion.md .......... optional 17-lesson video map (blueprint order)
-├── portal/ .................... branded landing pages: index · candidate (?c=Name) · trainer · practice
-├── assets/ ..................... shared deck CSS, official logo, nav script
+├── curriculum-map.md ........... every "Claude way" component → day/module/episode/exam domain
+├── reasoning-patterns.md ....... Chain-of-Thought vs ReAct vs adaptive thinking (candidates + trainers)
+├── video-companion.md .......... 17-lesson exam walkthrough + build-along course map (deep links)
+├── start.sh / stop.sh ......... launch the portal locally over http
+├── portal/ .................... index · candidate (?c=Name) · trainer · practice · view (md reader) · watch (video)
+├── code-snippets/ ............. runnable references keyed to exam question types
+├── assets/ ..................... shared deck CSS + visual layer, official logo, nav script, img/ (pass B)
 ├── logistics/ ................... FOR THE ORGANISER & TRAINER — read first
 │   ├── 00-environment-setup.md
 │   ├── 01-procurement-guide.md ....... give this to the budget holder (push: Claude Team)
@@ -126,13 +130,14 @@ your browser; `--lan` to share on Wi-Fi), or host on GitHub Pages — see `porta
 
 | Component | Status |
 |---|---|
-| Brand assets (official logo), README, THEME, requirements, `video-companion.md` | ✅ complete |
-| `logistics/00`–`05` (8-domain blueprint + **exam method** + procurement + runbook) | ✅ complete |
-| `day0-prework/` (primer, `check_env.py`, `hello_claude.py`) | ✅ complete |
-| `day1-foundations/` (deck, trainer guide, 4 labs, exercises, quiz, exam questions) | ✅ complete |
-| `question-bank/` — README (8 domains) + Domain 2 pool (28 items) | ✅ complete (pattern for the rest) |
-| `day2`–`day5` | 🟡 outline + lab specs; full build in follow-up passes |
-| `question-bank/` domains 1, 3–8 + scenarios + 53-item mock | 🟡 blueprint |
+| Brand assets (official logo), README, THEME, requirements | ✅ |
+| `logistics/00`–`05` · `video-companion.md` · **`reasoning-patterns.md`** (CoT/ReAct) · **`curriculum-map.md`** (coverage) | ✅ |
+| `portal/` — landing · candidate (`?c=`) · trainer · **practice** (38 items, code-ref'd) · **`view.html`** (md reader) · **`watch.html`** (2-series in-page player) · `start.sh` | ✅ |
+| `code-snippets/` — 12 runnable references keyed to exam question types | ✅ |
+| `day0-prework/` (primer, `check_env.py`, `hello_claude.py`) | ✅ |
+| `day1-foundations/` — **deck (visual layer: chips · SVG diagrams · focus-code · ReAct · CoT)** · `recap.html` · trainer guide · 4 labs · exercises · quiz · exam questions | ✅ |
+| `day2`–`day5` — **decks (pass-A visual) + `recap.html` + outline/lab-specs** | ✅ decks & recaps; 🟡 full trainer guides + quizzes + per-day exam-question sets |
+| `question-bank/` — README (8 domains) + Domain 2 pool (28) + domains 1,3–8 seeded | 🟡 domains 3–8 + scenarios + 53-item mock still to fill |
 
 Follow-up build passes are listed at the end of `logistics/03` and in the plan.
 

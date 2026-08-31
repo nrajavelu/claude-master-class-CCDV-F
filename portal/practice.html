@@ -35,7 +35,7 @@
     <div class="card" style="display:flex; gap:18px; flex-wrap:wrap; align-items:center">
       <div>
         <label class="fld" for="fday" style="margin:0 0 4px">Day</label>
-        <select class="txt" id="fday" style="width:auto"><option value="">All</option><option value="1">Day 1</option></select>
+        <select class="txt" id="fday" style="width:auto"><option value="">All</option><option value="1">Day 1</option><option value="2">Day 2</option><option value="3">Day 3</option><option value="4">Day 4</option><option value="5">Day 5</option></select>
       </div>
       <div>
         <label class="fld" for="fdom" style="margin:0 0 4px">Domain</label>
@@ -165,8 +165,11 @@
 
   function rationale(q) {
     const s = state[q.id];
+    var ref = q.ref
+      ? '<div style="margin-top:8px;font-family:var(--font-mono);font-size:.8rem;color:var(--ink-500)">▶ sample code: <code>' + esc(q.ref) + '</code></div>'
+      : '';
     return '<div class="rationale"><b>' + (s.correct ? '✓ Correct' : '✗ Not quite') +
-      '</b> — answer: <b>' + q.answer.join(", ") + '</b>. ' + esc(q.rationale) + '</div>';
+      '</b> — answer: <b>' + q.answer.join(", ") + '</b>. ' + esc(q.rationale) + ref + '</div>';
   }
 
   function updateScore() {

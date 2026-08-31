@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 2 recap — one page · Aizentify CDF</title>
+<link rel="stylesheet" href="../assets/aizentify-theme.css">
+<style>
+  html,body{overflow:auto;height:auto} body{background:var(--navy-950)}
+  .page{max-width:1000px;margin:0 auto;padding:5vh 6vw 12vh}
+  .page h1{font-size:2.6rem;margin-bottom:.3rem} .page h2{font-size:1.4rem;margin:2.2rem 0 .9rem;padding-bottom:.4rem;border-bottom:1px solid var(--navy-800)}
+  .page h3{color:var(--cyan-300);margin:1rem 0 .3rem;font-size:1rem}
+  .page p,.page li{color:var(--paper-100)} .page ul{margin:.4rem 0 1rem 1.3rem} .page li{margin-bottom:.4rem}
+  .page code{background:var(--navy-900);border:1px solid var(--navy-800);border-radius:5px;padding:.05rem .35rem;color:var(--cyan-300);font-size:.86em}
+  .kicker{font-family:var(--font-mono);color:var(--blue-400);letter-spacing:.12em;text-transform:uppercase;font-size:.85rem}
+  .vids a{display:inline-block;margin:0 .8rem .4rem 0;font-family:var(--font-mono);font-size:.82rem;color:var(--cyan-300);border:1px solid rgba(61,209,242,.3);border-radius:999px;padding:.2rem .6rem;text-decoration:none}
+  .refln{font-family:var(--font-mono);font-size:.76rem;color:var(--ink-500);border-top:1px solid var(--navy-800);padding-top:.6rem;margin-top:.8rem}
+  .foot{margin-top:3rem;color:var(--ink-500);font-family:var(--font-mono);font-size:.78rem}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">Aizentify · CCDV-F · Day 2 — keep this open</div>
+  <h1>Prompting · tools · <span class="gradient-text">structured output</span></h1>
+  <p class="muted">Decision ③ — what does Claude see and say. Full deck: <code>slides/day2.html</code>.</p>
+
+  <h2>Prompt engineering</h2>
+  <ul>
+    <li>Contract (role · rules · output shape) → <code>system</code>. Task + data → <code>messages</code>. If you'd paste it every turn, it's a system prompt.</li>
+    <li><b>Chain-of-Thought</b> — zero-shot ("think step by step") / structured (name the steps) / few-shot. Helps maths &amp; multi-constraint choice; skip for classify/extract. "CoT always helps" is a distractor. See <code>reasoning-patterns.md</code>.</li>
+    <li>Structure inputs with tags (<code>&lt;ticket&gt;</code>, <code>&lt;doc&gt;</code>) — instruction ≠ data, and first line of injection defence.</li>
+    <li>Two prompts both correct → the exam prefers the shorter one with a concrete example.</li>
+  </ul>
+
+  <h2>The three surfaces</h2>
+  <ul>
+    <li><b>Chat product</b> — Anthropic's own system prompt sits under yours → prototype behaves great, doesn't transfer to the API.</li>
+    <li><b>Coding-tool rules file</b> — arrives as a <b>user message</b>; later messages sit at the same level.</li>
+    <li><b>The API</b> — instructions go in the top-level <code>system</code> field. <b>No message has <code>role:"system"</code></b> (classic distractor).</li>
+  </ul>
+
+  <h2>Untrusted content — both directions</h2>
+  <ul>
+    <li>External / third-party content (a fetched page, a ticket) belongs in a <code>tool_result</code> block. ✓</li>
+    <li>Your own instructions <b>never</b> go in a <code>tool_result</code> — that channel is read with suspicion. ✗</li>
+  </ul>
+
+  <h2>Tools — the description is the interface</h2>
+  <ul>
+    <li><code>name</code> (unique) · <code>description</code> (the biggest factor in correct use — say what, when, inputs) · <code>input_schema</code>.</li>
+    <li>Tool called at the wrong time? Check the description before the model.</li>
+    <li>Parallel <code>tool_use</code> → one user message, a list of <code>tool_result</code> blocks, ids matching.</li>
+  </ul>
+
+  <h2>Structured output you can trust</h2>
+  <ul>
+    <li><code>strict:true</code> is a field on the <b>tool definition</b>; schema needs <code>additionalProperties:false</code> + everything in <code>required</code>.</li>
+    <li>No "optional" — optional = allow <code>null</code> as a type. <b>Unsupported schema features are rejected, not ignored.</b></li>
+    <li><code>client.messages.parse()</code> validates the response for you. Parse tool inputs with <code>json.loads</code>, never string-match.</li>
+    <li>On the SDK <code>@tool</code> path <code>strict</code> isn't forwarded yet — schema <i>guides</i>, <code>validate()</code> <i>enforces</i>. "Asking is not making sure."</li>
+  </ul>
+
+  <h2>Watch it</h2>
+  <div class="vids">
+    <a href="../portal/watch.html?l=5" target="_blank">▶ L5 · Three surfaces (39:18)</a>
+    <a href="../portal/watch.html?l=7" target="_blank">▶ L7 · Asking is not making sure (1:00:52)</a>
+    <a href="../portal/watch.html?l=12" target="_blank">▶ L12 · The description is the interface (1:51:50)</a>
+    <a href="../portal/watch.html?l=16" target="_blank">▶ L16 · The attack arrives as a ticket (2:35:19)</a>
+    <a href="../portal/watch.html?s=build&e=3" target="_blank">▶ Build-along Ep 03 · Custom tool</a>
+    <a href="../portal/watch.html?s=build&e=7" target="_blank">▶ Build-along Ep 07 · Structured output</a>
+  </div>
+  <p class="refln">episodes: ep03 · ep04 · ep07 &nbsp;·&nbsp; code: code-snippets/prompt_structure.py · cot_structured.py · strict_tool.py &nbsp;·&nbsp; qb: domain-6 · domain-8 · domain-2 &nbsp;·&nbsp; practice: portal/practice.html?day=2</p>
+  <p class="foot">Aizentify · Claude Certified Developer – Foundations · © 2026 Aizentify LLP</p>
+</div>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1a7ee8"/></marker>
+  <linearGradient id="brandgrad" x1="0" y1="0" x2="1" y2="0.4"><stop offset="0" stop-color="#3dd1f2"/><stop offset="0.55" stop-color="#1a7ee8"/><stop offset="1" stop-color="#1450e8"/></linearGradient>
+</defs></svg>
+</body>
+</html>

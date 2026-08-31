@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Day 2 — Prompt &amp; context engineering · tools · structured output · Aizentify CDF</title>
+  <link rel="stylesheet" href="../../assets/aizentify-theme.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1a7ee8"/></marker>
+  <marker id="arrowghost" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3f4348"/></marker>
+  <linearGradient id="brandgrad" x1="0" y1="0" x2="1" y2="0.4"><stop offset="0" stop-color="#3dd1f2"/><stop offset="0.55" stop-color="#1a7ee8"/><stop offset="1" stop-color="#1450e8"/></linearGradient>
+</defs></svg>
+
+<div class="deck">
+
+  <section class="slide title">
+    <div class="kicker">Aizentify · CCDV-F · Day 2</div>
+    <h1>Prompt &amp; context engineering<br>· tools · structured output</h1>
+    <div class="rule"></div>
+    <p class="tag">Steer the model on purpose. Give it tools it uses right. Get output your code can trust.</p>
+  </section>
+
+  <section class="slide">
+    <span class="chip recap">Orientation</span>
+    <h2>Today · <span class="accent">decision ③</span> — what does Claude see &amp; say?</h2>
+    <table class="k">
+      <tr><th>Module</th><th>You leave able to…</th><th>Domain</th></tr>
+      <tr><td>1 Prompt engineering, deliberately</td><td>contract in <code>system</code>, structure, few-shot</td><td>D6</td></tr>
+      <tr><td>2 The three surfaces</td><td>know where instructions land on each</td><td>D2</td></tr>
+      <tr><td>3 Boundaries &amp; untrusted content</td><td>keep hostile input out of the instruction channel</td><td>D6 · D7</td></tr>
+      <tr><td>4 Tools: the description is the interface</td><td>write a tool the model calls correctly</td><td>D8</td></tr>
+      <tr><td>5 Structured output you can trust</td><td><code>strict</code> schema + a validation layer</td><td>D2</td></tr>
+    </table>
+    <p class="muted">Anchor episodes: <code>ep03</code>, <code>ep07</code>, <code>ep04</code>. Yesterday's method still runs on every exam question.</p>
+  </section>
+
+  <section class="slide section"><div class="num">Module 1</div><h1>Prompt engineering, deliberately</h1></section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>Contract in <code>system</code> · task in <code>messages</code></h2>
+    <ul class="clean">
+      <li>Role, rules, output shape → <code>system</code>. It applies to every turn.</li>
+      <li>The changing task and the data → <code>messages</code>.</li>
+      <li>Heuristic: if you'd paste it every turn, it's a system prompt.</li>
+    </ul>
+    <pre class="dim"><code><span class="keep"><mark class="focus">system=</mark>"You extract fields from support tickets. Output only what the schema asks for."</span>
+<span class="keep">messages=[{"role":"user","content": "&lt;ticket&gt;...&lt;/ticket&gt;"}]</span></code></pre>
+  </section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>Explicit · structure · <span class="accent">show don't tell</span></h2>
+    <div class="cols">
+      <div class="card"><h3>Be explicit</h3><p>Format, length, audience, exclusions. Ambiguity is answered by a guess.</p></div>
+      <div class="card"><h3>Structure with tags</h3><p><code>&lt;doc&gt;</code>, <code>&lt;ticket&gt;</code>, <code>&lt;example&gt;</code> — instruction ≠ data. First line of injection defence.</p></div>
+      <div class="card"><h3>Few-shot</h3><p>One or two <i>input → output</i> pairs beat a paragraph of rules. Called zero/one/multi-shot.</p></div>
+    </div>
+    <p class="muted"><span class="chip exam" style="margin:0 .4rem 0 0">Exam watch</span> two prompts both correct → the exam prefers the shorter one with a concrete example.</p>
+  </section>
+
+  <section class="slide section"><div class="num">Module 2</div><h1>The three surfaces</h1></section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>Three surfaces · <span class="accent">three contracts</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 320" role="img" aria-label="Three surfaces">
+        <rect class="d-node" x="20" y="30" width="270" height="260" rx="12"/>
+        <text class="d-label" x="40" y="62">Chat product</text>
+        <text class="d-sub" x="40" y="90">Anthropic's own system</text>
+        <text class="d-sub" x="40" y="110">prompt sits UNDER yours</text>
+        <text class="d-sub" x="40" y="140">→ prototype behaves great</text>
+        <text class="d-sub" x="40" y="160">→ doesn't transfer to the API</text>
+        <rect class="d-node" x="315" y="30" width="270" height="260" rx="12"/>
+        <text class="d-label" x="335" y="62">Coding-tool rules file</text>
+        <text class="d-sub" x="335" y="90">arrives as a</text>
+        <text class="d-mono" x="335" y="112">user message</text>
+        <text class="d-sub" x="335" y="142">later messages sit at the</text>
+        <text class="d-sub" x="335" y="162">same level — weaker promise</text>
+        <rect class="d-node hot" x="610" y="30" width="270" height="260" rx="12"/>
+        <text class="d-label" x="630" y="62">The API</text>
+        <text class="d-sub" x="630" y="90">instructions go in the</text>
+        <text class="d-mono" x="630" y="112">system</text>
+        <text class="d-sub" x="630" y="132">top-level field</text>
+        <text class="d-sub" x="630" y="170" fill="#f2b877">NO message has</text>
+        <text class="d-mono" x="630" y="190" fill="#f2b877">role: "system"</text>
+      </svg>
+    </div>
+    <p class="muted">Prototype anywhere; re-prove it on the surface it will actually run on. An option offering a <code>role:"system"</code> message is a distractor.</p>
+    <a class="watch-chip" href="../../portal/watch.html?l=5" target="_blank">39:18 · L5</a>
+  </section>
+
+  <section class="slide section"><div class="num">Module 3</div><h1>Boundaries &amp; untrusted content</h1></section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2><code>tool_result</code> is the <span class="accent">untrusted</span> channel — both ways</h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 280" role="img" aria-label="Untrusted content direction">
+        <rect class="d-node hot" x="330" y="110" width="240" height="60" rx="10"/>
+        <text class="d-mono" x="360" y="146">tool_result block</text>
+        <rect class="d-node" x="20" y="30" width="260" height="60" rx="10"/>
+        <text class="d-sub" x="38" y="55">a fetched web page, a ticket,</text>
+        <text class="d-sub" x="38" y="75">a customer's text</text>
+        <path class="d-ok" d="M285 60 C 340 60, 340 120, 355 130"/>
+        <line class="d-flow" x1="285" y1="70" x2="330" y2="120"/>
+        <text class="d-sub" x="600" y="140" fill="#2fae66">✓ external content goes HERE</text>
+        <rect class="d-node warn" x="20" y="190" width="260" height="60" rx="10"/>
+        <text class="d-sub" x="38" y="215">your own instructions</text>
+        <text class="d-sub" x="38" y="235">("approve this", "do X next")</text>
+        <line class="d-x" x1="285" y1="200" x2="345" y2="160"/>
+        <line class="d-x" x1="285" y1="240" x2="345" y2="165"/>
+        <text class="d-sub" x="600" y="200" fill="#f2b877">✗ never — that channel is</text>
+        <text class="d-sub" x="600" y="220" fill="#f2b877">read with suspicion</text>
+      </svg>
+    </div>
+    <p class="muted">Need to say something after a tool runs? Say it in the next turn, in your own channel. Full security pass: Day 5.</p>
+    <a class="watch-chip" href="../../portal/watch.html?l=16" target="_blank">2:35:19 · L16</a>
+  </section>
+
+  <section class="slide section"><div class="num">Module 4</div><h1>Tools — the description is the interface</h1></section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>A tool description is a <span class="accent">job posting</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 300" role="img" aria-label="Tool definition anatomy">
+        <text x="30" y="170" font-family="var(--font-mono)" font-size="110" fill="#3f4348">{</text>
+        <rect class="d-node" x="110" y="30" width="240" height="50" rx="9"/><text class="d-mono" x="128" y="61">name</text>
+        <line class="d-flow ghost" x1="355" y1="55" x2="470" y2="55" marker-end="url(#arrowghost)"/><text class="d-sub" x="480" y="60">what Claude calls it · unique</text>
+        <rect class="d-node hot" x="110" y="100" width="240" height="70" rx="9"/><text class="d-mono" x="128" y="142">description</text>
+        <line class="d-flow" x1="355" y1="135" x2="470" y2="135"/>
+        <text class="d-sub" x="480" y="128">the BIGGEST factor in whether</text>
+        <text class="d-sub" x="480" y="148">the model uses it right — say</text>
+        <text class="d-sub" x="480" y="168">what it does, WHEN to use it, inputs</text>
+        <rect class="d-node" x="110" y="190" width="240" height="50" rx="9"/><text class="d-mono" x="128" y="221">input_schema</text>
+        <line class="d-flow ghost" x1="355" y1="215" x2="470" y2="215" marker-end="url(#arrowghost)"/><text class="d-sub" x="480" y="220">plain JSON Schema for the args</text>
+      </svg>
+    </div>
+    <p class="muted">Tool called at the wrong time? Check the <b>description</b> before the model. Parallel <code>tool_use</code> → one user message of <code>tool_result</code> blocks, ids matching.</p>
+    <a class="watch-chip" href="../../portal/watch.html?l=12" target="_blank">1:51:50 · L12</a>
+  </section>
+
+  <section class="slide">
+    <span class="chip lab">Do this now · 35 min</span>
+    <h2>Lab · <span class="accent">a tool with a real description</span></h2>
+    <p>Define <code>lookup_order(order_id)</code> twice — a vague description, then a detailed one — and run 5 prompts through each.</p>
+    <ul class="clean">
+      <li>Vague: the model mis-calls / skips it on ≥ 2 prompts.</li>
+      <li>Detailed (what · when · inputs): correct on all 5.</li>
+      <li>Write one sentence on why. Reference: <code>ep03/tools.py</code>.</li>
+    </ul>
+  </section>
+
+  <section class="slide section"><div class="num">Module 5</div><h1>Structured output you can trust</h1></section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>Asking is <span class="accent">not making sure</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 250" role="img" aria-label="Schema as contract">
+        <rect class="d-node" x="20" y="40" width="240" height="60" rx="10"/><text class="d-sub" x="40" y="66">"please reply as JSON"</text><text class="d-sub" x="40" y="86">(prompt only)</text>
+        <line class="d-flow ghost" x1="265" y1="70" x2="360" y2="70" marker-end="url(#arrowghost)"/>
+        <text class="d-sub" x="375" y="75">maybe — you still validate &amp; retry</text>
+        <rect class="d-node hot" x="20" y="140" width="240" height="70" rx="10"/>
+        <text class="d-mono" x="40" y="170">strict: true</text>
+        <text class="d-sub" x="40" y="192">+ additionalProperties:false</text>
+        <line class="d-flow" x1="265" y1="175" x2="360" y2="175"/>
+        <text class="d-sub" x="375" y="180">grammar-constrained → shape guaranteed</text>
+      </svg>
+    </div>
+    <ul class="clean">
+      <li><code>strict</code> is a field on the <b>tool definition</b>; schema needs <code>additionalProperties:false</code> + everything in <code>required</code>.</li>
+      <li>No "optional" — optional = allow <code>null</code> as a type.</li>
+      <li><b>Unsupported schema features are rejected, not ignored.</b></li>
+      <li><code>client.messages.parse()</code> validates the response against your schema for you.</li>
+    </ul>
+    <a class="watch-chip" href="../../portal/watch.html?l=7" target="_blank">1:00:52 · L7</a>
+  </section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>Validate, don't hope</h2>
+    <pre class="dim"><code><span class="keep">def validate_finding(args) -&gt; list[str]:   # returns specific problems</span>
+<span class="keep">    errors = []</span>
+<span class="keep">    <mark class="focus">if args.get("severity") not in ("blocking","warning","nit"):</mark></span>
+<span class="keep">        errors.append("severity must be one of ... — got %r" % args.get("severity"))</span>
+<span class="keep">    return errors</span></code></pre>
+    <p class="muted">On the SDK's <code>@tool</code> path <code>strict</code> isn't forwarded yet — the schema <i>guides</i>, <code>validate()</code> <i>enforces</i>. Send precise errors back so the model can fix and resubmit.</p>
+  </section>
+
+  <section class="slide">
+    <span class="chip lab">Do this now · 45 min</span>
+    <h2>Lab · <span class="accent">strict output + validation</span></h2>
+    <pre><code># FINDING_SCHEMA: file_path, line:int, severity:enum, message, suggested_fix: str|null</code></pre>
+    <ul class="clean">
+      <li>Build <code>submit_finding</code> with <code>strict:true</code> + <code>validate_finding()</code>.</li>
+      <li>Feed 3 inputs: clean · wrong-severity · missing-line. Bad ones rejected with a precise message.</li>
+      <li>Do the same extraction with <code>client.messages.parse()</code> and compare.</li>
+      <li>Reference: <code>ep07/schemas.py</code>, <code>ep07/tools.py</code> — read-along, build fresh.</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>Bridge · the same tool on the <span class="accent">SDK</span></h2>
+    <ul class="clean">
+      <li><code>@tool("name", "description", {schema})</code> + <code>create_sdk_mcp_server(...)</code>.</li>
+      <li><code>query(prompt, options)</code> with <code>allowed_tools</code> scoped to just that tool.</li>
+      <li>Same tool call, same result as the raw-API version — the loop is now the SDK's job (Day 3).</li>
+    </ul>
+    <p class="muted">Run <code>ep03/agent.py</code> to see it. Lab: port Module 4's tool.</p>
+  </section>
+
+  <section class="slide">
+    <span class="chip recap">Recap</span>
+    <h2>Day 2 · <span class="accent">what you can do now</span></h2>
+    <ul class="clean">
+      <li>Put the contract in <code>system</code>; structure inputs with tags; steer format with an example.</li>
+      <li>Name the surface: chat vs coding-rules vs API — and know where instructions land on each.</li>
+      <li>Keep untrusted content in <code>tool_result</code>; keep your instructions out of it.</li>
+      <li>Write a tool description the model obeys; enforce output with <code>strict</code> + a validator.</li>
+    </ul>
+    <p class="muted">End on <code>exam-style-questions.md</code> → <code>quiz.md</code> → <code>portal/practice.html?day=2</code>. Tomorrow: agents, Claude Code, MCP.</p>
+  </section>
+
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

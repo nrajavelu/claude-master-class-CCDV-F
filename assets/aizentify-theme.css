@@ -249,6 +249,16 @@ pre .focus, pre mark.focus {
   border-radius: 2px;
 }
 
+/* ---------- inline reference line (episode / file / lab / video / question-bank) ---------- */
+.refs {
+  font-family: var(--font-mono); font-size: .74rem; line-height: 1.6;
+  color: var(--ink-500); border-top: 1px solid var(--navy-800);
+  padding-top: .6rem; margin-top: .9rem; max-width: 78ch;
+}
+.refs b { color: var(--cyan-300); font-weight: 400; }
+.slide table.k.src td:first-child { color: var(--cyan-300); white-space: nowrap; }
+.slide table.k.src { font-size: .82rem; }
+
 /* ---------- inline-SVG diagram styling ---------- */
 .diagram { width: 100%; max-width: 940px; margin: .4rem 0; }
 .diagram svg { width: 100%; height: auto; overflow: visible; }

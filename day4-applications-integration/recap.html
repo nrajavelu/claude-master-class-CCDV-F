@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 4 recap — one page · Aizentify CDF</title>
+<link rel="stylesheet" href="../assets/aizentify-theme.css">
+<style>
+  html,body{overflow:auto;height:auto} body{background:var(--navy-950)}
+  .page{max-width:1000px;margin:0 auto;padding:5vh 6vw 12vh}
+  .page h1{font-size:2.6rem;margin-bottom:.3rem} .page h2{font-size:1.4rem;margin:2.2rem 0 .9rem;padding-bottom:.4rem;border-bottom:1px solid var(--navy-800)}
+  .page p,.page li{color:var(--paper-100)} .page ul{margin:.4rem 0 1rem 1.3rem} .page li{margin-bottom:.4rem}
+  .page code{background:var(--navy-900);border:1px solid var(--navy-800);border-radius:5px;padding:.05rem .35rem;color:var(--cyan-300);font-size:.86em}
+  .kicker{font-family:var(--font-mono);color:var(--blue-400);letter-spacing:.12em;text-transform:uppercase;font-size:.85rem}
+  .vids a{display:inline-block;margin:0 .8rem .4rem 0;font-family:var(--font-mono);font-size:.82rem;color:var(--cyan-300);border:1px solid rgba(61,209,242,.3);border-radius:999px;padding:.2rem .6rem;text-decoration:none}
+  .refln{font-family:var(--font-mono);font-size:.76rem;color:var(--ink-500);border-top:1px solid var(--navy-800);padding-top:.6rem;margin-top:.8rem}
+  .foot{margin-top:3rem;color:var(--ink-500);font-family:var(--font-mono);font-size:.78rem}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">Aizentify · CCDV-F · Day 4 — keep this open</div>
+  <h1>Applications &amp; integration — <span class="gradient-text">the 33% day</span></h1>
+  <p class="muted">Decisions ③ &amp; ④. A quarter of the exam has no Claude in it. Full deck: <code>slides/day4.html</code>.</p>
+
+  <h2>Requirements — one sentence, two lists</h2>
+  <ul>
+    <li><b>Functional</b> — what it does (summarise the ticket, stream the answer, read the screenshot).</li>
+    <li><b>Infrastructure</b> — what it runs on <i>and</i> what the team must be able to do to it (shared server, any engineer can deploy + roll back).</li>
+  </ul>
+
+  <h2>Systems life cycle</h2>
+  <ul>
+    <li><b>develop → implement → operate → maintain.</b> "Implement" = deploy where users are, not write the code.</li>
+    <li>Production credit is earned in <b>operate + maintain</b>. Who deploys → implement; who gets the 2 a.m. call → operate.</li>
+  </ul>
+
+  <h2>SW-eng foundations (the mechanisms)</h2>
+  <ul>
+    <li><b>Version control</b> → rollback = pick the last good version. <b>Code review</b> → knowledge leaves one head.</li>
+    <li><b>Pipeline</b> — branch → review → test → deploy. <b>Refactoring</b> — small (rename) &amp; large (restructure); safe only with history + tests.</li>
+    <li>Rule 2: "any engineer can roll back" kills "write a setup doc" — a doc is guidance; VCS + pipeline is the mechanism.</li>
+  </ul>
+
+  <h2>Configuration management — same repo, 3 Claudes</h2>
+  <ul>
+    <li>Pin the model version. Commit <code>CLAUDE.md</code>. Env-specific settings in a committed <code>config.toml</code>/<code>.env.example</code>. Secrets in <code>.gitignore</code>.</li>
+    <li>Every behaviour-affecting input in version control or an example config — secrets are not.</li>
+  </ul>
+
+  <h2>Context engineering — a bigger window makes it worse</h2>
+  <ul>
+    <li>The window holds <b>your input + tool schemas + history + the answer</b>. A growing conversation is a growing request.</li>
+    <li><b>Compaction</b> = summarise earlier context. <b>Context-editing</b> = clear old tool-results / thinking. <b>Memory tool</b> = write to disk. One session per task; <code>compact</code> when it genuinely runs long.</li>
+  </ul>
+
+  <h2>RAG</h2>
+  <ul>
+    <li>chunk → embed → similarity search → grounded prompt (<code>&lt;doc id&gt;</code>) → answer <b>+ cite</b>. Out-of-corpus question → say so, don't invent.</li>
+    <li>RAG vs long-context vs fine-tune: retrieve when the knowledge is large / changing / must be cited. Embeddings: Voyage or local — no first-party Anthropic embeddings API.</li>
+  </ul>
+
+  <h2>Evaluation</h2>
+  <ul>
+    <li>Eval set (input → expected properties). Three check types: <b>structural assertion</b> · keyword/contains · <b>LLM-as-judge</b>. Wire as <code>pytest</code>.</li>
+    <li>Assert on structure + key content, not exact wording — output varies by design.</li>
+  </ul>
+
+  <h2>Watch it</h2>
+  <div class="vids">
+    <a href="../portal/watch.html?l=4" target="_blank">▶ L4 · The quarter that isn't about Claude (28:36)</a>
+    <a href="../portal/watch.html?l=6" target="_blank">▶ L6 · Same repo, 3 Claudes (50:01)</a>
+    <a href="../portal/watch.html?l=8" target="_blank">▶ L8 · A bigger window makes it worse (1:10:36)</a>
+    <a href="../portal/watch.html?s=build&e=6" target="_blank">▶ Build-along Ep 06 · Memory &amp; sessions</a>
+    <a href="../portal/watch.html?s=build&e=8" target="_blank">▶ Build-along Ep 08 · Skills</a>
+  </div>
+  <p class="refln">episodes: ep06 · ep08 &nbsp;·&nbsp; qb: domain-2 · domain-6 · domain-4 &nbsp;·&nbsp; scenario Q4/Q7/Q14 &nbsp;·&nbsp; practice: portal/practice.html?day=4</p>
+  <p class="foot">Aizentify · Claude Certified Developer – Foundations · © 2026 Aizentify LLP</p>
+</div>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1a7ee8"/></marker>
+  <linearGradient id="brandgrad" x1="0" y1="0" x2="1" y2="0.4"><stop offset="0" stop-color="#3dd1f2"/><stop offset="0.55" stop-color="#1a7ee8"/><stop offset="1" stop-color="#1450e8"/></linearGradient>
+</defs></svg>
+</body>
+</html>

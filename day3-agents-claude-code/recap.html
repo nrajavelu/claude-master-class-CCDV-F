@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 3 recap — one page · Aizentify CDF</title>
+<link rel="stylesheet" href="../assets/aizentify-theme.css">
+<style>
+  html,body{overflow:auto;height:auto} body{background:var(--navy-950)}
+  .page{max-width:1000px;margin:0 auto;padding:5vh 6vw 12vh}
+  .page h1{font-size:2.6rem;margin-bottom:.3rem} .page h2{font-size:1.4rem;margin:2.2rem 0 .9rem;padding-bottom:.4rem;border-bottom:1px solid var(--navy-800)}
+  .page p,.page li{color:var(--paper-100)} .page ul{margin:.4rem 0 1rem 1.3rem} .page li{margin-bottom:.4rem}
+  .page code{background:var(--navy-900);border:1px solid var(--navy-800);border-radius:5px;padding:.05rem .35rem;color:var(--cyan-300);font-size:.86em}
+  .kicker{font-family:var(--font-mono);color:var(--blue-400);letter-spacing:.12em;text-transform:uppercase;font-size:.85rem}
+  .vids a{display:inline-block;margin:0 .8rem .4rem 0;font-family:var(--font-mono);font-size:.82rem;color:var(--cyan-300);border:1px solid rgba(61,209,242,.3);border-radius:999px;padding:.2rem .6rem;text-decoration:none}
+  .refln{font-family:var(--font-mono);font-size:.76rem;color:var(--ink-500);border-top:1px solid var(--navy-800);padding-top:.6rem;margin-top:.8rem}
+  .foot{margin-top:3rem;color:var(--ink-500);font-family:var(--font-mono);font-size:.78rem}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">Aizentify · CCDV-F · Day 3 — keep this open</div>
+  <h1>Agents · Claude Code · <span class="gradient-text">MCP</span></h1>
+  <p class="muted">Decision ① — what runs. Full deck: <code>slides/day3.html</code>.</p>
+
+  <h2>Should you build an agent?</h2>
+  <ul><li>All four must be yes: <b>complexity</b> · <b>value</b> · <b>viability</b> · <b>cost of error</b> (can mistakes be caught?). Any "no" → one call or a code-controlled workflow.</li></ul>
+
+  <h2>Four ways to build one — harness × deployment</h2>
+  <ul>
+    <li><b>Manual loop</b> — you write the harness, you host.</li>
+    <li><b>Tool Runner</b> — SDK drives the loop over <i>your</i> tools; you host. Per-turn hooks.</li>
+    <li><b>Claude Agent SDK</b> — Claude Code as a library (built-in tools); you host.</li>
+    <li><b>Managed Agents</b> — Anthropic runs the loop <i>and</i> hosts a per-session sandbox.</li>
+    <li>Tool Runner ≠ Claude Agent SDK (different packages). Only Managed Agents adds managed deployment.</li>
+  </ul>
+
+  <h2>Hooks — code the model can't talk out of</h2>
+  <ul>
+    <li><b>PreToolUse</b> — approve / <b>deny</b> (the mechanism answer to a <i>must/never</i> stem).</li>
+    <li><b>PostToolUse</b> — transform · taint external text as untrusted.</li>
+    <li><b>Stop</b> — reads the transcript; a review can't END until a comment was posted.</li>
+    <li><b>PreCompact</b> — observe only; by the time it fires it's too late to save anything.</li>
+  </ul>
+
+  <h2>Subagents — usually fewer</h2>
+  <ul><li>Coordinator fans out to subagents, each with own fresh context, narrow tools, own model. Each one adds context/latency/cost — fan out only when work truly parallelises or one loop would fill its context with reading.</li></ul>
+
+  <h2>Claude Code</h2>
+  <ul>
+    <li>Project config discovered <b>cwd → repo root</b>: <code>CLAUDE.md</code>, <code>.claude/skills/</code>, <code>.claude/commands/</code>, <code>.mcp.json</code>. Both a subfolder and root file apply.</li>
+    <li>A rules file's content arrives as a <b>user message</b>, not <code>system</code>.</li>
+    <li>Headless: <code>claude -p "..."</code> for CI. <code>setting_sources=["project"]</code> gates it in the SDK.</li>
+  </ul>
+
+  <h2>MCP — not a bag of tools</h2>
+  <ul>
+    <li>MCP is a <b>protocol</b>. <code>.mcp.json</code> transports: <code>stdio</code> (a local command) · <code>http</code> (remote URL + headers) · <code>sse</code>.</li>
+    <li>A remote server exposes dozens of tools — <b>scope</b> <code>allowed_tools</code>. Secrets via <code>${ENV_VAR}</code>.</li>
+    <li>A plugin runs code with <b>your privileges</b> — installing it is a trust decision.</li>
+  </ul>
+
+  <h2>Watch it</h2>
+  <div class="vids">
+    <a href="../portal/watch.html?l=13" target="_blank">▶ L13 · MCP is not a bag of tools (2:02:43)</a>
+    <a href="../portal/watch.html?l=14" target="_blank">▶ L14 · Usually fewer agents (2:12:59)</a>
+    <a href="../portal/watch.html?l=15" target="_blank">▶ L15 · Self-hosted ≠ air-gapped (2:24:14)</a>
+    <a href="../portal/watch.html?l=6" target="_blank">▶ L6 · Same repo, 3 Claudes (50:01)</a>
+    <a href="../portal/watch.html?s=build&e=2" target="_blank">▶ Build-along Ep 02–09</a>
+  </div>
+  <p class="refln">episodes: ep02 ep04 ep05 ep08 ep09 &nbsp;·&nbsp; code: code-snippets/blocking_hook.py · mcp_server.py · agent_loop_react.py &nbsp;·&nbsp; qb: domain-1 · domain-3 · domain-8 · domain-7 &nbsp;·&nbsp; practice: portal/practice.html?day=3</p>
+  <p class="foot">Aizentify · Claude Certified Developer – Foundations · © 2026 Aizentify LLP</p>
+</div>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1a7ee8"/></marker>
+  <linearGradient id="brandgrad" x1="0" y1="0" x2="1" y2="0.4"><stop offset="0" stop-color="#3dd1f2"/><stop offset="0.55" stop-color="#1a7ee8"/><stop offset="1" stop-color="#1450e8"/></linearGradient>
+</defs></svg>
+</body>
+</html>

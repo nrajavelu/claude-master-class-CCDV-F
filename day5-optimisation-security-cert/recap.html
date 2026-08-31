@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 5 recap — one page · Aizentify CDF</title>
+<link rel="stylesheet" href="../assets/aizentify-theme.css">
+<style>
+  html,body{overflow:auto;height:auto} body{background:var(--navy-950)}
+  .page{max-width:1000px;margin:0 auto;padding:5vh 6vw 12vh}
+  .page h1{font-size:2.6rem;margin-bottom:.3rem} .page h2{font-size:1.4rem;margin:2.2rem 0 .9rem;padding-bottom:.4rem;border-bottom:1px solid var(--navy-800)}
+  .page p,.page li{color:var(--paper-100)} .page ul{margin:.4rem 0 1rem 1.3rem} .page li{margin-bottom:.4rem}
+  .page code{background:var(--navy-900);border:1px solid var(--navy-800);border-radius:5px;padding:.05rem .35rem;color:var(--cyan-300);font-size:.86em}
+  .kicker{font-family:var(--font-mono);color:var(--blue-400);letter-spacing:.12em;text-transform:uppercase;font-size:.85rem}
+  .vids a{display:inline-block;margin:0 .8rem .4rem 0;font-family:var(--font-mono);font-size:.82rem;color:var(--cyan-300);border:1px solid rgba(61,209,242,.3);border-radius:999px;padding:.2rem .6rem;text-decoration:none}
+  .refln{font-family:var(--font-mono);font-size:.76rem;color:var(--ink-500);border-top:1px solid var(--navy-800);padding-top:.6rem;margin-top:.8rem}
+  .foot{margin-top:3rem;color:var(--ink-500);font-family:var(--font-mono);font-size:.78rem}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="kicker">Aizentify · CCDV-F · Day 5 — keep this open</div>
+  <h1>Optimisation · security · <span class="gradient-text">the exam</span></h1>
+  <p class="muted">Decisions ② &amp; ④. Full deck: <code>slides/day5.html</code>.</p>
+
+  <h2>Model selection</h2>
+  <ul><li>Quality / latency / cost — pick 2. <b>Start capable, measure, step down.</b> Not "pick a tier by task type". Lower <code>effort</code> on the newest model often beats a smaller model at high effort. <code>xhigh</code> = coding/agentic sweet spot.</li></ul>
+
+  <h2>Cost &amp; token management</h2>
+  <ul>
+    <li><code>input_tokens</code> = your text <b>+ tool schemas + system + generated output</b>. Read <code>usage</code> every call. Judge <b>cost per completed task</b>.</li>
+    <li>The order: <b>1</b> caching → <b>2</b> input hygiene → <b>3</b> loop/output hygiene → <b>4</b> batch → <b>5</b> budgets → <b>6</b> effort → <b>7</b> model → <b>8</b> multi-model. Free wins first.</li>
+  </ul>
+
+  <h2>Prompt caching</h2>
+  <ul>
+    <li>Prefix match — any byte change in the prefix invalidates everything after it. Render order <code>tools → system → messages</code>; stable content before the breakpoint, volatile after.</li>
+    <li>Verify with <code>usage.cache_read_input_tokens</code> (0 across repeats = something invalidating). Invalidators: <code>datetime.now()</code>, unsorted <code>json.dumps</code>, varying tool set.</li>
+    <li>Cache read ≈ 0.1× input price; cache write ≈ 1.25×.</li>
+  </ul>
+
+  <h2>Batch</h2>
+  <ul><li>~50% cost, non-urgent. Poll to <code>ended</code>. <b>Results come back in ANY order — key by <code>custom_id</code>, never position.</b> "10,000 docs overnight, cost matters" → Batch.</li></ul>
+
+  <h2>Reliability — three places a call breaks</h2>
+  <ul>
+    <li><b>Before it leaves</b> — 400, fail fast. <b>In transit</b> — 429 <code>rate_limit</code> (yours) / <code>overloaded</code> (theirs) / connection — back off. <b>After 200</b> — truncation / <code>refusal</code> (check <code>stop_details</code>) / wrong shape (validate).</li>
+    <li>SDK retries 408/409/429/5xx + connection, <code>max_retries=2</code>. On streams, an error can arrive as an event mid-stream.</li>
+  </ul>
+
+  <h2>Vision &amp; documents</h2>
+  <ul><li>An image is built-in tokens (patches) → if you have the text, send the text. A PDF is billed twice — text <b>and</b> each page as an image. Citations: <code>citations:{enabled:true}</code> on each <code>document</code> block.</li></ul>
+
+  <h2>Security &amp; secrets</h2>
+  <ul>
+    <li>Injection: "must never" → guidance is dead. Isolate untrusted text + a <b>blocking hook</b> on the dangerous tool. A more capable model follows the injected instruction better too — tier is not the fix.</li>
+    <li>Keys in a secret store / <code>.env</code> + <code>.gitignore</code>, never the repo. Least-privilege PAT. <code>${VAR}</code> expansion in config. Self-hosted ≠ air-gapped.</li>
+  </ul>
+
+  <h2>Exam-day routine</h2>
+  <ul>
+    <li>~135 sec/item; flag &amp; move past 2.5 min. Read the last sentence of the stem first ("best" / "select two" / "will NOT").</li>
+    <li>Name the decision → kill stale-API + generic-knob → if <i>must/never</i>, kill guidance → pick the mechanism → tie-break to cheaper/simpler/SDK-native. No blanks.</li>
+  </ul>
+
+  <h2>Watch it</h2>
+  <div class="vids">
+    <a href="../portal/watch.html?l=10" target="_blank">▶ L10 · input_tokens is not your input (1:30:42)</a>
+    <a href="../portal/watch.html?l=11" target="_blank">▶ L11 · Batch — any order (1:40:56)</a>
+    <a href="../portal/watch.html?l=16" target="_blank">▶ L16 · The attack arrives as a ticket (2:35:19)</a>
+    <a href="../portal/watch.html?l=17" target="_blank">▶ L17 · Exam day (2:46:42)</a>
+    <a href="../portal/watch.html?s=build&e=10" target="_blank">▶ Build-along Ep 10–12</a>
+  </div>
+  <p class="refln">episodes: ep10 ep11 ep12 &nbsp;·&nbsp; code: code-snippets/prompt_caching.py · batch_custom_id.py · blocking_hook.py &nbsp;·&nbsp; qb: domain-5 · domain-7 &nbsp;·&nbsp; mock: mock-exam/README.md &nbsp;·&nbsp; practice: portal/practice.html?day=5</p>
+  <p class="foot">Aizentify · Claude Certified Developer – Foundations · © 2026 Aizentify LLP</p>
+</div>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1a7ee8"/></marker>
+  <linearGradient id="brandgrad" x1="0" y1="0" x2="1" y2="0.4"><stop offset="0" stop-color="#3dd1f2"/><stop offset="0.55" stop-color="#1a7ee8"/><stop offset="1" stop-color="#1450e8"/></linearGradient>
+</defs></svg>
+</body>
+</html>

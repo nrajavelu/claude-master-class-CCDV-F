@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Day 4 — Applications &amp; integration · Aizentify CDF</title>
+  <link rel="stylesheet" href="../../assets/aizentify-theme.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1a7ee8"/></marker>
+  <marker id="arrowghost" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3f4348"/></marker>
+  <linearGradient id="brandgrad" x1="0" y1="0" x2="1" y2="0.4"><stop offset="0" stop-color="#3dd1f2"/><stop offset="0.55" stop-color="#1a7ee8"/><stop offset="1" stop-color="#1450e8"/></linearGradient>
+</defs></svg>
+
+<div class="deck">
+
+  <section class="slide title">
+    <div class="kicker">Aizentify · CCDV-F · Day 4</div>
+    <h1>Applications &amp; integration<br><span class="accent">the 33% day</span></h1>
+    <div class="rule"></div>
+    <p class="tag">Requirements → design → lifecycle → configuration → RAG → evaluation. A quarter of the exam has no Claude in it.</p>
+  </section>
+
+  <section class="slide">
+    <span class="chip recap">Orientation</span>
+    <h2>Today · <span class="accent">decisions ③ &amp; ④</span></h2>
+    <table class="k">
+      <tr><th>Module</th><th>You leave able to…</th><th>Domain</th></tr>
+      <tr><td>1 Requirements</td><td>sort functional vs infrastructure</td><td>D2</td></tr>
+      <tr><td>2 Systems life cycle</td><td>place a system · who owns each stage</td><td>D2</td></tr>
+      <tr><td>3 SW-eng foundations</td><td>VCS · review · pipeline · refactoring</td><td>D2</td></tr>
+      <tr><td>4 Application design &amp; config mgmt</td><td>surface · output shape · pin &amp; commit config</td><td>D2</td></tr>
+      <tr><td>5 Context engineering</td><td>compaction vs context-editing vs memory</td><td>D6</td></tr>
+      <tr><td>6 RAG</td><td>chunk · embed · search · ground · cite</td><td>D2 · D6</td></tr>
+      <tr><td>7 Evaluation</td><td>eval set · assertion vs judge · regression</td><td>D4</td></tr>
+    </table>
+    <p class="muted">Anchor: <code>ep06</code> (context/sessions), <code>ep08</code> (skills). Video L4, L6, L8.</p>
+  </section>
+
+  <section class="slide section"><div class="num">Module 1</div><h1>Requirements</h1></section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>One sentence → <span class="accent">two lists</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 250" role="img" aria-label="Requirements split">
+        <rect class="d-node hot" x="300" y="20" width="300" height="50" rx="10"/><text class="d-sub" x="322" y="50">"the support desk must…" (the ask + architecture)</text>
+        <line class="d-flow" x1="400" y1="72" x2="230" y2="120"/>
+        <line class="d-flow" x1="500" y1="72" x2="670" y2="120"/>
+        <rect class="d-node" x="30" y="125" width="380" height="110" rx="10"/>
+        <text class="d-label" x="52" y="155">functional — what it DOES</text>
+        <text class="d-sub" x="52" y="182">summarise the ticket · stream the answer</text>
+        <text class="d-sub" x="52" y="202">read the screenshot</text>
+        <rect class="d-node" x="490" y="125" width="380" height="110" rx="10"/>
+        <text class="d-label" x="512" y="155">infrastructure — what it RUNS ON</text>
+        <text class="d-sub" x="512" y="182">a shared server (not a laptop)</text>
+        <text class="d-sub" x="512" y="202">any engineer can deploy + roll back</text>
+      </svg>
+    </div>
+    <p class="muted">Infrastructure = what it runs on <i>and</i> what the team must be able to do to it. Every stem in this skill asks you to sort or derive one list.</p>
+    <a class="watch-chip" href="../../portal/watch.html?l=4" target="_blank">28:36 · L4</a>
+  </section>
+
+  <section class="slide section"><div class="num">Module 2</div><h1>Systems life cycle</h1></section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>Four stages — <span class="accent">"implement" means deploy</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 180" role="img" aria-label="Systems life cycle">
+        <g><rect class="d-node" x="20" y="55" width="190" height="60" rx="10"/><text class="d-label" x="42" y="92">develop</text></g>
+        <line class="d-flow" x1="212" y1="85" x2="242" y2="85"/>
+        <g><rect class="d-node hot" x="245" y="55" width="190" height="60" rx="10"/><text class="d-label" x="267" y="88">implement</text><text class="d-sub" x="267" y="106" font-size="10">deploy where users are</text></g>
+        <line class="d-flow" x1="437" y1="85" x2="467" y2="85"/>
+        <g><rect class="d-node hot" x="470" y="55" width="190" height="60" rx="10"/><text class="d-label" x="492" y="92">operate</text></g>
+        <line class="d-flow" x1="662" y1="85" x2="692" y2="85"/>
+        <g><rect class="d-node hot" x="695" y="55" width="185" height="60" rx="10"/><text class="d-label" x="717" y="92">maintain</text></g>
+        <text class="d-sub" x="470" y="150">production credit is earned HERE — in operate + maintain</text>
+      </svg>
+    </div>
+    <p class="muted">"Implement" ≠ write the code. Who deploys → implement. Who gets the 2 a.m. call → operate. When it's retired → maintain.</p>
+  </section>
+
+  <section class="slide section"><div class="num">Module 3</div><h1>Software-engineering foundations</h1></section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>What turns code into a <span class="accent">service anyone owns</span></h2>
+    <ul class="clean">
+      <li><b>Version control</b> — remembers every change → rollback is picking the last good version, not reconstructing it.</li>
+      <li><b>Code review</b> — a second engineer reads every change → knowledge stops living in one head.</li>
+      <li><b>Pipeline</b> — branch → review → test → deploy. Shipping becomes a route, not an event on a laptop.</li>
+      <li><b>Refactoring</b> — improve shape without changing behaviour. Small (rename/tidy) &amp; large (restructure). Only safe once history + tests exist.</li>
+      <li>REST / JSON / async you already have from Day 1.</li>
+    </ul>
+    <p class="muted">Rule 2 lives here too: "requires that any engineer can roll back" kills "write a setup doc" — a doc is guidance; VCS + pipeline is the mechanism.</p>
+  </section>
+
+  <section class="slide">
+    <span class="chip lab">Do this now · 25 min</span>
+    <h2>Lab · <span class="accent">requirements split</span></h2>
+    <p>From a one-paragraph brief for a "contract clause checker": produce the two lists + a 5-box architecture sketch, then tag which the console-style app already meets.</p>
+    <p class="muted">Green light: ~6 functional + ~5 infrastructure, correctly sorted; a one-line diagnosis.</p>
+  </section>
+
+  <section class="slide section"><div class="num">Module 4</div><h1>Application design &amp; configuration management</h1></section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>Design choices that scale a team</h2>
+    <ul class="clean">
+      <li><b>Surface</b> — chat vs coding-rules vs API (Day 2). Prototype anywhere; re-prove on the real one.</li>
+      <li><b>Output shape</b> — prose for a human, a <b>schema</b> for a dashboard. Same review, two shapes.</li>
+      <li><b>Session hygiene</b> — one session per task. <code>clear</code> starts fresh · <code>compact</code> summarises · <code>inspect</code> shows what's loaded.</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>Same repo · <span class="accent">three different Claudes</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 210" role="img" aria-label="Configuration management">
+        <rect class="d-node" x="20" y="30" width="230" height="150" rx="10"/>
+        <text class="d-sub" x="40" y="58">3 engineers, 1 repo</text>
+        <text class="d-sub" x="40" y="82">rules on each laptop</text>
+        <text class="d-sub" x="40" y="112" fill="#f2b877">→ 3 behaviours</text>
+        <line class="d-flow" x1="255" y1="105" x2="340" y2="105"/>
+        <rect class="d-node hot" x="345" y="30" width="280" height="150" rx="10"/>
+        <text class="d-label" x="365" y="58">committed config</text>
+        <text class="d-mono" x="365" y="86" font-size="11">MODEL = "claude-..."   (pinned)</text>
+        <text class="d-mono" x="365" y="108" font-size="11">CLAUDE.md   (in git)</text>
+        <text class="d-mono" x="365" y="130" font-size="11">config.toml   (env-specific)</text>
+        <text class="d-mono" x="365" y="152" font-size="11">.gitignore   (secrets OUT)</text>
+        <line class="d-flow" x1="630" y1="105" x2="715" y2="105"/>
+        <rect class="d-node hot" x="720" y="55" width="160" height="100" rx="10"/>
+        <text class="d-sub" x="740" y="105">same behaviour</text>
+        <text class="d-sub" x="740" y="125">every run</text>
+      </svg>
+    </div>
+    <p class="muted">Pin the model version. Commit the rules. Every behaviour-affecting input in version control or an example config — secrets are not.</p>
+    <a class="watch-chip" href="../../portal/watch.html?l=6" target="_blank">50:01 · L6</a>
+  </section>
+
+  <section class="slide">
+    <span class="chip lab">Do this now · 35 min</span>
+    <h2>Lab · <span class="accent">make it reproducible</span></h2>
+    <p>Take an agent script whose behaviour depends on uncommitted local files. Add a pinned model constant, a committed <code>CLAUDE.md</code>, a <code>config.toml</code>/<code>.env.example</code>, and a <code>.gitignore</code>. Two people run it → same behaviour.</p>
+    <p class="muted">Reference: <code>ep06/</code> (CLAUDE.md discovery, <code>setting_sources</code>).</p>
+  </section>
+
+  <section class="slide section"><div class="num">Module 5</div><h1>Context engineering</h1></section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>A bigger window <span class="accent">makes it worse</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 220" role="img" aria-label="Context window contents">
+        <rect class="d-node" x="20" y="20" width="860" height="120" rx="14"/>
+        <text class="d-label" x="44" y="48">the context window — the model's whole world for this call</text>
+        <rect x="44" y="70" width="180" height="46" rx="8" fill="rgba(30,167,232,.12)" stroke="#1a7ee8"/><text class="d-mono" x="60" y="98" font-size="11">your input</text>
+        <rect x="240" y="70" width="180" height="46" rx="8" fill="rgba(255,255,255,.04)" stroke="#3f4348"/><text class="d-mono" x="256" y="98" font-size="11">tool schemas</text>
+        <rect x="436" y="70" width="220" height="46" rx="8" fill="rgba(255,255,255,.04)" stroke="#3f4348"/><text class="d-mono" x="452" y="98" font-size="11">conversation history</text>
+        <rect x="672" y="70" width="180" height="46" rx="8" fill="rgba(30,167,232,.12)" stroke="#1a7ee8"/><text class="d-mono" x="688" y="98" font-size="11">the answer</text>
+        <text class="d-sub" x="44" y="175">compaction = summarise earlier context &nbsp;|&nbsp; context-editing = CLEAR old tool-results / thinking &nbsp;|&nbsp; memory tool = write to disk</text>
+      </svg>
+    </div>
+    <p class="muted">A growing conversation is a growing request. Fill the window with stale tool-results and quality drops. One session per task; <code>compact</code> when it genuinely runs long.</p>
+    <a class="watch-chip" href="../../portal/watch.html?l=8" target="_blank">1:10:36 · L8</a>
+  </section>
+
+  <section class="slide section"><div class="num">Module 6</div><h1>RAG</h1></section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>The <span class="accent">RAG pipeline</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 130" role="img" aria-label="RAG pipeline">
+        <g><rect class="d-node" x="10" y="40" width="140" height="50" rx="9"/><text class="d-sub" x="30" y="70">chunk</text></g>
+        <line class="d-flow" x1="152" y1="65" x2="180" y2="65"/>
+        <g><rect class="d-node" x="182" y="40" width="140" height="50" rx="9"/><text class="d-sub" x="202" y="70">embed</text></g>
+        <line class="d-flow" x1="324" y1="65" x2="352" y2="65"/>
+        <g><rect class="d-node" x="354" y="40" width="150" height="50" rx="9"/><text class="d-sub" x="374" y="70">similarity search</text></g>
+        <line class="d-flow" x1="506" y1="65" x2="534" y2="65"/>
+        <g><rect class="d-node hot" x="536" y="40" width="170" height="50" rx="9"/><text class="d-sub" x="556" y="63">grounded prompt</text><text class="d-mono" x="556" y="82" font-size="10">&lt;doc id=...&gt;</text></g>
+        <line class="d-flow" x1="708" y1="65" x2="736" y2="65"/>
+        <g><rect class="d-node hot" x="738" y="40" width="150" height="50" rx="9"/><text class="d-sub" x="758" y="63">answer</text><text class="d-sub" x="758" y="82" font-size="10">+ cite doc ids</text></g>
+      </svg>
+    </div>
+    <ul class="clean">
+      <li>Ask something not in the corpus → it should say so, not invent.</li>
+      <li>RAG vs long-context vs fine-tune: retrieve when the knowledge is large / changing / must be cited.</li>
+      <li>Embeddings: Voyage (hosted) or local <code>sentence-transformers</code> — Anthropic has no first-party embeddings API.</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <span class="chip lab">Do this now · 50 min</span>
+    <h2>Lab · <span class="accent">tiny RAG with citations</span></h2>
+    <p>Index ~15 short docs: chunk (~500 tok, overlap) → embed → cosine top-k → grounded prompt with <code>&lt;doc id&gt;</code> tags → answer <b>and cite</b>. One out-of-corpus question → "not in the provided documents".</p>
+  </section>
+
+  <section class="slide section"><div class="num">Module 7</div><h1>Evaluation</h1></section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>Assert on <span class="accent">structure</span>, not wording</h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 170" role="img" aria-label="Eval harness">
+        <rect class="d-node" x="20" y="30" width="180" height="110" rx="10"/><text class="d-label" x="40" y="60">eval set</text><text class="d-sub" x="40" y="86">input → expected</text><text class="d-sub" x="40" y="106">properties</text>
+        <line class="d-flow" x1="202" y1="85" x2="250" y2="85"/>
+        <rect class="d-node hot" x="255" y="20" width="300" height="46" rx="8"/><text class="d-sub" x="275" y="48">structural assertion — cited ≥ 1 doc</text>
+        <rect class="d-node hot" x="255" y="72" width="300" height="46" rx="8"/><text class="d-sub" x="275" y="100">keyword / contains</text>
+        <rect class="d-node hot" x="255" y="124" width="300" height="40" rx="8"/><text class="d-sub" x="275" y="150">LLM-as-judge — "follows only the cited docs?"</text>
+        <line class="d-flow" x1="560" y1="85" x2="608" y2="85"/>
+        <rect class="d-node" x="612" y="55" width="150" height="60" rx="10"/><text class="d-mono" x="632" y="90">pytest</text>
+        <path class="d-ok" d="M790 60 l14 16 l26 -32"/>
+      </svg>
+    </div>
+    <p class="muted">Output wording varies by design — test the contract. Introduce a regression (drop the citation instruction) → tests go red, each naming the case + failed check.</p>
+  </section>
+
+  <section class="slide">
+    <span class="chip lab">Do this now · 45 min</span>
+    <h2>Lab · <span class="accent">eval harness + regression</span></h2>
+    <p>A 12-case eval set for the RAG answerer · 3 checks (structural / keyword / LLM-judge) wired as <code>pytest</code> · then break it and watch ≥ 3 tests fail.</p>
+  </section>
+
+  <section class="slide">
+    <span class="chip recap">Recap</span>
+    <h2>Day 4 · <span class="accent">what you can do now</span></h2>
+    <ul class="clean">
+      <li>Turn a business sentence into functional + infrastructure requirements; place it in the life cycle.</li>
+      <li>Name the mechanisms that make code a service: VCS, review, pipeline, pinned + committed config.</li>
+      <li>Manage the context window: compaction vs context-editing vs memory; one session per task.</li>
+      <li>Build a grounded, cited RAG answerer and a regression-catching eval harness.</li>
+    </ul>
+    <p class="muted">End on <code>exam-style-questions.md</code> → <code>quiz.md</code> → <code>portal/practice.html?day=4</code>. Tomorrow: optimisation, security, the mock.</p>
+  </section>
+
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Day 3 — Building agents · Claude Code · MCP · Aizentify CDF</title>
+  <link rel="stylesheet" href="../../assets/aizentify-theme.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#1a7ee8"/></marker>
+  <marker id="arrowghost" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#3f4348"/></marker>
+  <linearGradient id="brandgrad" x1="0" y1="0" x2="1" y2="0.4"><stop offset="0" stop-color="#3dd1f2"/><stop offset="0.55" stop-color="#1a7ee8"/><stop offset="1" stop-color="#1450e8"/></linearGradient>
+</defs></svg>
+
+<div class="deck">
+
+  <section class="slide title">
+    <div class="kicker">Aizentify · CCDV-F · Day 3</div>
+    <h1>Building agents<br>· Claude Code · MCP</h1>
+    <div class="rule"></div>
+    <p class="tag">Who supplies the harness. Who supplies the deployment. Hooks, subagents, and a real MCP server.</p>
+  </section>
+
+  <section class="slide">
+    <span class="chip recap">Orientation</span>
+    <h2>Today · <span class="accent">decision ①</span> — what runs?</h2>
+    <table class="k">
+      <tr><th>Module</th><th>You leave able to…</th><th>Domain</th></tr>
+      <tr><td>1 Workflow vs agent · should you?</td><td>apply the four criteria</td><td>D1</td></tr>
+      <tr><td>2 Four ways to build an agent</td><td>split harness from deployment</td><td>D1</td></tr>
+      <tr><td>3 Hooks lifecycle</td><td>gate / transform / don't-finish-without</td><td>D7</td></tr>
+      <tr><td>4 Subagents &amp; patterns</td><td>fan out, scope, "usually fewer"</td><td>D1</td></tr>
+      <tr><td>5 Claude Code operation</td><td>rules · skills · project-config · headless</td><td>D3</td></tr>
+      <tr><td>6 MCP</td><td>build a FastMCP server; scope a toolset</td><td>D8</td></tr>
+    </table>
+    <p class="muted">Anchor: <code>ep02</code> <code>ep04</code> <code>ep05</code> <code>ep09</code>. Build-along Eps 02, 04, 05, 09.</p>
+  </section>
+
+  <section class="slide section"><div class="num">Module 1</div><h1>Should you build an agent?</h1></section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>Four checks — all must be <span class="accent">yes</span></h2>
+    <ul class="clean">
+      <li><b>Complexity</b> — multi-step, hard to fully specify up front?</li>
+      <li><b>Value</b> — does the outcome justify the cost + latency?</li>
+      <li><b>Viability</b> — is Claude actually good at this task type?</li>
+      <li><b>Cost of error</b> — can mistakes be caught &amp; recovered (tests, review, rollback)?</li>
+    </ul>
+    <p class="muted">Any "no" → stay at a simpler tier: one call, or a code-controlled workflow. "Extract the invoice total" is one call, not an agent.</p>
+    <a class="watch-chip" href="../../portal/watch.html?l=14" target="_blank">2:12:59 · L14</a>
+  </section>
+
+  <section class="slide section"><div class="num">Module 2</div><h1>Four ways to build an agent</h1></section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>Harness × <span class="accent">deployment</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 380" role="img" aria-label="Four ways to build an agent">
+        <text class="d-sub" x="30" y="24">harness = the agent loop + context management &nbsp;·&nbsp; deployment = the infra it runs on</text>
+        <rect class="d-node" x="20" y="40" width="425" height="150" rx="12"/>
+        <text class="d-label" x="42" y="72">Manual loop</text>
+        <text class="d-sub" x="42" y="98">you write the while stop_reason == "tool_use"</text>
+        <text class="d-mono" x="42" y="130">harness: you  ·  deploy: you</text>
+        <text class="d-sub" x="42" y="160">own the whole loop; no beta dependency</text>
+        <rect class="d-node hot" x="455" y="40" width="425" height="150" rx="12"/>
+        <text class="d-label" x="477" y="72">Tool Runner</text>
+        <text class="d-sub" x="477" y="98">SDK drives the loop over YOUR tools</text>
+        <text class="d-mono" x="477" y="130">harness: SDK  ·  deploy: you</text>
+        <text class="d-sub" x="477" y="160">per-turn hooks: approval, retries, caching</text>
+        <rect class="d-node" x="20" y="210" width="425" height="150" rx="12"/>
+        <text class="d-label" x="42" y="242">Claude Agent SDK</text>
+        <text class="d-sub" x="42" y="268">Claude Code as a library — built-in tools</text>
+        <text class="d-mono" x="42" y="300">harness: SDK  ·  deploy: you</text>
+        <text class="d-sub" x="42" y="330">Read/Write/Bash/Grep + MCP + subagents</text>
+        <rect class="d-node warn" x="455" y="210" width="425" height="150" rx="12"/>
+        <text class="d-label" x="477" y="242">Managed Agents</text>
+        <text class="d-sub" x="477" y="268">Anthropic runs the loop + hosts a sandbox</text>
+        <text class="d-mono" x="477" y="300">harness: Anthropic  ·  deploy: Anthropic</text>
+        <text class="d-sub" x="477" y="330">persisted configs · scheduled · file mounts</text>
+      </svg>
+    </div>
+    <p class="muted">"Tool Runner ≠ Claude Agent SDK" — different packages. Only Managed Agents adds managed deployment.</p>
+  </section>
+
+  <section class="slide section"><div class="num">Module 3</div><h1>Hooks — code the model can't talk out of</h1></section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>The hook <span class="accent">lifecycle</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 240" role="img" aria-label="Hook lifecycle">
+        <line class="d-flow" x1="20" y1="120" x2="880" y2="120"/>
+        <g><rect class="d-node hot" x="30" y="70" width="180" height="60" rx="10"/><text class="d-mono" x="48" y="98" font-size="12">PreToolUse</text><text class="d-sub" x="48" y="118" font-size="11">approve / DENY</text></g>
+        <g><rect class="d-node" x="250" y="80" width="150" height="40" rx="8"/><text class="d-sub" x="270" y="105">tool runs</text></g>
+        <g><rect class="d-node hot" x="440" y="70" width="190" height="60" rx="10"/><text class="d-mono" x="458" y="98" font-size="12">PostToolUse</text><text class="d-sub" x="458" y="118" font-size="11">transform · taint</text></g>
+        <g><rect class="d-node hot" x="680" y="70" width="180" height="60" rx="10"/><text class="d-mono" x="698" y="98" font-size="12">Stop</text><text class="d-sub" x="698" y="118" font-size="11">don't finish without X</text></g>
+        <g><rect class="d-node" x="440" y="160" width="190" height="46" rx="8"/><text class="d-mono" x="458" y="180" font-size="11">PreCompact</text><text class="d-sub" x="458" y="198" font-size="10">observe — too late to save</text></g>
+      </svg>
+    </div>
+    <ul class="clean">
+      <li>A <b>blocking <code>PreToolUse</code> hook</b> is the mechanism answer to a <i>must / never</i> security stem.</li>
+      <li><code>PostToolUse</code> tags fetched external text as untrusted, reformats results.</li>
+      <li><code>Stop</code> reads the transcript — a review can't END until a comment was posted.</li>
+    </ul>
+    <a class="watch-chip" href="../../portal/watch.html?s=build&e=4" target="_blank">Build-along · Ep 04</a>
+  </section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>A blocking hook, in code</h2>
+    <pre class="dim"><code><span class="keep">async def block_refund(input_data, tool_use_id, context):</span>
+<span class="keep">    if input_data["tool_name"] != "refund": return {}</span>
+<span class="keep">    <mark class="focus">return {"hookSpecificOutput": {"permissionDecision": "deny",</mark></span>
+<span class="keep"><mark class="focus">        "permissionDecisionReason": "refunds require human approval"}}</mark></span></code></pre>
+    <p class="muted">Runs before the tool. Returns a decision. The model's intent doesn't matter — the code decides.</p>
+  </section>
+
+  <section class="slide section"><div class="num">Module 4</div><h1>Subagents — usually fewer</h1></section>
+
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>Coordinator <span class="accent">fans out</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 260" role="img" aria-label="Subagent fan-out">
+        <rect class="d-node hot" x="360" y="20" width="180" height="56" rx="10"/><text class="d-label" x="392" y="54">coordinator</text>
+        <line class="d-flow" x1="420" y1="78" x2="230" y2="130"/>
+        <line class="d-flow" x1="480" y1="78" x2="670" y2="130"/>
+        <rect class="d-node" x="60" y="135" width="330" height="100" rx="10"/>
+        <text class="d-label" x="80" y="163">docstring-reviewer</text>
+        <text class="d-sub" x="80" y="185">own fresh context · narrow tools</text>
+        <text class="d-sub" x="80" y="205">cheaper model (Haiku)</text>
+        <rect class="d-node" x="510" y="135" width="330" height="100" rx="10"/>
+        <text class="d-label" x="530" y="163">security-reviewer</text>
+        <text class="d-sub" x="530" y="185">own fresh context · narrow tools</text>
+        <text class="d-sub" x="530" y="205">never sees the other's history</text>
+      </svg>
+    </div>
+    <p class="muted"><b>Usually fewer agents.</b> Each one adds context, latency, cost. A single loop is easier to debug and eval. Fan out only when the work truly parallelises or one loop would fill its context with reading.</p>
+    <a class="watch-chip" href="../../portal/watch.html?s=build&e=5" target="_blank">Build-along · Ep 05</a>
+  </section>
+
+  <section class="slide">
+    <span class="chip lab">Do this now · 50 min</span>
+    <h2>Lab · <span class="accent">two-subagent repo auditor</span></h2>
+    <ul class="clean">
+      <li>A coordinator <code>query()</code> that delegates to two <code>AgentDefinition</code>s, each with a narrow <code>tools=</code> list and its own model.</li>
+      <li>One custom <code>@tool</code>. Post one combined result.</li>
+      <li>Trace shows two delegations then an aggregated summary. Reference: <code>ep05/agent.py</code>, <code>ep05/subagents.py</code>.</li>
+    </ul>
+  </section>
+
+  <section class="slide section"><div class="num">Module 5</div><h1>Claude Code operation</h1></section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>Project config is discovered <span class="accent">cwd upward</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 240" role="img" aria-label="Project config discovery">
+        <rect class="d-node" x="30" y="30" width="300" height="46" rx="8"/><text class="d-mono" x="48" y="59" font-size="12">repo-root/</text>
+        <rect class="d-node" x="70" y="90" width="300" height="46" rx="8"/><text class="d-mono" x="88" y="119" font-size="12">repo-root/src/</text>
+        <rect class="d-node hot" x="110" y="150" width="320" height="46" rx="8"/><text class="d-mono" x="128" y="179" font-size="12">repo-root/src/feature/ &lt;- you run here</text>
+        <line class="d-flow" x1="270" y1="150" x2="230" y2="136" marker-end="url(#arrow)"/>
+        <line class="d-flow" x1="230" y1="90" x2="190" y2="76" marker-end="url(#arrow)"/>
+        <text class="d-sub" x="470" y="55">picks up, walking UP:</text>
+        <text class="d-mono" x="470" y="85" font-size="12">CLAUDE.md</text>
+        <text class="d-mono" x="470" y="110" font-size="12">.claude/skills/*/SKILL.md</text>
+        <text class="d-mono" x="470" y="135" font-size="12">.claude/commands/*</text>
+        <text class="d-mono" x="470" y="160" font-size="12">.mcp.json</text>
+        <text class="d-sub" x="470" y="190">both a subfolder and root file apply</text>
+      </svg>
+    </div>
+    <ul class="clean">
+      <li>A rules file's content arrives as a <b>user message</b>, not <code>system</code>.</li>
+      <li>Headless / print mode: <code>claude -p "..."</code> for CI — pipes a result to stdout.</li>
+      <li><code>setting_sources=["project"]</code> is what gates all of this in the SDK.</li>
+    </ul>
+    <a class="watch-chip" href="../../portal/watch.html?l=6" target="_blank">50:01 · L6</a>
+  </section>
+
+  <section class="slide">
+    <span class="chip lab">Do this now · 40 min</span>
+    <h2>Lab · <span class="accent">operate Claude Code</span></h2>
+    <ul class="clean">
+      <li>Add a <code>CLAUDE.md</code>, a <code>.claude/skills/&lt;name&gt;/SKILL.md</code>, and a slash command to a scratch project.</li>
+      <li>Run <code>claude</code>; show each being picked up without re-prompting.</li>
+      <li>Run headless: <code>claude -p "..."</code> and pipe the output. Reference: <code>ep08/.claude/</code>.</li>
+    </ul>
+  </section>
+
+  <section class="slide section"><div class="num">Module 6</div><h1>MCP</h1></section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch</span>
+    <h2>An MCP server is <span class="accent">not a bag of tools</span></h2>
+    <div class="diagram">
+      <svg viewBox="0 0 900 230" role="img" aria-label="MCP transports">
+        <rect class="d-node hot" x="20" y="90" width="150" height="50" rx="9"/><text class="d-mono" x="42" y="120" font-size="12">.mcp.json</text>
+        <line class="d-flow" x1="172" y1="100" x2="300" y2="55" marker-end="url(#arrow)"/>
+        <line class="d-flow" x1="172" y1="115" x2="300" y2="115" marker-end="url(#arrow)"/>
+        <line class="d-flow" x1="172" y1="130" x2="300" y2="175" marker-end="url(#arrow)"/>
+        <rect class="d-node" x="305" y="30" width="360" height="46" rx="8"/><text class="d-sub" x="325" y="59"><tspan class="d-mono">stdio</tspan> — a local command + args (your FastMCP server)</text>
+        <rect class="d-node" x="305" y="92" width="360" height="46" rx="8"/><text class="d-sub" x="325" y="121"><tspan class="d-mono">http</tspan> — a remote URL + headers (GitHub's server)</text>
+        <rect class="d-node" x="305" y="154" width="360" height="46" rx="8"/><text class="d-sub" x="325" y="183"><tspan class="d-mono">sse</tspan> — a remote event stream</text>
+      </svg>
+    </div>
+    <ul class="clean">
+      <li>MCP is a <b>protocol</b>, not a library — Claude Code, Desktop, Cursor all speak it.</li>
+      <li>A remote server exposes dozens of tools — <b>scope</b> <code>allowed_tools</code> to the few you need.</li>
+      <li>Secrets via <code>${ENV_VAR}</code> expansion in the config — never hardcoded.</li>
+      <li>A plugin runs code with <b>your privileges</b> — installing one is a trust decision.</li>
+    </ul>
+    <a class="watch-chip" href="../../portal/watch.html?l=13" target="_blank">2:02:43 · L13</a>
+  </section>
+
+  <section class="slide">
+    <span class="chip lab">Do this now · 45 min</span>
+    <h2>Lab · <span class="accent">build &amp; wire an MCP server</span></h2>
+    <ul class="clean">
+      <li>Write <code>facts_server.py</code> with FastMCP (one <code>@mcp.tool()</code>, stdio).</li>
+      <li>Smoke-test by piping JSON-RPC (<code>initialize</code> / <code>tools/list</code> / <code>tools/call</code>).</li>
+      <li>Add it to <code>.mcp.json</code> (stdio) + a remote GitHub server (http, <code>${GITHUB_PAT}</code>); scope to one tool each.</li>
+      <li>Reference: <code>ep09/repo_facts_server.py</code>, <code>ep09/.mcp.json</code>, <code>ep09/mcp_test_input.jsonl</code>.</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <span class="chip recap">Recap</span>
+    <h2>Day 3 · <span class="accent">what you can do now</span></h2>
+    <ul class="clean">
+      <li>Decide whether to build an agent at all; then pick one of the four ways by harness × deployment.</li>
+      <li>Gate a dangerous tool with a blocking hook; taint external text with a PostToolUse hook.</li>
+      <li>Fan out to scoped subagents — but usually fewer.</li>
+      <li>Operate Claude Code (rules, skills, project-config, headless) and stand up an MCP server.</li>
+    </ul>
+    <p class="muted">End on <code>exam-style-questions.md</code> → <code>quiz.md</code> → <code>portal/practice.html?day=3</code>. Tomorrow: the 33% domain — applications &amp; integration.</p>
+  </section>
+
+</div>
+<script src="../../assets/deck.js"></script>
+</body>
+</html>

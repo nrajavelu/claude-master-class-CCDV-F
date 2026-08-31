@@ -390,10 +390,38 @@ python labs/lab1_explainer/starter/explainer.py labs/lab1_explainer/sample.py</c
     </ul>
   </section>
 
+  <!-- 17b · Chain-of-Thought -->
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2><span class="accent">Chain-of-Thought</span> — reason first, answer last</h2>
+    <div class="cols">
+      <div>
+        <ul class="clean">
+          <li>Ask for the <b>working before the answer</b> — reasoning tokens give the model room to decompose.</li>
+          <li><b>Zero-shot:</b> "think step by step". <b>Structured:</b> name the steps. <b>Few-shot:</b> show worked <i>problem → reasoning → answer</i>.</li>
+          <li>Claude's <b>adaptive thinking</b> is CoT built into the model — next slide.</li>
+          <li>Helps: maths, multi-constraint choice, ambiguity. <b>Skip it</b> for classify / extract / high-volume.</li>
+        </ul>
+        <p class="muted">"CoT always helps" is a distractor — it costs latency and can hurt simple tasks.</p>
+      </div>
+      <div>
+        <pre class="dim"><code><span class="keep">system=(</span>
+<span class="keep"> "Reason in three labelled steps, then</span>
+<span class="keep">  end with 'Answer: &lt;letter&gt;'.</span>
+<span class="keep">  <mark class="focus">Step 1 - the constraint the question names.</mark></span>
+<span class="keep">  Step 2 - eliminate options that don't serve it.</span>
+<span class="keep">  Step 3 - pick the mechanism built for it.")</span></code></pre>
+      </div>
+    </div>
+    <p class="refs"><b>→ deep dive:</b> <code>reasoning-patterns.md</code> (CoT vs ReAct vs thinking) &nbsp;·&nbsp;
+      <b>code:</b> <code>code-snippets/cot_structured.py</code> &nbsp;·&nbsp;
+      <b>drill:</b> <code>question-bank/domain-6-prompt-context-engineering.md</code></p>
+  </section>
+
   <!-- 18 · thinking & effort -->
   <section class="slide">
     <span class="chip exam">Exam watch</span>
-    <h2><span class="accent">Thinking</span> &amp; effort</h2>
+    <h2><span class="accent">Adaptive thinking</span> = Claude's built-in CoT</h2>
     <ul class="clean">
       <li>Current models take <code>thinking={"type": "adaptive"}</code> — the model decides how much.</li>
       <li>The old fixed <code>budget_tokens</code> is <b>deprecated / rejected</b> on current models. A classic stale-answer distractor.</li>
@@ -536,6 +564,35 @@ python labs/lab3_resilient/starter/resilient.py labs/lab1_explainer/sample.py --
     <a class="watch-chip" href="../../portal/watch.html?l=10" target="_blank">1:30:42 · L10</a>
   </section>
 
+  <!-- 27a · ReAct -->
+  <section class="slide">
+    <span class="chip concept">Concept</span>
+    <h2>The loop is <span class="accent">ReAct</span> — Reason · Act · Observe</h2>
+    <div class="cols">
+      <div>
+        <ul class="clean">
+          <li><b>Reason</b> — the model thinks about what it needs (a <code>thinking</code> block, or just its plan).</li>
+          <li><b>Act</b> — it emits a <code>tool_use</code> block; <code>stop_reason == "tool_use"</code>.</li>
+          <li><b>Observe</b> — your code runs the tool, appends the <code>tool_result</code>; the model reads it and reasons again.</li>
+          <li>Repeat until it has enough → <code>end_turn</code>.</li>
+        </ul>
+        <p class="muted">"Agent" is this cycle in a <code>while</code> loop. The API gives you the pieces; you wire Reason→Act→Observe.</p>
+      </div>
+      <div>
+        <pre class="dim"><code><span class="keep"><mark class="focus">Thought:</mark> I don't know what discount.py does — I must read it.</span>
+<span class="keep"><mark class="focus">Action:</mark> read_project_file(path="discount.py")</span>
+<span class="keep"><mark class="focus">Observation:</mark> "def apply_discount(price, percent): ..."</span>
+<span class="keep">Thought: line 7's `if percent &gt; 1` is unreachable —</span>
+<span class="keep">        line 5 already raised. That's the bug.</span>
+<span class="keep">Answer: discount.py:7 — dead code after the guard.</span></code></pre>
+      </div>
+    </div>
+    <p class="refs"><b>→ built in:</b> Lab 4 (<code>labs/lab4_agentic_loop/</code>) &nbsp;·&nbsp;
+      <b>episode:</b> <code>ep01/agent.py</code> (the <code>while True</code> loop) &nbsp;·&nbsp;
+      <b>video:</b> Build-along Ep 01 &nbsp;·&nbsp;
+      <b>drill:</b> <code>question-bank/domain-1-agents-workflows.md</code> · <code>code-snippets/agent_loop_react.py</code></p>
+  </section>
+
   <!-- 27 · the agent loop ring (diagram) -->
   <section class="slide">
     <span class="chip exam">Exam watch</span>
@@ -595,6 +652,24 @@ python labs/lab3_resilient/starter/resilient.py labs/lab1_explainer/sample.py --
       <li>Build a tool-using agent loop from first principles.</li>
     </ul>
     <p class="muted">Tomorrow: tools with <i>schemas</i>, guaranteed structured output, and guardrails.</p>
+  </section>
+
+  <!-- 29b · sources & module references -->
+  <section class="slide">
+    <span class="chip recap">For the trainer</span>
+    <h2>Day 1 · <span class="accent">sources &amp; module references</span></h2>
+    <table class="k src">
+      <tr><th>Module</th><th>Draws from</th><th>Practice / code</th></tr>
+      <tr><td>0 · exam method</td><td>exam guide samples · video L1, L17 · <code>logistics/05-exam-method.md</code></td><td><code>exam-style-questions.md</code></td></tr>
+      <tr><td>1 · Messages API</td><td><code>ep01/agent.py</code> · video L2 · <code>claude-api</code> skill README</td><td><code>code-snippets/messages_basics.py</code> · Lab 1</td></tr>
+      <tr><td>2 · prompting</td><td>video L5, L7 · <code>ep01</code> system-prompt slides</td><td><code>exercises.md</code> B · <code>code-snippets/prompt_structure.py</code></td></tr>
+      <tr><td>3 · streaming</td><td><code>ep01</code> · video L3 · <code>claude-api</code> streaming.md</td><td>Lab 2 · <code>code-snippets/streaming.py</code></td></tr>
+      <tr><td>4 · errors</td><td>video L9 · <code>claude-api</code> error-codes.md</td><td>Lab 3 · <code>code-snippets/retry_chain.py</code></td></tr>
+      <tr><td>5 · tokens &amp; the ReAct loop</td><td><code>ep01/agent.py</code> · video L10 · Build-along Ep 01</td><td>Lab 4 · <code>code-snippets/count_tokens.py</code> · <code>agent_loop_react.py</code></td></tr>
+    </table>
+    <p class="refs"><b>question bank:</b> <code>domain-2-applications-integration.md</code> (API mechanics, 28 items) ·
+      <code>domain-1-agents-workflows.md</code> · <code>domain-5/6-*</code> &nbsp;·&nbsp;
+      <b>recap:</b> <code>day1-foundations/recap.html</code></p>
   </section>
 
   <!-- 30 · exam prep -->
