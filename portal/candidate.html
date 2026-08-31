@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Candidate portal · Aizentify CDF-F Bootcamp</title>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" data-keepc aria-label="Aizentify"></a>
+    <div class="links">
+      <a href="index.html" data-keepc>Overview</a>
+      <a href="candidate.html" data-keepc>My portal</a>
+      <a href="trainer.html">Trainer</a>
+      <a href="practice.html" data-keepc>Practice</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">Candidate portal</div>
+    <h1>Hi <span class="gradient" data-who>there</span> 👋</h1>
+    <p class="lead">Everything you need for the week, in order. Your progress is saved on this device.</p>
+    <div class="rule"></div>
+    <div style="max-width:520px">
+      <div class="progress" data-scan="day0,week" data-label="all"><i></i></div>
+      <p class="muted" style="margin-top:8px; font-family:var(--font-mono); font-size:.8rem">
+        <span data-progress-label="all">0 / 0 (0%)</span> complete</p>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap-narrow">
+    <div class="note" id="noname" hidden>
+      <b>No name in your link.</b> Ask your trainer for your personal portal link
+      (<code>candidate.html?c=Your%20Name</code>) so your progress is saved under your name.
+    </div>
+
+    <h2>Before Day 1 — <span class="gradient">pre-work</span></h2>
+    <p class="muted">Self-paced, ~2–3 hours. Do this at least 2 days before Day 1. Full guide:
+      <a href="../day0-prework/README.md" data-keepc>day0-prework/README.md</a>.</p>
+    <ul class="checklist" data-store="day0">
+      <li><input type="checkbox" data-id="tooling"><div class="ct"><span>Install Python 3.11+, VS Code, git, Node</span>
+        <small>Follow <a href="../logistics/00-environment-setup.md">logistics/00-environment-setup.md</a></small></div></li>
+      <li><input type="checkbox" data-id="venv"><div class="ct"><span>Create the venv &amp; <code>pip install -r requirements.txt</code></span>
+        <small>From <code>aizentify-cdf-bootcamp/</code></small></div></li>
+      <li><input type="checkbox" data-id="key"><div class="ct"><span>Put your <code>ANTHROPIC_API_KEY</code> in a local <code>.env</code></span>
+        <small>Your org provides the key — never commit it</small></div></li>
+      <li><input type="checkbox" data-id="doctor"><div class="ct"><span><code>python day0-prework/check_env.py</code> → all green</span></div></li>
+      <li><input type="checkbox" data-id="hello"><div class="ct"><span><code>python day0-prework/labs/hello_claude.py</code> → a reply + a usage line</span></div></li>
+      <li><input type="checkbox" data-id="primer"><div class="ct"><span>Skim <a href="../day0-prework/python-primer.md">python-primer.md</a></span></div></li>
+      <li><input type="checkbox" data-id="video"><div class="ct"><span><i>Optional:</i> watch lesson 1 of the <a href="../video-companion.md">video companion</a> (the four decisions)</span></div></li>
+      <li><input type="checkbox" data-id="screenshot"><div class="ct"><span>Send your <code>check_env.py</code> + <code>hello_claude.py</code> screenshots to the coordinator</span></div></li>
+    </ul>
+  </div>
+</section>
+
+<section style="background:var(--paper-100)">
+  <div class="wrap">
+    <h2>Your <span class="gradient">week</span></h2>
+    <div class="progress" data-scan="week" data-label="week" style="max-width:520px; margin-bottom:8px"><i></i></div>
+    <p class="muted" style="font-family:var(--font-mono); font-size:.8rem; margin-bottom:20px">
+      <span data-progress-label="week">0 / 0 (0%)</span></p>
+
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="meta">Day 1 · D2 · D5 · D6 · D4 · D1</div>
+        <h3>Foundations: the exam method &amp; the Messages API</h3>
+        <p><a href="../day1-foundations/slides/day1.html" target="_blank">Open the deck ↗</a> ·
+           <a href="../day1-foundations/exercises.md">exercises</a> ·
+           <a href="../day1-foundations/quiz.md">quiz</a> ·
+           <a href="../day1-foundations/exam-style-questions.md">exam-style Qs</a></p>
+        <ul class="checklist" data-store="week">
+          <li><input type="checkbox" data-id="d1-deck"><div class="ct"><span>Attended Day 1 / reviewed the deck</span></div></li>
+          <li><input type="checkbox" data-id="d1-lab1"><div class="ct"><span>Lab 1 — code explainer</span><small><code>day1-foundations/labs/lab1_explainer/</code></small></div></li>
+          <li><input type="checkbox" data-id="d1-lab2"><div class="ct"><span>Lab 2 — streaming</span></div></li>
+          <li><input type="checkbox" data-id="d1-lab3"><div class="ct"><span>Lab 3 — resilient call</span></div></li>
+          <li><input type="checkbox" data-id="d1-lab4"><div class="ct"><span>Lab 4 — agent loop by hand</span></div></li>
+          <li><input type="checkbox" data-id="d1-quiz"><div class="ct"><span>Day 1 quiz ≥ 9/12</span></div></li>
+          <li><input type="checkbox" data-id="d1-practice"><div class="ct"><span>Day 1 <a href="practice.html?day=1" data-keepc>practice set</a> ≥ 14/20</span></div></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="meta">Day 2 · D6 · D8 · D2</div>
+        <h3>Prompt &amp; context engineering · tools · structured output</h3>
+        <p class="muted"><a href="../day2-prompt-tools-output/README.md">Module outline &amp; lab specs</a> — full deck in build pass 2.</p>
+        <ul class="checklist" data-store="week">
+          <li><input type="checkbox" data-id="d2-day"><div class="ct"><span>Attended Day 2</span></div></li>
+          <li><input type="checkbox" data-id="d2-labs"><div class="ct"><span>Day 2 labs (prompt surgery · tool description · strict output · SDK port)</span></div></li>
+          <li><input type="checkbox" data-id="d2-quiz"><div class="ct"><span>Day 2 quiz + practice</span></div></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="meta">Day 3 · D1 · D3 · D8 · D7</div>
+        <h3>Building agents · Claude Code · MCP</h3>
+        <p class="muted"><a href="../day3-agents-claude-code/README.md">Module outline &amp; lab specs</a></p>
+        <ul class="checklist" data-store="week">
+          <li><input type="checkbox" data-id="d3-day"><div class="ct"><span>Attended Day 3</span></div></li>
+          <li><input type="checkbox" data-id="d3-labs"><div class="ct"><span>Day 3 labs (subagents · blocking hook · Claude Code · MCP server)</span></div></li>
+          <li><input type="checkbox" data-id="d3-quiz"><div class="ct"><span>Day 3 quiz + practice</span></div></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="meta">Day 4 · D2 · D6 · D4</div>
+        <h3>Applications &amp; integration: requirements → RAG → eval</h3>
+        <p class="muted"><a href="../day4-applications-integration/README.md">Module outline &amp; lab specs</a></p>
+        <ul class="checklist" data-store="week">
+          <li><input type="checkbox" data-id="d4-day"><div class="ct"><span>Attended Day 4</span></div></li>
+          <li><input type="checkbox" data-id="d4-labs"><div class="ct"><span>Day 4 labs (requirements split · reproducibility · RAG · eval harness)</span></div></li>
+          <li><input type="checkbox" data-id="d4-quiz"><div class="ct"><span>Day 4 quiz + practice</span></div></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="meta">Day 5 · D5 · D7 · D4</div>
+        <h3>Optimisation · security · the mock exam</h3>
+        <p class="muted"><a href="../day5-optimisation-security-cert/README.md">Module outline</a> ·
+          <a href="../day5-optimisation-security-cert/mock-exam/README.md">mock-exam blueprint</a></p>
+        <ul class="checklist" data-store="week">
+          <li><input type="checkbox" data-id="d5-day"><div class="ct"><span>Attended Day 5</span></div></li>
+          <li><input type="checkbox" data-id="d5-labs"><div class="ct"><span>Day 5 labs (caching · batch · injection · secrets) + capstone</span></div></li>
+          <li><input type="checkbox" data-id="d5-mock"><div class="ct"><span>53-item mock ≥ 73% overall, no domain &lt; 60%</span></div></li>
+          <li><input type="checkbox" data-id="d5-plan"><div class="ct"><span>Got my per-domain revision plan from the trainer</span></div></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="meta">After</div>
+        <h3>Book &amp; pass</h3>
+        <ul class="checklist" data-store="week">
+          <li><input type="checkbox" data-id="post-register"><div class="ct"><span>Confirmed exam registration works (company email · partner academy)</span></div></li>
+          <li><input type="checkbox" data-id="post-remock"><div class="ct"><span>Re-sat the mock the day before</span></div></li>
+          <li><input type="checkbox" data-id="post-booked"><div class="ct"><span>Booked the CCDV-F exam (within 2–3 weeks)</span></div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap-narrow">
+    <h2>Keep <span class="gradient">practising</span></h2>
+    <p>The practice centre has every exam-style question with per-distractor rationale and per-domain
+      scoring. It remembers what you've answered.</p>
+    <div class="btn-row"><a class="btn btn-primary" href="practice.html" data-keepc>Open practice →</a></div>
+    <hr>
+    <p class="muted">Video companion (optional, evening review): <a href="../video-companion.md">17-lesson map</a>.
+      Exam method (read this): <a href="../logistics/05-exam-method.md">logistics/05</a>.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Aizentify · Claude Certified Developer – Foundations · © 2026 Aizentify LLP</span>
+    <span data-who>there</span>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+  if (AIZ.who() === "guest") document.getElementById("noname").hidden = false;
+</script>
+</body>
+</html>

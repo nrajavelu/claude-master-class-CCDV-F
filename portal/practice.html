@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Practice · Aizentify CDF-F Bootcamp</title>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" data-keepc aria-label="Aizentify"></a>
+    <div class="links">
+      <a href="index.html" data-keepc>Overview</a>
+      <a href="candidate.html" data-keepc>Candidate portal</a>
+      <a href="trainer.html">Trainer</a>
+      <a href="practice.html" data-keepc>Practice</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" style="padding:56px 0 60px">
+  <div class="wrap">
+    <div class="kicker">Practice · <span data-who>guest</span></div>
+    <h1>Exam-style <span class="gradient">questions</span></h1>
+    <p class="lead">Answer, check, read the rationale. Every wrong option is explained. Score tracked per
+      domain, saved on this device.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="card" style="display:flex; gap:18px; flex-wrap:wrap; align-items:center">
+      <div>
+        <label class="fld" for="fday" style="margin:0 0 4px">Day</label>
+        <select class="txt" id="fday" style="width:auto"><option value="">All</option><option value="1">Day 1</option></select>
+      </div>
+      <div>
+        <label class="fld" for="fdom" style="margin:0 0 4px">Domain</label>
+        <select class="txt" id="fdom" style="width:auto"><option value="">All</option></select>
+      </div>
+      <div>
+        <label class="fld" for="fmode" style="margin:0 0 4px">Show</label>
+        <select class="txt" id="fmode" style="width:auto">
+          <option value="all">All</option><option value="unanswered">Unanswered</option>
+          <option value="wrong">Got wrong</option>
+        </select>
+      </div>
+      <div style="flex:1"></div>
+      <button class="btn btn-light" id="reset">Reset my answers</button>
+    </div>
+    <p class="note" style="margin-top:14px"><b>Method:</b> name the decision (① what runs · ② how it calls
+      Claude · ③ what Claude sees &amp; says · ④ will it survive production) → find the constraint word →
+      Rule 1 kill the generic knobs → Rule 2 (if <i>must/never</i>) kill the guidance → pick the mechanism.</p>
+  </div>
+</section>
+
+<section style="padding-top:8px">
+  <div class="wrap" id="list"></div>
+</section>
+
+<div class="scorebar">
+  <div class="wrap">
+    <div><b id="score">0 / 0</b> <span class="muted" id="pct"></span></div>
+    <div class="domainbars" id="dbars"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <span>Aizentify · Claude Certified Developer – Foundations · © 2026 Aizentify LLP</span>
+    <span><a href="../question-bank/README.md">Full question bank →</a></span>
+  </div>
+</footer>
+
+<script src="questions.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  const Q = window.AIZ_QUESTIONS || [];
+  const $ = (s) => document.querySelector(s);
+  const list = $("#list");
+  const DOMAINS = {
+    D1:"Agents & Workflows", D2:"Applications & Integration", D3:"Claude Code",
+    D4:"Eval, Testing & Debugging", D5:"Model Selection & Optimisation",
+    D6:"Prompt & Context Engineering", D7:"Security & Safety", D8:"Tools & MCPs"
+  };
+
+  // state: { [id]: {picked:[k], correct:bool} }
+  let state = AIZ.get("practice", {});
+
+  // domain filter options
+  const doms = [...new Set(Q.map((q) => q.domain))].sort();
+  doms.forEach((d) => {
+    const o = document.createElement("option");
+    o.value = d; o.textContent = d + " — " + (DOMAINS[d] || "");
+    $("#fdom").appendChild(o);
+  });
+
+  function filtered() {
+    const fd = $("#fday").value, fm = $("#fdom").value, mode = $("#fmode").value;
+    return Q.filter((q) => {
+      if (fd && String(q.day) !== fd) return false;
+      if (fm && q.domain !== fm) return false;
+      const s = state[q.id];
+      if (mode === "unanswered" && s) return false;
+      if (mode === "wrong" && (!s || s.correct)) return false;
+      return true;
+    });
+  }
+
+  function render() {
+    const qs = filtered();
+    list.innerHTML = "";
+    if (!qs.length) { list.innerHTML = '<p class="muted">Nothing matches that filter.</p>'; updateScore(); return; }
+    qs.forEach((q) => list.appendChild(card(q)));
+    updateScore();
+  }
+
+  function card(q) {
+    const s = state[q.id];
+    const multi = q.answer.length > 1;
+    const el = document.createElement("div");
+    el.className = "q";
+    el.innerHTML =
+      '<div class="qh"><span class="pill">' + q.domain + ' · ' + q.style +
+      (multi ? ' · choose ' + q.answer.length : '') + '</span>' +
+      '<span class="muted" style="font-family:var(--font-mono);font-size:.72rem">' + q.sub + '</span></div>' +
+      '<div class="stem">' + esc(q.stem) + '</div><div class="opts"></div>' +
+      '<div class="btn-row" style="margin-top:6px"><button class="btn btn-primary chk">' +
+      (s ? 'Answered' : 'Check') + '</button></div>' +
+      (s ? rationale(q) : '<div class="rationale" hidden></div>');
+    const opts = el.querySelector(".opts");
+    q.options.forEach((o) => {
+      const row = document.createElement("label");
+      row.className = "opt";
+      row.innerHTML = '<input type="' + (multi ? "checkbox" : "radio") + '" name="' + q.id + '" value="' + o.k + '">' +
+        '<span><b>' + o.k + '.</b> ' + esc(o.t) + '</span>';
+      opts.appendChild(row);
+      if (s) {
+        const chosen = s.picked.includes(o.k), isAns = q.answer.includes(o.k);
+        row.querySelector("input").checked = chosen;
+        row.querySelector("input").disabled = true;
+        if (isAns) row.classList.add("correct");
+        else if (chosen) row.classList.add("wrong");
+      }
+    });
+    opts.addEventListener("change", (e) => {
+      opts.querySelectorAll(".opt").forEach((r) =>
+        r.classList.toggle("sel", r.querySelector("input").checked));
+    });
+    el.querySelector(".chk").addEventListener("click", () => {
+      if (state[q.id]) return;
+      const picked = [...opts.querySelectorAll("input:checked")].map((i) => i.value);
+      if (!picked.length) return;
+      const correct = picked.length === q.answer.length && picked.every((k) => q.answer.includes(k));
+      state[q.id] = { picked, correct };
+      AIZ.set("practice", state);
+      render();
+    });
+    return el;
+  }
+
+  function rationale(q) {
+    const s = state[q.id];
+    return '<div class="rationale"><b>' + (s.correct ? '✓ Correct' : '✗ Not quite') +
+      '</b> — answer: <b>' + q.answer.join(", ") + '</b>. ' + esc(q.rationale) + '</div>';
+  }
+
+  function updateScore() {
+    const answered = Object.keys(state).length;
+    const right = Object.values(state).filter((s) => s.correct).length;
+    $("#score").textContent = right + " / " + answered;
+    $("#pct").textContent = answered ? "(" + Math.round(right / answered * 100) + "%)  ·  " + Q.length + " in bank" : "";
+    const byDom = {};
+    Q.forEach((q) => { byDom[q.domain] = byDom[q.domain] || { a: 0, r: 0 }; });
+    Object.entries(state).forEach(([id, s]) => {
+      const q = Q.find((x) => x.id === id); if (!q) return;
+      byDom[q.domain].a++; if (s.correct) byDom[q.domain].r++;
+    });
+    $("#dbars").innerHTML = Object.entries(byDom).filter(([, v]) => v.a)
+      .map(([d, v]) => '<span class="db">' + d + ' ' + v.r + '/' + v.a + '</span>').join("");
+  }
+
+  function esc(s){return String(s).replace(/[&<>]/g,(c)=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));}
+
+  ["fday","fdom","fmode"].forEach((id) => $("#" + id).addEventListener("change", render));
+  // deep-link ?day=1
+  const dayParam = AIZ.qp("day"); if (dayParam) $("#fday").value = dayParam;
+  const domParam = AIZ.qp("domain"); if (domParam) $("#fdom").value = domParam;
+  $("#reset").addEventListener("click", () => {
+    if (!confirm("Clear all your practice answers on this device?")) return;
+    state = {}; AIZ.set("practice", state); render();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

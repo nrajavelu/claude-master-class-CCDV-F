@@ -90,6 +90,7 @@ aizentify-cdf-bootcamp/
 ├── THEME.md ..................... Aizentify brand tokens + deck authoring
 ├── requirements.txt ............. pip install -r this
 ├── video-companion.md .......... optional 17-lesson video map (blueprint order)
+├── portal/ .................... branded landing pages: index · candidate (?c=Name) · trainer · practice
 ├── assets/ ..................... shared deck CSS, official logo, nav script
 ├── logistics/ ................... FOR THE ORGANISER & TRAINER — read first
 │   ├── 00-environment-setup.md
@@ -112,6 +113,11 @@ aizentify-cdf-bootcamp/
 `day0-prework/README.md` → `day1-foundations/trainer-guide.md`.
 
 **Candidate reading order:** `day0-prework/README.md` (before Day 1) → follow the trainer.
+
+**Portal.** `portal/index.html` is a branded hub over all of the above — a personal
+`candidate.html?c=Name` page with a saved progress checklist, a `trainer.html` console with a
+candidate-link generator, and an interactive `practice.html`. Open it from disk or host it on
+GitHub Pages (`portal/README.md`).
 
 ---
 
