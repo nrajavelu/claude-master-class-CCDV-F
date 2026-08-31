@@ -46,16 +46,19 @@ and all portal pages render fully.
 ### Local (no hosting)
 Open `portal/index.html` directly and the landing / candidate / trainer / practice pages all
 work. **The Markdown reader (`view.html`) needs http**, though — Chrome blocks a `file://`
-page from reading sibling files. So for the full experience (rendered guides/quizzes) run a
-one-line server from the `aizentify-cdf-bootcamp/` folder:
+page from reading sibling files. So for the full experience (rendered guides/quizzes) use the
+launcher in the bootcamp root:
 
 ```
-python3 -m http.server 8000
-# then open  http://localhost:8000/portal/
+./start.sh            # serve locally + open the portal in your browser
+./start.sh --lan      # also bind 0.0.0.0 and print a shareable http://<your-ip>:PORT/portal/ URL
+./start.sh 9000       # pick a port
+./stop.sh             # stop it (or just Ctrl+C the start.sh terminal)
 ```
 
-Share on your LAN with `http://<your-ip>:8000/portal/`. Generate candidate links on
-`trainer.html` with that base URL.
+`start.sh` picks a free port if the default (8000) is taken, waits for the server, prints the
+URLs, and opens your browser. Generate candidate links on `trainer.html` using the base URL
+it prints.
 
 ---
 

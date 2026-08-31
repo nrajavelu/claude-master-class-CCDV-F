@@ -116,8 +116,9 @@ aizentify-cdf-bootcamp/
 
 **Portal.** `portal/index.html` is a branded hub over all of the above — a personal
 `candidate.html?c=Name` page with a saved progress checklist, a `trainer.html` console with a
-candidate-link generator, and an interactive `practice.html`. Open it from disk or host it on
-GitHub Pages (`portal/README.md`).
+candidate-link generator, an interactive `practice.html`, and `view.html` which renders the
+`.md` guides/quizzes as themed pages. Launch it with **`./start.sh`** (serves locally + opens
+your browser; `--lan` to share on Wi-Fi), or host on GitHub Pages — see `portal/README.md`.
 
 ---
 
