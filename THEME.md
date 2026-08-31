@@ -132,7 +132,78 @@ click right half = next, left half = prev. Slide number is in the URL hash (deep
 
 ---
 
-## 4. House style
+## 4. Visual layer (build pass A)
+
+Inspired by `ep01/Coding_Claude_Agents.pptx`: a consistent slide-type system, schematic
+diagrams instead of bullet walls, and a "spotlight one line" code treatment. All on-brand
+(cyan→blue, not orange), all in `aizentify-theme.css`, all theme-token-driven.
+
+### Slide-type chips — one per slide, top-left
+
+```html
+<span class="chip concept">Concept</span>      <!-- the idea + mental model -->
+<span class="chip tryit">Try it</span>         <!-- 2-min REPL check, not a lab -->
+<span class="chip lab">Do this now</span>      <!-- open the editor, graded lab -->
+<span class="chip exam">Exam watch</span>      <!-- known CCDV-F question target -->
+<span class="chip recap">Recap</span>          <!-- three lines, then move on -->
+```
+
+Each renders an icon + label. Module 0 of every day carries a **legend slide** explaining
+them. (The older `.pill` / `.pill lab` / `.pill exam` markup still works.)
+
+### `▶ watch` chip — deck slide → in-portal player
+
+```html
+<a class="watch-chip" href="../../portal/watch.html?l=2" target="_blank">9:57 · L2</a>
+```
+
+Put one on a concept slide when the video companion covers the same idea. `?l=<n>` =
+walkthrough lesson; `?t=<seconds>` = exact time; `?s=build&e=<n>` = build-along episode.
+Auto-hidden in print.
+
+### Focus-code — dim the block, spotlight the line
+
+```html
+<pre class="dim"><code><span class="keep">line that stays readable</span>
+<span class="keep"><mark class="focus">the one line that matters</mark></span>
+line that fades</code></pre>
+```
+
+`pre.dim code` fades to muted; `.keep` restores normal; `mark.focus` gets a gradient
+left-border + soft glow.
+
+### Inline-SVG diagrams
+
+Author `<svg>` **inline in the deck** (not `<img>`) so it inherits theme tokens. Wrap in
+`<div class="diagram">`. Include the shared `<defs>` block (arrowhead `#arrow`, gradient
+`#brandgrad`) once per page. Style hooks:
+
+| class | role |
+|---|---|
+| `.d-node` / `.d-node.hot` / `.d-node.warn` | box: neutral / blue / amber outline |
+| `.d-label` `.d-sub` `.d-mono` | heading text / muted text / mono (cyan) text |
+| `.d-flow` (+ `.dash` `.ghost`) | arrowed connector |
+| `.d-stroke-grad` `.d-fill-grad` | brand-gradient stroke / fill |
+| `.d-ok` `.d-x` | green check-path / red cross |
+
+Day 1 ships: four-decisions grid, two-rules flow, request-anatomy slabs, response shape,
+"the API has amnesia" client⇄API, retry/fail-fast tree, the agent-loop ring. Reuse these
+shapes across Days 2–5.
+
+### One-page recap (`dayN/recap.html`)
+
+A dark, scrollable single page — every diagram from the day + the exam-watch facts + the
+video deep-links. Candidates keep it open / print it. Links `aizentify-theme.css` for the
+`.d-*` classes and overrides `overflow`/`height` in a scoped `<style>`.
+
+### Build pass B (later)
+
+Hand-made hero illustrations go in `assets/img/` — see `assets/img/README.md` for the brief
+and the slide-swap pattern. Pass A's chips / focus-code / recap stay unchanged.
+
+---
+
+## 5. House style
 
 - **One idea per slide.** If it needs two, it's two slides.
 - Headlines are claims, not labels: "Streaming stops the 10-minute timeout", not "Streaming".

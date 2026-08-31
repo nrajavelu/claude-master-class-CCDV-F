@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Day 1 recap — one page · Aizentify CDF</title>
+<link rel="stylesheet" href="../assets/aizentify-theme.css">
+<style>
+  html, body { overflow: auto; height: auto; }
+  body { background: var(--navy-950); }
+  .page { max-width: 1000px; margin: 0 auto; padding: 5vh 6vw 12vh; }
+  .page h1 { font-size: 2.6rem; margin-bottom: .3rem; }
+  .page h2 { font-size: 1.5rem; margin: 2.4rem 0 1rem; padding-bottom: .4rem;
+             border-bottom: 1px solid var(--navy-800); }
+  .page h3 { color: var(--cyan-300); margin: 1.2rem 0 .4rem; font-size: 1.05rem; }
+  .page p, .page li { color: var(--paper-100); }
+  .page ul { margin: .4rem 0 1rem 1.3rem; } .page li { margin-bottom: .4rem; }
+  .page code { background: var(--navy-900); border: 1px solid var(--navy-800);
+    border-radius: 5px; padding: .05rem .35rem; color: var(--cyan-300); font-size: .86em; }
+  .factgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 720px) { .factgrid { grid-template-columns: 1fr; } }
+  .fact { background: rgba(255,255,255,.03); border: 1px solid var(--navy-800);
+    border-radius: 12px; padding: 14px 16px; }
+  .fact b { color: #fff; }
+  .kicker { font-family: var(--font-mono); color: var(--blue-400); letter-spacing: .12em;
+    text-transform: uppercase; font-size: .85rem; }
+  .vids a { display: inline-block; margin: 0 .8rem .4rem 0; font-family: var(--font-mono);
+    font-size: .82rem; color: var(--cyan-300); border: 1px solid rgba(61,209,242,.3);
+    border-radius: 999px; padding: .2rem .6rem; text-decoration: none; }
+  .foot { margin-top: 3rem; color: var(--ink-500); font-family: var(--font-mono); font-size: .78rem; }
+  @media print { body { background: #fff; } .page p, .page li, .page h1 { color: #17181b; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="kicker">Aizentify · CCDV-F · Day 1 — keep this open</div>
+  <h1>Foundations, on <span class="gradient-text">one page</span></h1>
+  <p class="muted">The mental models from today's deck, the facts the exam leans on, and where to
+    watch each idea. Full deck: <code>slides/day1.html</code>.</p>
+
+  <h2>The method — every question is one of four decisions</h2>
+  <div class="diagram">
+    <svg viewBox="0 0 900 400" role="img" aria-label="Four decisions grid">
+      <rect class="d-node hot" x="20" y="20" width="415" height="165" rx="12"/>
+      <text class="d-label" x="42" y="55">① What runs?</text>
+      <text class="d-sub" x="42" y="80">workflow vs agent · one loop vs sub-agents · built-in vs your tool</text>
+      <text class="d-mono" x="42" y="150">D1 · D8  ·  ~13 / 53</text>
+      <rect class="d-node hot" x="465" y="20" width="415" height="165" rx="12"/>
+      <text class="d-label" x="487" y="55">② How does it call Claude?</text>
+      <text class="d-sub" x="487" y="80">messages · stream vs batch · model tier · token cost</text>
+      <text class="d-mono" x="487" y="150">D2 · D5  ·  ~12 / 53</text>
+      <rect class="d-node hot" x="20" y="215" width="415" height="165" rx="12"/>
+      <text class="d-label" x="42" y="250">③ What does Claude see &amp; say?</text>
+      <text class="d-sub" x="42" y="275">context window · prompt build · output shape your code consumes</text>
+      <text class="d-mono" x="42" y="345">D6 · D2 · D3  ·  ~13 / 53</text>
+      <rect class="d-node warn" x="465" y="215" width="415" height="165" rx="12"/>
+      <text class="d-label" x="487" y="250">④ Will it survive production?</text>
+      <text class="d-sub" x="487" y="275">requirements &amp; lifecycle · debugging · security</text>
+      <text class="d-mono" x="487" y="345">D2 · D4 · D7  ·  ~15 / 53 · biggest</text>
+    </svg>
+  </div>
+  <p><b>Rule 1</b> — the stem names a constraint → the answer is the mechanism built for it; a generic
+    knob (temperature, model tier, <code>max_tokens</code>, "raise the timeout") is a distractor.<br>
+    <b>Rule 2</b> — if the stem says <i>must / never / always / cannot</i>, guidance ("tell the model
+    to…", "write it down") is dead; only a mechanism (isolation, a blocking hook, a schema) survives.
+    <i>"A polite request is not an enforceable control."</i></p>
+
+  <h2>The Messages API</h2>
+  <div class="factgrid">
+    <div class="fact"><b>One endpoint.</b> <code>client.messages.create</code> / <code>.stream</code>.
+      Tools, vision, PDF, thinking, structured output are <i>parameters</i> — not separate APIs.
+      Token counting is the one separate endpoint.</div>
+    <div class="fact"><b>Stateless.</b> No server session. Multi-turn = you resend the whole
+      <code>messages</code> list every call.</div>
+    <div class="fact"><b>Request</b> = <code>model</code> + <code>max_tokens</code> (both required) +
+      <code>system</code> (own field — no <code>role:"system"</code> message) + <code>messages</code>
+      (first must be <code>user</code>).</div>
+    <div class="fact"><b>Response</b> = <code>content</code> (a LIST of typed blocks — check
+      <code>block.type</code>) + <code>stop_reason</code> (branch on it) + <code>usage</code> (your bill).
+      You send dicts, get back objects.</div>
+  </div>
+
+  <h3>stop_reason — all of them</h3>
+  <ul>
+    <li><code>end_turn</code> — read the text · <code>max_tokens</code> — raise it / stream / narrow</li>
+    <li><code>tool_use</code> — run it, feed results back · <code>stop_sequence</code> — expected</li>
+    <li><code>pause_turn</code> — resend to continue · <code>refusal</code> — HTTP 200, not an
+      exception; check <code>stop_details</code> before reading <code>content</code></li>
+    <li>Not Claude values: <code>tool_call</code>, <code>content_filter</code>, <code>token_limit</code>,
+      <code>function_call</code> — distractors.</li>
+  </ul>
+
+  <h2>Streaming</h2>
+  <ul>
+    <li>Server-Sent Events over the same HTTP call — <b>not</b> a WebSocket.</li>
+    <li>Non-streaming holds the connection until done → long outputs can time out. Stream anything long.</li>
+    <li>An error can arrive <i>as an event mid-stream</i> — read events, not just the status code.</li>
+    <li><code>stream.get_final_message()</code> after the <code>with</code> block gives the complete
+      Message (usage, stop_reason, blocks). Don't hand-assemble.</li>
+  </ul>
+
+  <h2>Errors — retry or fail fast</h2>
+  <div class="diagram">
+    <svg viewBox="0 0 900 300" role="img" aria-label="Retry vs fail-fast">
+      <rect class="d-node" x="360" y="20" width="180" height="48" rx="10"/>
+      <text class="d-mono" x="392" y="50">exception</text>
+      <line class="d-flow" x1="410" y1="70" x2="230" y2="120"/>
+      <line class="d-flow" x1="490" y1="70" x2="670" y2="120"/>
+      <rect class="d-node warn" x="30" y="125" width="380" height="150" rx="12"/>
+      <text class="d-label" x="52" y="158" fill="#f2b877">fail fast — don't retry</text>
+      <text class="d-mono" x="52" y="188" font-size="13">BadRequestError · 400</text>
+      <text class="d-mono" x="52" y="210" font-size="13">AuthenticationError · 401</text>
+      <text class="d-mono" x="52" y="232" font-size="13">PermissionDeniedError · 403</text>
+      <text class="d-mono" x="52" y="254" font-size="13">NotFoundError · 404</text>
+      <rect class="d-node hot" x="490" y="125" width="380" height="150" rx="12"/>
+      <text class="d-label" x="512" y="158">back off &amp; retry</text>
+      <text class="d-mono" x="512" y="188" font-size="13">RateLimitError · 429</text>
+      <text class="d-mono" x="512" y="210" font-size="13">APIStatusError · ≥ 500</text>
+      <text class="d-mono" x="512" y="232" font-size="13">APIConnectionError</text>
+      <text class="d-sub" x="512" y="262">exponential backoff + jitter</text>
+    </svg>
+  </div>
+  <ul>
+    <li>Catch a chain, most-specific first. A single <code>except Exception</code> loses the distinction.</li>
+    <li>SDK already retries 408/409/429/5xx + connection, <code>max_retries=2</code>, ~10-min timeout.</li>
+    <li><code>rate_limit</code> = your spike (yours to fix). <code>overloaded</code> = their load.</li>
+  </ul>
+
+  <h2>Tokens &amp; cost</h2>
+  <ul>
+    <li><code>count_tokens(model, system, messages, tools)</code> — separate cheap endpoint, no
+      <code>max_tokens</code>. Predict spend / check fit.</li>
+    <li>Cost = tokens × (price-per-million ÷ 1e6). Output dearer than input.</li>
+    <li><code>cache_read_input_tokens</code> ≈ 0.1× input price (a cache <i>write</i> ≈ 1.25×).</li>
+  </ul>
+
+  <h2>The agentic loop</h2>
+  <div class="diagram" style="max-width:420px">
+    <svg viewBox="0 0 420 420" role="img" aria-label="Agent loop ring">
+      <circle cx="210" cy="210" r="130" fill="none" stroke="#2b2e33" stroke-width="2"/>
+      <path d="M210 80 A130 130 0 0 1 320 158" class="d-stroke-grad" marker-end="url(#arrow)"/>
+      <path d="M338 232 A130 130 0 0 1 262 328" class="d-stroke-grad" marker-end="url(#arrow)"/>
+      <path d="M180 336 A130 130 0 0 1 88 262" class="d-stroke-grad" marker-end="url(#arrow)"/>
+      <path d="M82 178 A130 130 0 0 1 158 84" class="d-stroke-grad" marker-end="url(#arrow)"/>
+      <text class="d-label" x="210" y="60" text-anchor="middle">Send</text>
+      <text class="d-label" x="360" y="200" text-anchor="middle">Check</text>
+      <text class="d-sub" x="360" y="218" text-anchor="middle">stop_reason</text>
+      <text class="d-label" x="245" y="372" text-anchor="middle">Act</text>
+      <text class="d-label" x="70" y="200" text-anchor="middle">Append</text>
+      <text class="d-mono" x="210" y="205" text-anchor="middle" font-size="18">while True:</text>
+      <text class="d-sub" x="210" y="228" text-anchor="middle">until end_turn</text>
+    </svg>
+  </div>
+  <ul>
+    <li><b>Rule 1</b> — after every response append <code>{"role":"assistant","content": response.content}</code> (the whole list).</li>
+    <li><b>Rule 2</b> — on <code>tool_use</code>: one user message, a list of <code>tool_result</code> blocks, <code>tool_use_id</code>s matching.</li>
+    <li>Loop until <code>end_turn</code>; handle <code>max_tokens</code> / <code>refusal</code>; cap the turns.</li>
+  </ul>
+
+  <h2>Watch it</h2>
+  <div class="vids">
+    <a href="../portal/watch.html?l=1" target="_blank">▶ L1 · Four decisions (0:00)</a>
+    <a href="../portal/watch.html?l=2" target="_blank">▶ L2 · One Ticket, One Call (9:57)</a>
+    <a href="../portal/watch.html?l=3" target="_blank">▶ L3 · Streaming, Vision, Thinking (18:40)</a>
+    <a href="../portal/watch.html?l=9" target="_blank">▶ L9 · Three places a call can break (1:19:58)</a>
+    <a href="../portal/watch.html?l=10" target="_blank">▶ L10 · input_tokens is not your input (1:30:42)</a>
+    <a href="../portal/watch.html?s=build&e=1" target="_blank">▶ Build-along Ep 01 · First agent on the raw API</a>
+  </div>
+
+  <p class="foot">Aizentify · Claude Certified Developer – Foundations · © 2026 Aizentify LLP ·
+    practice: <code>portal/practice.html?day=1</code></p>
+</div>
+
+<!-- shared SVG defs for the diagrams above -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0 0 L10 5 L0 10 z" fill="#1a7ee8"/></marker>
+  <linearGradient id="brandgrad" x1="0" y1="0" x2="1" y2="0.4">
+    <stop offset="0" stop-color="#3dd1f2"/><stop offset="0.55" stop-color="#1a7ee8"/><stop offset="1" stop-color="#1450e8"/>
+  </linearGradient>
+</defs></svg>
+</body>
+</html>

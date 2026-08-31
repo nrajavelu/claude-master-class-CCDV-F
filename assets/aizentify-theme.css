@@ -198,8 +198,77 @@ table.k td { color: var(--paper-100); }
   z-index: 20; transition: opacity .4s ease;
 }
 
+/* ============================================================================
+   Visual layer (build pass A) — slide-type chips, focus-code, ▶watch chip,
+   and inline-SVG diagram styling. Diagrams are authored inline in the deck so
+   they inherit these classes and the theme tokens.
+   ============================================================================ */
+
+/* ---------- slide-type chips (consistent all week) ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em;
+  text-transform: uppercase; padding: .3rem .7rem .3rem .55rem;
+  border-radius: 999px; border: 1px solid; margin-bottom: 1.1rem;
+}
+.chip::before { content: ""; width: 13px; height: 13px; background: currentColor;
+  -webkit-mask: var(--ic) center/contain no-repeat; mask: var(--ic) center/contain no-repeat; }
+.chip.concept  { color: var(--cyan-300);  border-color: rgba(61,209,242,.35); background: rgba(61,209,242,.10);
+  --ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='M12 3a6 6 0 0 0-4 10.5V17h8v-3.5A6 6 0 0 0 12 3z'/%3E%3Cline x1='9' y1='21' x2='15' y2='21'/%3E%3C/svg%3E"); }
+.chip.tryit    { color: #9ec2ff; border-color: rgba(20,80,232,.4); background: rgba(20,80,232,.14);
+  --ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='M9 3h6M10 3v6L5 19a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-10V3'/%3E%3C/svg%3E"); }
+.chip.lab      { color: #9ec2ff; border-color: rgba(20,80,232,.45); background: rgba(20,80,232,.18);
+  --ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpolygon points='5 3 19 12 5 21 5 3'/%3E%3C/svg%3E"); }
+.chip.exam     { color: #f2b877; border-color: rgba(242,184,120,.4); background: rgba(242,184,120,.12);
+  --ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpath d='M12 9v4M12 17h.01'/%3E%3Cpath d='M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z'/%3E%3C/svg%3E"); }
+.chip.recap    { color: var(--ink-300); border-color: var(--navy-700); background: rgba(255,255,255,.04);
+  --ic: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2'%3E%3Cpolyline points='9 11 12 14 20 6'/%3E%3Cpath d='M20 12v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9'/%3E%3C/svg%3E"); }
+
+/* keep old .pill markup working */
+.pill.lab { --x: 1; }
+
+/* ---------- ▶ watch chip (deck slide -> in-portal player) ---------- */
+.watch-chip {
+  position: absolute; right: 8vw; bottom: 3.4vh;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em;
+  color: var(--cyan-300); text-decoration: none;
+  border: 1px solid rgba(61,209,242,.35); border-radius: 999px; padding: .25rem .7rem;
+  background: rgba(61,209,242,.08); transition: background .12s ease;
+}
+.watch-chip:hover { background: rgba(61,209,242,.18); }
+.watch-chip::before { content: "▶ "; }
+
+/* ---------- focus-code: dim the block, spotlight one line ---------- */
+pre.dim code { color: #6b7686; }
+pre.dim code .keep { color: #d6e2f0; }
+pre .focus, pre mark.focus {
+  display: inline-block; background: rgba(30,167,232,.10); color: #fff;
+  border-left: 3px solid var(--blue-500);
+  padding: 0 .5rem; margin-left: -.5rem;
+  box-shadow: -3px 0 18px rgba(30,167,232,.35);
+  border-radius: 2px;
+}
+
+/* ---------- inline-SVG diagram styling ---------- */
+.diagram { width: 100%; max-width: 940px; margin: .4rem 0; }
+.diagram svg { width: 100%; height: auto; overflow: visible; }
+.diagram .d-node   { fill: rgba(255,255,255,.04); stroke: var(--navy-700); stroke-width: 1.5; }
+.diagram .d-node.hot{ stroke: var(--blue-500); }
+.diagram .d-node.warn{ stroke: #f2b877; }
+.diagram .d-label  { fill: var(--paper-50); font-family: var(--font-head); font-weight: 600; font-size: 15px; }
+.diagram .d-sub    { fill: var(--ink-300); font-family: var(--font-body); font-size: 12px; }
+.diagram .d-mono   { fill: var(--cyan-300); font-family: var(--font-mono); font-size: 13px; }
+.diagram .d-flow   { stroke: var(--blue-500); stroke-width: 2; fill: none; marker-end: url(#arrow); }
+.diagram .d-flow.dash { stroke-dasharray: 6 6; }
+.diagram .d-flow.ghost { stroke: var(--navy-700); }
+.diagram .d-fill-grad { fill: url(#brandgrad); }
+.diagram .d-stroke-grad { stroke: url(#brandgrad); fill: none; stroke-width: 3; }
+.diagram .d-x { stroke: #c0392b; stroke-width: 2.5; }
+.diagram .d-ok { stroke: #2fae66; stroke-width: 2.5; fill: none; }
+
 @media print {
   html, body { overflow: visible; height: auto; }
   .slide { display: flex !important; position: relative; inset: auto; page-break-after: always; min-height: 100vh; }
   #counter, #progress, #hint { display: none; }
+  .watch-chip { display: none; }
 }

@@ -22,9 +22,14 @@ Candidate laptops (venv + `.env` ready), this deck on the projector, printed ans
 
 ## Timing plan
 
-Deck is **34 slides** (Module 0 was added: 4 slides — divider + four-decisions +
-two-rules + four-step-attack — between the agenda and Module 1). Slide numbers below are
-approximate; navigate by heading.
+Deck is **~36 slides**. It now carries the visual layer (see `THEME.md §4`): a **slide-type
+chip** top-left of every slide (`Concept` / `Try it` / `Do this now` / `Exam watch` /
+`Recap`) with a **legend slide** early in Module 0; **inline-SVG diagrams** for the four
+decisions, the two rules, request/response anatomy, "the API has amnesia", the retry tree,
+and the agent-loop ring; **focus-code** blocks (one line spotlit); and **▶ watch** corner
+chips linking the in-page player. There's also a **one-page recap** (`recap.html`) to hand
+out at the end. Slide numbers below are approximate — **navigate by the slide title** in
+each heading.
 
 | Block | Slides (approx) | Time |
 |---|---|---|
