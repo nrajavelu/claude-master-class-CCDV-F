@@ -16,6 +16,7 @@
       <a href="candidate.html" data-keepc>Candidate portal</a>
       <a href="trainer.html">Trainer</a>
       <a href="practice.html" data-keepc>Practice</a>
+      <a href="watch.html" data-keepc>Video</a>
     </div>
   </div>
 </nav>
@@ -66,6 +67,18 @@
       const h = a.getAttribute("href");
       if (/^https?:|^view\.html/.test(h)) return;
       a.setAttribute("href", "view.html?f=" + encodeURIComponent(dir + h));
+    });
+    // YouTube deep-links -> in-portal player
+    target.querySelectorAll('a[href*="youtube.com/watch"]').forEach(function (a) {
+      var m = (a.getAttribute("href") || "").match(/[?&]t=(\d+)s?/);
+      a.setAttribute("href", "watch.html?t=" + (m ? m[1] : "0"));
+    });
+    // every link in a rendered doc opens in a new tab (references, video deep-links, ...)
+    target.querySelectorAll("a[href]").forEach(function (a) {
+      const h = a.getAttribute("href") || "";
+      if (h.charAt(0) === "#") return;            // in-page anchors stay put
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
     });
     // carry candidate id forward on those
     if (typeof AIZ.greet === "function") AIZ.greet();

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video companion · Aizentify CDF-F Bootcamp</title>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" data-keepc aria-label="Aizentify"></a>
+    <div class="links">
+      <a href="index.html" data-keepc>Overview</a>
+      <a href="candidate.html" data-keepc>Candidate portal</a>
+      <a href="trainer.html">Trainer</a>
+      <a href="practice.html" data-keepc>Practice</a>
+      <a href="watch.html" data-keepc>Video</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" style="padding:40px 0 44px">
+  <div class="wrap">
+    <div class="kicker">Video companion · in-page player</div>
+    <h1 id="now">CCDV-F <span class="gradient">video</span></h1>
+    <p class="lead">Two series, played here — no trip to YouTube. Pick a chapter or an episode and it
+      loads in place.</p>
+    <div class="btn-row" style="margin-top:14px">
+      <button class="btn btn-primary" id="tab-walk">Exam walkthrough</button>
+      <button class="btn btn-light" id="tab-build">Build-along course</button>
+    </div>
+  </div>
+</header>
+
+<section style="padding-top:24px">
+  <div class="wrap">
+    <div class="watch-grid">
+      <div>
+        <div class="video-embed"><div id="player"></div></div>
+        <p class="muted" id="blurb" style="font-size:.82rem; margin-top:8px"></p>
+        <p class="muted" style="font-size:.82rem">Trouble playing?
+          <a id="ytfallback" href="https://www.youtube.com/watch?v=Lan-CbQ2IKM" target="_blank" rel="noopener">open on YouTube ↗</a></p>
+      </div>
+      <div class="chapters" id="rail"><p class="muted">Loading…</p></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Aizentify · Claude Certified Developer – Foundations · © 2026 Aizentify LLP</span>
+    <span><a href="view.html?f=../video-companion.md" data-keepc>full lesson → module map</a></span>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+(function () {
+  // ---------- data ----------
+  // A) the exam-strategy walkthrough: one video, 17 chapters (seek)
+  var WALK = {
+    vid: "Lan-CbQ2IKM",
+    blurb: "The CCDV-F exam walkthrough — four decisions + two elimination rules, built across one support-desk story.",
+    ch: [
+      [1,"Every Question Is One of Four Decisions",0,"method"],
+      [2,"One Ticket, One Call",597,"Day 1"],
+      [3,"Streaming, Vision, Thinking",1120,"Day 1 · 5"],
+      [4,"The Quarter That Isn't About Claude",1716,"Day 4"],
+      [5,"The Three Surfaces",2358,"Day 2 · 3"],
+      [6,"Same Repo, Three Different Claudes",3001,"Day 4 · 3"],
+      [7,"Asking Is Not Making Sure",3652,"Day 2"],
+      [8,"A Bigger Window Makes It Worse",4236,"Day 4"],
+      [9,"The Three Places a Call Can Break",4798,"Day 1 · 4"],
+      [10,"input_tokens Is Not Your Input",5442,"Day 1 · 5"],
+      [11,"Batch: Results in Any Order",6056,"Day 5"],
+      [12,"The Description Is the Interface",6710,"Day 2"],
+      [13,"An MCP Server Is Not a Bag of Tools",7363,"Day 3"],
+      [14,"Usually Fewer Agents",7979,"Day 3"],
+      [15,"Self-Hosted Is Not Air-Gapped",8654,"Day 3 · 5"],
+      [16,"The Attack Arrives as a Ticket",9319,"Day 5"],
+      [17,"Exam Day: Name the Decision First",10002,"method · Day 5"]
+    ]
+  };
+  // B) the hands-on build-along course: one video PER episode.
+  //    Paste the YouTube id for each as they're confirmed (playlist not yet mapped).
+  var BUILD = {
+    blurb: "The hands-on build-along — one PR-review agent grown across the episodes; mirrors the epNN/ folders in the parent repo.",
+    ep: [
+      [0,  "Course Overview",                              "R3hHhqIOjA0", "—",     "Start here"],
+      [1,  "Your First Agent on the Raw Messages API",     "RheXq2HKJmY", "ep01",  "Day 1 · Lab 4"],
+      [2,  "Same Job on the Claude Agent SDK",             null,          "ep02",  "Day 3 · M3"],
+      [3,  "Custom Tool: Docstring Coverage Checker",      null,          "ep03",  "Day 2 · L2 / Day 3"],
+      [4,  "Hooks & Guardrails",                           null,          "ep04",  "Day 3 · M4 · Lab 2"],
+      [5,  "Subagents & the Coordinator",                  null,          "ep05",  "Day 3 · M5 · Lab 1"],
+      [6,  "Memory, Sessions & Context That Survives",     null,          "ep06",  "Day 4 · M5-6"],
+      [7,  "Structured Output You Can Trust",              null,          "ep07",  "Day 2 · L3"],
+      [8,  "Skills: Reusable Agent Capabilities",          null,          "ep08",  "Day 3 · M6 / Day 4"],
+      [9,  "MCP in the Real World",                        null,          "ep09",  "Day 3 · M7 · Lab 4"],
+      [10, "Choosing Your Model",                          null,          "ep10",  "Day 5 · M1"],
+      [11, "Cost, Tokens & Reliability in Production",     null,          "ep11",  "Day 5 · M2-5"],
+      [12, "Managed Agents",                               null,          "ep12",  "Day 5 · M... "]
+    ]
+  };
+
+  function fmt(s){var h=(s/3600)|0,m=((s%3600)/60)|0,x=s%60;return (h?h+":":"")+(h&&m<10?"0":"")+m+":"+(x<10?"0":"")+x;}
+  function esc(t){return String(t).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];});}
+
+  // ---------- state ----------
+  var series = (AIZ.qp("s") === "build") ? "build" : "walk";
+  var startT = parseInt(AIZ.qp("t") || "", 10);
+  var epN = parseInt(AIZ.qp("e") || "", 10);
+  var lp  = parseInt(AIZ.qp("l") || "", 10);
+  if (isNaN(startT) && !isNaN(lp)) { var r = WALK.ch.find(function(x){return x[0]===lp;}); if (r) startT = r[2]; }
+  if (isNaN(startT)) startT = 0;
+
+  var player=null, ready=false, curVid=null;
+
+  window.onYouTubeIframeAPIReady = function () {
+    var v = (series === "build") ? currentBuildVid() : WALK.vid;
+    curVid = v;
+    player = new YT.Player("player", {
+      videoId: v,
+      host: "https://www.youtube-nocookie.com",
+      playerVars: { start: (series==="walk"?startT:0), rel:0, modestbranding:1, playsinline:1 },
+      events: { onReady: function(){ ready = true; sync(); },
+                onStateChange: function(){ sync(); } }
+    });
+  };
+  var s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api";
+  document.head.appendChild(s);
+
+  function currentBuildEp(){ return BUILD.ep.find(function(r){return r[0]===epN;}) || BUILD.ep[1]; }
+  function currentBuildVid(){ var e=currentBuildEp(); return e[2] || "RheXq2HKJmY"; }
+
+  // ---------- render rail ----------
+  function renderRail(){
+    var box = document.getElementById("rail");
+    if (series === "walk") {
+      box.innerHTML = WALK.ch.map(function(r){
+        return '<button class="ch" data-sec="'+r[2]+'"><span class="t">'+fmt(r[2])+'</span>'+
+          '<span class="ttl">L'+r[0]+' · '+esc(r[1])+'</span><span class="day">'+r[3]+'</span></button>';
+      }).join("");
+    } else {
+      box.innerHTML = BUILD.ep.map(function(r){
+        var has = !!r[2];
+        return '<button class="ch'+(has?'':' off')+'" data-ep="'+r[0]+'"'+(has?'':' disabled')+'>'+
+          '<span class="t">'+(r[0]===0?"▶":"Ep"+r[0])+'</span>'+
+          '<span class="ttl">'+esc(r[1])+(has?'':' <em style="color:var(--ink-300)">— add id</em>')+'</span>'+
+          '<span class="day">'+esc(r[4])+'</span></button>';
+      }).join("");
+    }
+  }
+
+  document.getElementById("rail").addEventListener("click", function(e){
+    var b = e.target.closest(".ch"); if (!b || b.disabled) return;
+    if (series === "walk") {
+      var sec = +b.dataset.sec;
+      if (ready) { player.seekTo(sec, true); player.playVideo(); } else { startT = sec; }
+      setUrl({ s:"walk", t:sec });
+    } else {
+      epN = +b.dataset.ep;
+      var v = currentBuildVid();
+      if (ready && v !== curVid) { curVid = v; player.loadVideoById(v); }
+      setUrl({ s:"build", e:epN });
+    }
+    sync();
+  });
+
+  // ---------- tabs ----------
+  function setSeries(next){
+    if (next === series) return;
+    series = next;
+    document.getElementById("tab-walk").className = "btn " + (series==="walk"?"btn-primary":"btn-light");
+    document.getElementById("tab-build").className = "btn " + (series==="build"?"btn-primary":"btn-light");
+    document.getElementById("blurb").textContent = series==="walk" ? WALK.blurb : BUILD.blurb;
+    renderRail();
+    var v = series==="build" ? currentBuildVid() : WALK.vid;
+    if (ready) { curVid = v; player.loadVideoById({ videoId:v, startSeconds: series==="walk"?startT:0 }); }
+    setUrl(series==="walk" ? {s:"walk"} : {s:"build", e:isNaN(epN)?1:epN});
+    sync();
+  }
+  document.getElementById("tab-walk").addEventListener("click", function(){ setSeries("walk"); });
+  document.getElementById("tab-build").addEventListener("click", function(){ setSeries("build"); });
+
+  // ---------- sync header + highlight + fallback link ----------
+  function sync(){
+    if (series === "walk") {
+      var sec = (ready && player.getCurrentTime) ? (player.getCurrentTime()|0) : startT;
+      var cur = WALK.ch.slice().reverse().find(function(r){return sec>=r[2];}) || WALK.ch[0];
+      document.querySelectorAll("#rail .ch").forEach(function(b){ b.classList.toggle("on", +b.dataset.sec===cur[2]); });
+      document.getElementById("now").innerHTML = "L"+cur[0]+" · <span class='gradient'>"+esc(cur[1])+"</span>";
+      document.getElementById("ytfallback").href = "https://www.youtube.com/watch?v="+WALK.vid+"&t="+cur[2]+"s";
+    } else {
+      var e = currentBuildEp();
+      document.querySelectorAll("#rail .ch").forEach(function(b){ b.classList.toggle("on", +b.dataset.ep===e[0]); });
+      document.getElementById("now").innerHTML = (e[0]?"Ep "+e[0]+" · ":"")+"<span class='gradient'>"+esc(e[1])+"</span>";
+      document.getElementById("ytfallback").href = "https://www.youtube.com/watch?v="+(e[2]||"RheXq2HKJmY");
+    }
+  }
+  setInterval(function(){ if (series==="walk" && ready && player.getCurrentTime) sync(); }, 3000);
+
+  function setUrl(o){
+    var q = Object.keys(o).map(function(k){return k+"="+encodeURIComponent(o[k]);});
+    if (AIZ.who() !== "guest") q.push("c="+encodeURIComponent(AIZ.who()));
+    history.replaceState(null, "", "watch.html?"+q.join("&"));
+  }
+
+  // ---------- init ----------
+  document.getElementById("tab-walk").className = "btn " + (series==="walk"?"btn-primary":"btn-light");
+  document.getElementById("tab-build").className = "btn " + (series==="build"?"btn-primary":"btn-light");
+  document.getElementById("blurb").textContent = series==="walk" ? WALK.blurb : BUILD.blurb;
+  renderRail();
+})();
+</script>
+</body>
+</html>

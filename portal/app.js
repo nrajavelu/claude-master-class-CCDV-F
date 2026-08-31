@@ -94,9 +94,27 @@
     }
   };
 
+  // ---- reference links (markdown docs + external) open in a new tab ----
+  A.externalizeLinks = function (root) {
+    (root || document).querySelectorAll("a[href]").forEach(function (a) {
+      if (a.hasAttribute("target")) return;
+      const h = a.getAttribute("href") || "";
+      const isDoc = h.indexOf("view.html?f=") !== -1;                 // markdown reader
+      const isExternal = /^https?:\/\//i.test(h) &&
+        h.indexOf(location.host) === -1;                              // off-site (YouTube etc.)
+      const isRawFile = /\.(md|py|json|jsonl|txt|pdf)(\?|#|$)/i.test(h) &&
+        h.indexOf("view.html") === -1;                               // direct file link
+      if (isDoc || isExternal || isRawFile) {
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+      }
+    });
+  };
+
   document.addEventListener("DOMContentLoaded", function () {
     A.markNav();
     A.greet();
     A.wireChecklists();
+    A.externalizeLinks();
   });
 })();
