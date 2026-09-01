@@ -1,89 +1,55 @@
 #!/usr/bin/env bash
-# ============================================================================
-# Aizentify CDF-F Bootcamp — start the local portal
-#
-#   ./start.sh              serve on localhost, open the portal in your browser
-#   ./start.sh --lan        also bind 0.0.0.0 so candidates on your Wi-Fi can reach it
-#   ./start.sh 9000         use a specific port
-#   PORT=9000 ./start.sh    same, via env
-#
-# Serves this folder over http (so portal/view.html can fetch the .md files),
-# then opens  http://localhost:<port>/portal/  . Ctrl+C to stop.
-# ============================================================================
-set -euo pipefail
-
+# Serve the CDF-F Bootcamp portal locally and print the direct URLs.
+#   ./start.sh            # port 8070
+#   ./start.sh 8010       # pick a port
+#   ./start.sh --lan      # also bind 0.0.0.0 for other devices on your network
+set -eu
 cd "$(dirname "$0")"
 
-# ---- args ----
-BIND="127.0.0.1"
-SHARE=0
-PORT="${PORT:-8000}"
+BIND=127.0.0.1 HOST=localhost
+PORT=8070          # distinct per course so browser-cached pages never collide with another course
 for a in "$@"; do
   case "$a" in
-    --lan|--share) BIND="0.0.0.0"; SHARE=1 ;;
-    ''|*[!0-9]*)   : ;;                       # ignore non-numeric
-    *)             PORT="$a" ;;
+    --lan|--share) BIND=0.0.0.0 ;;
+    *[!0-9]*|'') : ;;
+    *) PORT="$a" ;;
   esac
 done
 
-# ---- python ----
-PY=""
-for c in python3 python; do
-  if command -v "$c" >/dev/null 2>&1; then PY="$c"; break; fi
-done
-if [ -z "$PY" ]; then
-  echo "error: python3 (or python) not found on PATH." >&2
-  echo "install Python 3.11+ — see logistics/00-environment-setup.md" >&2
-  exit 1
-fi
+PY=python3; command -v python3 >/dev/null || PY=python
 
-# ---- find a free port (try PORT .. PORT+20) ----
-# returns 0 (success) when nothing is listening on the port
-port_free() { "$PY" -c "import socket,sys; s=socket.socket(); s.settimeout(0.3); sys.exit(1 if s.connect_ex(('127.0.0.1', int('$1')))==0 else 0)" 2>/dev/null; }
-tries=0
-while ! port_free "$PORT"; do
-  PORT=$((PORT + 1)); tries=$((tries + 1))
-  if [ "$tries" -gt 20 ]; then echo "error: no free port near ${PORT}." >&2; exit 1; fi
-done
-
-URL="http://localhost:${PORT}/portal/"
-
-# ---- start server ----
-"$PY" -m http.server "$PORT" --bind "$BIND" --directory "$(pwd)" >/dev/null 2>&1 &
-SRV=$!
-trap 'echo; echo "stopping portal (pid $SRV)"; kill "$SRV" 2>/dev/null || true' INT TERM EXIT
-
-# wait for it to answer
-for _ in $(seq 1 20); do
-  if "$PY" -c "import urllib.request,sys
-try: urllib.request.urlopen('http://127.0.0.1:${PORT}/portal/index.html', timeout=0.5); sys.exit(0)
-except Exception: sys.exit(1)" 2>/dev/null; then break; fi
-  sleep 0.25
-done
-
-# ---- banner ----
-echo
-echo "  Aizentify CDF-F portal is running."
-echo "  ─────────────────────────────────────────────"
-echo "  Portal        $URL"
-echo "  Trainer       ${URL}trainer.html"
-echo "  Practice      ${URL}practice.html"
-if [ "$SHARE" -eq 1 ]; then
-  LAN="$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null \
-        || hostname -I 2>/dev/null | awk '{print $1}' || true)"
-  if [ -n "${LAN:-}" ]; then
-    echo "  Share (LAN)   http://${LAN}:${PORT}/portal/"
-    echo "                ^ paste this as the base URL in trainer.html to make candidate links"
+# find a free port: PORT .. PORT+15
+for p in $(seq "$PORT" $((PORT+15))); do
+  if "$PY" -c "import socket,sys; s=socket.socket(); sys.exit(0 if s.connect_ex(('127.0.0.1',$p))==0 else 1)"; then
+    continue                     # in use -> next
+  else
+    PORT="$p"; break
   fi
+done
+
+if [ "$BIND" = 0.0.0.0 ]; then
+  HOST=$("$PY" -c "import socket; print(socket.gethostbyname(socket.gethostname()))" 2>/dev/null || echo localhost)
 fi
-echo "  ─────────────────────────────────────────────"
-echo "  Ctrl+C to stop."
-echo
+BASE="http://$HOST:$PORT"
 
-# ---- open browser ----
-if command -v open        >/dev/null 2>&1; then open "$URL"
-elif command -v xdg-open  >/dev/null 2>&1; then xdg-open "$URL" >/dev/null 2>&1 || true
-elif command -v explorer.exe >/dev/null 2>&1; then explorer.exe "$URL" >/dev/null 2>&1 || true
-else echo "  (open $URL manually)"; fi
+cat <<TXT
 
-wait "$SRV"
+  Aizentify CDF-F Bootcamp  —  serving from $(pwd)
+  ------------------------------------------------------------------
+  Portal (start here)   $BASE/portal/index.html
+  Candidate portal      $BASE/portal/candidate.html
+  Trainer console       $BASE/portal/trainer.html
+  Practice              $BASE/portal/practice.html
+  Video player          $BASE/portal/watch.html
+  Decks                 $BASE/portal/decks.html
+  Study                 $BASE/portal/study.html
+  Cookbooks             $BASE/portal/cookbooks.html
+  Worked examples       $BASE/portal/examples.html
+  Resources             $BASE/portal/resources.html
+  ------------------------------------------------------------------
+  Ctrl+C to stop.
+
+TXT
+
+( sleep 1; command -v open >/dev/null && open "$BASE/portal/index.html" >/dev/null 2>&1 || true ) &
+exec "$PY" -m http.server "$PORT" --bind "$BIND"
