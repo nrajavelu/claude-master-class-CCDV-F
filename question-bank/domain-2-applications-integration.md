@@ -1,9 +1,10 @@
 # Domain 2 — Applications and Integration  ·  sub-area: **Claude API Mechanics**
 
-CCDV-F Domain 2 is **33.1%** of the exam. This file currently holds the **Claude API
-Mechanics** sub-pool (28 items). The other D2 sub-areas — Understanding Requirements, Systems
-Life Cycle, Software Engineering Foundations, Application Design, Configuration Management —
-are added in the Day 4 build pass.
+CCDV-F Domain 2 is **33.1%** of the exam — the largest domain. **Items 1–28** are the
+**Claude API Mechanics** sub-pool (from Day 1). **Items 29–48** cover the other five D2
+sub-areas — Understanding Requirements, Systems Life Cycle, Software Engineering Foundations,
+Claude Application Design, Configuration Management (from Day 4). Deeper prose:
+`../topic-briefings.md` · Day 4; checklist: `../blueprint-mastery-map.md` 2.1–2.6.
 
 A handful of items below also touch **D5** (Technical Fundamentals: tokens, context, cost)
 and **D4** (Debugging & Error Handling); they're tagged inline where so.
@@ -355,3 +356,130 @@ D. only available in the Agent SDK
 
 > **Answer:** B
 > **Why:** One endpoint, many parameters — the core mental model of Domain 1.
+
+---
+
+## D2 sub-areas 2–6 — Requirements · Life Cycle · SW-Eng · App Design · Config Mgmt
+
+### 29. (SBA · Understanding Requirements) Which is an actual *requirement* you can design and test against?
+A. "make the support team faster"  B. "draft replies in under 3 s p95 measured from Frankfurt, processing no customer data outside the EU"  C. "use the best model"  D. "reduce the ticket backlog"
+
+> **Answer:** B
+> **Why:** Verifiable, with latency and residency pinned; it becomes an eval criterion.
+> **Distractors:** A/D — **true-but-irrelevant**: the business problem restated. C — **right-word-wrong-place**: a solution, not a requirement.
+
+### 30. (SBA · Understanding Requirements) Infrastructure requirements sit on four axes:
+A. cost, speed, quality, scope  B. latency (from the user's region), scale (peak volume), residency (where data is processed), identity (credential model + audit)  C. CPU, RAM, disk, network  D. uptime, latency, throughput, cost
+
+> **Answer:** B
+> **Distractors:** A — project-management triangle. C — machine specs. D — overlaps but misses residency/identity, the exam's focus.
+
+### 31. (SCN · Understanding Requirements) A stakeholder says "we want Claude to help EU agents clear their backlog faster." First move?
+A. start building a prototype  B. derive functional behaviours + infrastructure constraints (incl. the EU-residency source) and record them as eval criteria and design constraints  C. pick a model  D. choose a cloud
+
+> **Answer:** B
+> **Distractors:** A/C/D — jumping to a solution before requirements exist.
+
+### 32. (SBA · Systems Life Cycle) The systems life cycle arc the guide uses:
+A. plan → code → ship  B. Requirements → Design → Build → Test → Deploy → Operate → Iterate, with gates between phases  C. design → deploy → forget  D. build → break → fix
+
+> **Answer:** B
+> **Distractors:** A/C/D — miss the gates and the Operate/Iterate tail where production credit is earned.
+
+### 33. (SCN · Systems Life Cycle) When should the eval suite for a Claude feature first exist?
+A. after launch, once real failures appear  B. during Build — it gates Deploy and validates every later prompt/model change  C. only for regulated data  D. during Requirements, before any code
+
+> **Answer:** B
+> **Distractors:** A — **symptom-treater**: waits for production pain. C — **extremist** ("only if"). D — too early to write meaningful cases.
+
+### 34. (SBA · Systems Life Cycle) Why do Claude apps need *continuous* monitoring where traditional software often doesn't?
+A. they crash more  B. model behaviour can shift on a version bump and prompts drift with usage, so quality isn't frozen at release  C. tokens expire  D. the API changes weekly
+
+> **Answer:** B
+> **Distractors:** A/C/D — invented or exaggerated.
+
+### 35. (SBA · SW-Eng Foundations) `AsyncAnthropic` gives you:
+A. lower latency on a single call  B. concurrency — many calls overlap; one call is no faster  C. lower token cost  D. automatic batching
+
+> **Answer:** B
+> **Distractors:** A/C — false. D — chunking async calls is not the Batch API.
+
+### 36. (SCN · SW-Eng Foundations) A team ships a "just wording" prompt tweak straight to prod with no review; reply tone shifts and a downstream classifier's accuracy drops. Root cause?
+A. the model regressed  B. a prompt is code — the change needed review and a CI eval-suite run  C. the classifier needs retraining  D. temperature was too high
+
+> **Answer:** B
+> **Distractors:** A/C/D — **symptom-treater**: chase the downstream effect, not the missing process.
+
+### 37. (SBA · SW-Eng Foundations) Code review of a Claude integration must additionally cover:
+A. nothing extra  B. prompts and tool schemas — a schema change breaks every caller and no compiler catches it  C. only the model ID  D. only the tests
+
+> **Answer:** B
+> **Distractors:** A/C/D — understate the review surface.
+
+### 38. (SCN · SW-Eng Foundations) A consultancy hardcodes one client's values throughout the code and ships no eval suite. The next engagement:
+A. reuses it cleanly  B. has nothing to configure and no way to validate changes — a rewrite  C. only needs the model swapped  D. is unaffected
+
+> **Answer:** B
+> **Why:** Package for reuse — parameterise engagement-specific values, bundle the eval suite.
+> **Distractors:** A/C/D — assume reusability that wasn't built.
+
+### 39. (SBA · Application Design) The six deployment placements include first-party API, Claude Platform on AWS, Amazon Bedrock, Bedrock legacy, Google Vertex AI, and:
+A. a local GPU only  B. a third-party platform such as Microsoft Foundry  C. GitHub Actions  D. a browser extension
+
+> **Answer:** B
+> **Distractors:** A/C/D — not model-hosting platforms.
+
+### 40. (SCN · Application Design) A German insurer requires all customer data processed in the EU and runs on GCP. Which satisfies both?
+A. first-party Claude API with a strict data-handling system prompt  B. Vertex AI in a europe-west region  C. Amazon Bedrock in us-east-1  D. Managed Agents
+
+> **Answer:** B
+> **Distractors:** A — **right-word-wrong-place**: a prompt is not a residency control; the direct API has no EU residency. C — wrong region. D — not residency-guaranteed here (**wrong-system**).
+
+### 41. (SBA · Application Design) HIPAA BAA coverage for Claude **excludes**:
+A. Amazon Bedrock in a HIPAA-eligible account  B. Google Vertex AI  C. the Console / Workbench / beta features / consumer plans  D. the first-party API under a signed BAA
+
+> **Answer:** C
+> **Distractors:** A/B/D — all can be covered; the Console and beta surfaces cannot.
+
+### 42. (SBA · Application Design) Measure a deployment platform on three dimensions:
+A. brand, docs, popularity  B. latency from the customer's actual region with the actual payload · compliance as a pass/fail gate at scoping · total cost per call (tokens + egress + integration)  C. only cost  D. only compliance
+
+> **Answer:** B
+> **Distractors:** A — irrelevant. C/D — single-axis.
+
+### 43. (SBA · Application Design) A strict, detailed system prompt about "never store or transmit data outside region X" is:
+A. a valid data-residency control  B. not a compliance or residency control — those are enforced by endpoint, region, and contract, decided before any prompt is written  C. sufficient with temperature 0  D. required for FedRAMP
+
+> **Answer:** B
+> **Distractors:** A/C/D — treat guidance as enforcement (**right-word-wrong-place**).
+
+### 44. (SCN · Application Design) A workload needs FedRAMP authorisation. Valid route?
+A. the standard AWS Marketplace listing  B. Claude for Government, Bedrock GovCloud, or Vertex Assured Workloads  C. the first-party API with audit logging on  D. any region if you enable ZDR
+
+> **Answer:** B
+> **Distractors:** A/C/D — none carry FedRAMP authorisation.
+
+### 45. (SBA · Configuration Management) An alias like `claude-sonnet` vs a pinned ID like `claude-sonnet-5-YYYYMMDD`:
+A. identical  B. the alias is a moving target that updates over time and can differ by platform; the pinned ID is fixed until you edit the line — production pins  C. the pinned ID auto-updates  D. aliases are safer for production
+
+> **Answer:** B
+> **Distractors:** A/C/D — invert or flatten the distinction.
+
+### 46. (SCN · Configuration Management) Prod points at the `claude-sonnet` alias. Overnight it advances, the response JSON gains a field, a parser throws `KeyError`, and there's no fast way back. What should have been in place?
+A. a broader `try/except`  B. a pinned full model ID, the prior version retained for rollback, and promotion gated on an eval run  C. a retry with backoff  D. streaming
+
+> **Answer:** B
+> **Distractors:** A/C/D — **symptom-treater**: patch the crash, not the config practice.
+
+### 47. (SBA · Configuration Management) Which four artifacts are version-controlled, reviewed, and eval-validated like code?
+A. only the source files  B. `CLAUDE.md`, `settings.json`, the model version pin, and prompt / few-shot versions  C. only the prompts  D. the API key and the endpoint URL
+
+> **Answer:** B
+> **Why:** None are compiled or type-checked — the eval suite is the only regression net.
+> **Distractors:** A/C — too narrow. D — secrets, not config to commit.
+
+### 48. (SBA · Configuration Management) "A small prompt wording tweak" is:
+A. harmless, no need to track it  B. a deployment — it measurably shifts the output distribution, so it goes through review + eval like any release  C. only risky for classifiers  D. fine if temperature is 0
+
+> **Answer:** B
+> **Distractors:** A/C/D — understate that prompt edits change behaviour.
