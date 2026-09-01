@@ -159,10 +159,19 @@
     <a class="watch-chip" href="../../portal/watch.html?s=build&e=11" target="_blank">Build-along · Ep 11</a>
   </section>
 
-  <section class="slide">
+  <section class="slide" data-refs="cs:prompt_caching|worked example · prove the cache">
     <span class="chip lab">Do this now · 30 min</span>
     <h2>Lab · <span class="accent">prove the cache</span></h2>
     <p>Send the same 12 KB system prompt + a varying question ×5 with a breakpoint. Print the cache counters each call. Then put <code>datetime.now()</code> in the prefix and watch reads drop to 0.</p>
+    <pre class="out"><code>stable prefix:
+  call 0: cache_write= 1180  cache_read=    0     &larr; first call writes the cache
+  call 1: cache_write=    0  cache_read= 1180     &larr; prefix reused
+  call 2: cache_write=    0  cache_read= 1180
+prefix with datetime.now() (sabotaged):
+  call 0: cache_write= 1180  cache_read=    0
+  call 1: cache_write= 1180  cache_read=    0     &larr; every call re-writes; reads stay 0
+  call 2: cache_write= 1180  cache_read=    0</code></pre>
+    <p class="refs">Real run: <code>python code-snippets/prompt_caching.py</code> · worked example: <code>portal/examples.html?f=prompt_caching</code></p>
   </section>
 
   <section class="slide section"><div class="num">Module 4</div><h1>Batch</h1></section>

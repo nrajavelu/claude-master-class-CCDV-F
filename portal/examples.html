@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aizentify · Worked examples</title>
+<link rel="stylesheet" href="portal.css">
+<style>
+  .exwrap{max-width:900px;margin:0 auto;padding:0 24px 60px}
+  .exgrid{display:grid;gap:14px;grid-template-columns:repeat(2,1fr);margin-top:16px}
+  @media(max-width:760px){.exgrid{grid-template-columns:1fr}}
+  .excard{border:1px solid var(--line);border-radius:12px;background:var(--paper-0);padding:14px 16px}
+  .excard .m{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--blue-500)}
+  .excard h4{margin:4px 0 0;font-size:1rem}
+  .exgroup h3{margin:26px 0 0;font-size:1.02rem}
+  .md-body h2{scroll-margin-top:70px}
+  .outbox{border:1px dashed var(--line);border-radius:10px;background:var(--paper-50);padding:10px 14px;margin:.6em 0}
+  .outbox button{font:inherit;font-size:.85rem;border:1px solid var(--blue-500);background:var(--blue-500);color:#fff;border-radius:7px;padding:4px 12px;cursor:pointer}
+  .outbox .hint{font-size:.82rem;color:var(--ink-500);margin-left:10px}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Aizentify"></a>
+    <div class="links">
+      <a href="index.html">Overview</a>
+      <a href="candidate.html">Candidate portal</a>
+      <a href="trainer.html">Trainer console</a>
+      <a href="practice.html">Practice</a>
+      <a href="watch.html">Video</a>
+      <a href="decks.html">Decks</a>
+      <a href="study.html">Study</a>
+      <a href="cookbooks.html">Cookbooks</a>
+      <a href="examples.html" class="active">Examples</a>
+      <a href="resources.html">Resources</a>
+    </div>
+  </div>
+</nav>
+
+<section style="padding-top:26px">
+  <div class="exwrap">
+    <p class="muted" style="font-family:var(--font-mono);font-size:.8rem">
+      <a href="#" onclick="history.back();return false">&larr; back</a> &nbsp;·&nbsp; <span id="crumb">worked examples</span></p>
+    <div id="body" class="md-body"><p class="muted">Loading…</p></div>
+  </div>
+</section>
+
+<footer class="foot"><div class="wrap">Aizentify &middot; Claude Certified Developer &ndash; Foundations &middot; &copy; 2026 Aizentify LLP</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  var A = window.AIZ || {};
+  var f = A.qp ? A.qp('f') : new URLSearchParams(location.search).get('f');
+  var body = document.getElementById('body');
+  marked.setOptions({ gfm: true, breaks: false });
+
+  if (!f) {
+    document.getElementById('crumb').textContent = 'worked examples · code, a scenario, the real output';
+    fetch('../code-snippets/runs/catalog.json').then(function (r) { return r.json(); }).then(function (c) {
+      var byDay = {};
+      c.items.forEach(function (it) { (byDay[it.day] = byDay[it.day] || []).push(it); });
+      var html = '<h1>Worked examples</h1><p>Each page: a <b>scenario</b> with real input, the ' +
+        '<b>actual code</b>, its <b>captured output</b>, what to notice, the exam hook it defends, ' +
+        'and a tweak to try. Output is a real run (mock SDK offline; <code>--live</code> for real numbers).</p>';
+      Object.keys(byDay).forEach(function (d) {
+        html += '<div class="exgroup"><h3>' + d + '</h3><div class="exgrid">';
+        byDay[d].forEach(function (it) {
+          html += '<a class="excard link" href="examples.html?f=' + it.slug + '">' +
+            '<div class="m">' + it.domain + ' · ' + it.slug + '.py</div>' +
+            '<h4>' + it.title + '</h4></a>';
+        });
+        html += '</div></div>';
+      });
+      body.innerHTML = html;
+    }).catch(function () {
+      body.innerHTML = '<p class="note">Serve the portal over http (<code>./start.sh</code>) to list the examples.</p>';
+    });
+    return;
+  }
+
+  var slug = f.replace(/[^a-z0-9_]/gi, '');
+  document.getElementById('crumb').textContent = slug + '.py';
+  fetch('../code-snippets/runs/' + slug + '.md').then(function (r) { if (!r.ok) throw 0; return r.text(); })
+    .then(function (src) {
+      body.innerHTML = marked.parse(src);
+      body.querySelectorAll('a[href]').forEach(function (a) {
+        var h = a.getAttribute('href') || '';
+        if (h.charAt(0) === '#') return;
+        if (/\.md$/.test(h) && !/^https?:/.test(h)) { a.href = 'examples.html?f=' + h.replace(/.*\//, '').replace(/\.md$/, ''); }
+        else if (!/^https?:/.test(h) && h.indexOf('code-snippets/') === 0) { a.href = 'view.html?f=' + encodeURIComponent('../' + h); }
+        a.target = '_blank'; a.rel = 'noopener';
+      });
+      // collapse the Output section behind a predict/reveal toggle
+      var h2s = body.querySelectorAll('h2');
+      var outH = null;
+      h2s.forEach(function (h) { if (/^output\b/i.test(h.textContent.trim())) outH = h; });
+      if (outH) {
+        var hidden = [], n = outH.nextElementSibling;
+        while (n && n.tagName !== 'H2') { hidden.push(n); n = n.nextElementSibling; }
+        var box = document.createElement('div');
+        box.className = 'outbox';
+        box.innerHTML = '<button>👁 Reveal output</button><span class="hint">predict it first — what does this print, and why?</span>';
+        outH.after(box);
+        hidden.forEach(function (el) { el.hidden = true; });
+        box.querySelector('button').addEventListener('click', function () {
+          var show = hidden[0] && hidden[0].hidden;
+          hidden.forEach(function (el) { el.hidden = !show; });
+          this.textContent = show ? '🙈 Hide output' : '👁 Reveal output';
+        });
+      }
+      document.title = (src.match(/^#\s+(.+)$/m) || [, 'Worked example'])[1] + ' · Aizentify CDF-F';
+    })
+    .catch(function () {
+      body.innerHTML = '<p class="note">No worked example <code>' + slug + '</code>. ' +
+        '<a href="examples.html">See the list</a>.</p>';
+    });
+})();
+</script>
+</body>
+</html>

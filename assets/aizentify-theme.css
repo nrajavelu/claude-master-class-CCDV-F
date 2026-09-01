@@ -328,3 +328,7 @@ a.code-link code { color: var(--cyan-300); cursor: pointer; }
 @media (max-width: 640px) { #refdrawer .rd-panel { width: 100vw; } }
 
 @media print { .slide-refs { position: static; max-width: none; margin-top: .6rem; } #refdrawer { display: none !important; } }
+
+/* captured-run output panel on a deck slide */
+.slide pre.out { border-left-color: #2fae66; background: #04120b; font-size: .82rem; }
+.slide pre.out code { color: #bfe8cf; }

@@ -123,12 +123,29 @@ def _reply_blocks(messages, tools, thinking):
     if tools and not _has_tool_result(messages):
         t0 = tools[0]
         name = t0["name"] if isinstance(t0, dict) else getattr(t0, "name", "tool")
-        blocks.append(_Block(type="tool_use", id="toolu_mock1", name=name,
-                             input={"order_id": 10231} if "order" in name else {"a": 2, "b": 3}))
+        if "read_file" in name or name.endswith("read"):
+            inp = {"name": "discount.py"}
+        elif "find" in name or "submit" in name or "report" in name:
+            inp = {"file_path": "discount.py", "line": 12, "severity": "warning",
+                   "message": "apply_discount() has no docstring", "suggested_fix": None}
+        elif "refund" in name:
+            inp = {"order_id": "A-1004", "amount": 815.0}
+        elif "order" in name or "lookup" in name:
+            inp = {"order_id": 10231}
+        else:
+            inp = {"a": 2, "b": 3}
+        blocks.append(_Block(type="tool_use", id="toolu_mock1", name=name, input=inp))
         return blocks, "tool_use"
-    if "<selection>" in text or "classify" in text or "route" in text or "select the most" in text:
+    if "evaluate this" in text or "verdict>" in text or "pass, needs" in text or "you should be evaluating only" in text:
+        blocks.append(_Block(type="text", text="<verdict>PASS</verdict>\n<feedback>none</feedback>\n"
+                                               "<evaluation>PASS</evaluation>"))
+    elif "<selection>" in text or "classify" in text or "route" in text or "select the most" in text:
         blocks.append(_Block(type="text", text="<reasoning>billing keywords present</reasoning>\n"
                                                "<selection>billing</selection>"))
+    elif "missing $1" in text or "missing dollar" in text or "bellboy" in text or "bellhop" in text:
+        blocks.append(_Block(type="text", text=("There is no missing dollar. The $27 the guests "
+                             "paid already includes the bellhop's $2 ($25 room + $2 kept). Adding "
+                             "the $2 again double-counts it; $27 - $2 = $25, or $27 + $3 returned = $30.")))
     elif "how many legs" in text:
         blocks.append(_Block(type="text", text="4"))
     elif "value: metric" in text or "markdown table" in text:
@@ -177,11 +194,27 @@ class _Stream:
 
 
 class _Messages:
+    _last_prefix = None
+
+    def __init__(self, bad=False):
+        self._bad = bad
+
     def create(self, *, model="claude-haiku-4-5", messages=None, tools=None,
                thinking=None, max_tokens=1024, system=None, **kw):
+        if self._bad:
+            raise AuthenticationError()
         blocks, stop = _reply_blocks(messages or [], tools, thinking)
-        cr = 380 if kw.get("_cache_hit") else 0
-        return _Message(blocks, stop_reason=stop, usage=_Usage(cr=cr), model=model)
+        cw = cr = 0
+        # simulate the cache: same rendered prefix as last call -> a read; new prefix -> a write
+        has_cc = "cache_control" in repr(system) + repr(tools)
+        if has_cc:
+            key = repr(system)
+            if key == _Messages._last_prefix:
+                cr = 1180
+            else:
+                cw = 1180
+            _Messages._last_prefix = key
+        return _Message(blocks, stop_reason=stop, usage=_Usage(cw=cw, cr=cr), model=model)
 
     def stream(self, **kw):
         return _Stream(self.create(**kw))
@@ -219,11 +252,9 @@ class _Batches:
 
 class Anthropic:
     def __init__(self, api_key=None, max_retries=2, **kw):
-        if api_key and "not-real" in str(api_key):
-            self._bad = True
-        else:
-            self._bad = False
-        self.messages = _Messages()
+        bad = bool(api_key) and ("not-real" in str(api_key) or "REAL" in str(api_key))
+        self._bad = bad
+        self.messages = _Messages(bad=bad)
 
     def with_options(self, **kw):
         return self
@@ -240,8 +271,23 @@ def install():
                  "NotFoundError", "RateLimitError"):
         setattr(m, name, globals()[name])
     m.__version__ = "0.0.0-mock"
+    m.__path__ = []  # mark as a package so `anthropic.types...` imports resolve
+
+    # minimal submodule stubs for batch_custom_id.py's typed-dict imports
+    def _mod(name, **attrs):
+        mm = types.ModuleType(name)
+        for k, v in attrs.items():
+            setattr(mm, k, v)
+        mm.__path__ = []
+        sys.modules[name] = mm
+        return mm
+
+    _mod("anthropic.types", __getattr__=lambda n: dict)
+    _mod("anthropic.types.message_create_params", MessageCreateParamsNonStreaming=dict)
+    _mod("anthropic.types.messages")
+    _mod("anthropic.types.messages.batch_create_params", Request=dict)
     sys.modules["anthropic"] = m
-    # also stub python-dotenv so load_dotenv() is a no-op
+
     d = types.ModuleType("dotenv")
     d.load_dotenv = lambda *a, **k: False
     sys.modules.setdefault("dotenv", d)

@@ -1,0 +1,107 @@
+{
+  "source_dir": "code-snippets/",
+  "items": [
+    {
+      "slug": "messages_basics",
+      "title": "One call, read every field",
+      "day": "Day 1",
+      "domain": "D2"
+    },
+    {
+      "slug": "prompt_structure",
+      "title": "Contract in `system`, task in `messages`",
+      "day": "Day 1\u20132",
+      "domain": "D6"
+    },
+    {
+      "slug": "cot_structured",
+      "title": "Chain-of-Thought, then a clean answer",
+      "day": "Day 1",
+      "domain": "D6"
+    },
+    {
+      "slug": "agent_loop_react",
+      "title": "The ReAct loop, by hand",
+      "day": "Day 1 / 3",
+      "domain": "D1"
+    },
+    {
+      "slug": "streaming",
+      "title": "Stream tokens, then get the final Message",
+      "day": "Day 1",
+      "domain": "D2"
+    },
+    {
+      "slug": "retry_chain",
+      "title": "Retry the transient, fail fast on the rest",
+      "day": "Day 1",
+      "domain": "D4"
+    },
+    {
+      "slug": "count_tokens",
+      "title": "Count before you spend",
+      "day": "Day 1",
+      "domain": "D5"
+    },
+    {
+      "slug": "strict_tool",
+      "title": "A strict schema + a validation layer",
+      "day": "Day 2",
+      "domain": "D6/D2"
+    },
+    {
+      "slug": "prompt_caching",
+      "title": "Prove the cache",
+      "day": "Day 5",
+      "domain": "D5"
+    },
+    {
+      "slug": "batch_custom_id",
+      "title": "Batch: any order, key by `custom_id`",
+      "day": "Day 5",
+      "domain": "D5"
+    },
+    {
+      "slug": "workflow_patterns",
+      "title": "Chaining \u00b7 parallelisation \u00b7 routing",
+      "day": "Day 3",
+      "domain": "D1"
+    },
+    {
+      "slug": "orchestrator_workers",
+      "title": "Orchestrator-workers",
+      "day": "Day 3",
+      "domain": "D1"
+    },
+    {
+      "slug": "evaluator_optimizer",
+      "title": "Generate \u2192 critique \u2192 loop",
+      "day": "Day 3",
+      "domain": "D1/D4"
+    },
+    {
+      "slug": "cookbook_building_evals",
+      "title": "The eval loop: code-graded vs judge",
+      "day": "Day 4",
+      "domain": "D4"
+    },
+    {
+      "slug": "extended_thinking",
+      "title": "Extended thinking on Haiku 4.5",
+      "day": "Day 5",
+      "domain": "D5/D2"
+    },
+    {
+      "slug": "blocking_hook",
+      "title": "A hook that means \"never\"",
+      "day": "Day 3",
+      "domain": "D7"
+    },
+    {
+      "slug": "usage_cost_api",
+      "title": "Usage & cost from the Admin API",
+      "day": "Day 5",
+      "domain": "D5"
+    }
+  ]
+}

@@ -76,6 +76,7 @@
       <a href="decks.html">Decks</a>
       <a href="study.html">Study</a>
       <a href="cookbooks.html">Cookbooks</a>
+      <a href="examples.html">Examples</a>
       <a href="resources.html">Resources</a>
     </div>
   </div>
@@ -139,15 +140,17 @@
   var mdb = function (s) { return window.marked ? marked.parse(s || '') : ('<p>' + (s || '') + '</p>'); };
 
   var isMock = /mock-exam/i.test(f);
-  var lessonByNum = {}, cbBySlug = {};
+  var lessonByNum = {}, cbBySlug = {}, runsSlug = {};
   var COOKBOOK_BASE = 'https://github.com/anthropics/claude-cookbooks/blob/main/';
 
   Promise.all([
     fetch('study/catalog.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
-    fetch('cookbooks/catalog.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+    fetch('cookbooks/catalog.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+    fetch('../code-snippets/runs/catalog.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
   ]).then(function (res) {
       if (res[0]) res[0].lessons.forEach(function (l) { lessonByNum[l.n] = l.file; });
       if (res[1]) res[1].groups.forEach(function (g) { g.items.forEach(function (it) { cbBySlug[it.slug] = it; }); });
+      if (res[2]) res[2].items.forEach(function (it) { runsSlug[it.slug] = 1; });
     })
     .then(function () { return fetch(f).then(function (r) { if (!r.ok) throw 0; return r.text(); }); })
     .then(function (txt) { return isMock ? loadMock(txt) : parseDay(txt); })
@@ -227,7 +230,9 @@
   function refChips(why) {
     var out = [], seen = {};
     function addCs(n) { if (seen['cs' + n]) return; seen['cs' + n] = 1;
-      out.push({ cls: 'cs', label: n + '.py', href: 'view.html?f=' + encodeURIComponent('../code-snippets/' + n + '.py') }); }
+      out.push(runsSlug[n]
+        ? { cls: 'cs', label: n + ' · worked example', href: 'examples.html?f=' + n }
+        : { cls: 'cs', label: n + '.py', href: 'view.html?f=' + encodeURIComponent('../code-snippets/' + n + '.py') }); }
     function addL(n) { n = +n; if (seen['L' + n] || !lessonByNum[n]) return; seen['L' + n] = 1;
       out.push({ cls: 'study', label: 'study L' + n, href: 'study.html?p=' + encodeURIComponent(lessonByNum[n]) }); }
     function addR(s) { if (seen['R' + s]) return; seen['R' + s] = 1;

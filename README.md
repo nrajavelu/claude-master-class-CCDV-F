@@ -108,6 +108,8 @@ aizentify-cdf-bootcamp/
 ├── tools/extract_decks.py .... (re)build portal/decks/ from epNN/*.pptx — stdlib only
 ├── code-snippets/ ............. 12 runnable references keyed to exam question types
 ├── portal/cookbooks.html ....... ~56 Claude Cookbooks (MIT) curated by domain/day; nbviewer links + CB: chip targets
+├── portal/examples.html ....... worked-example page per code-snippet (code + scenario + captured output)
+├── tools/capture_runs.py ...... (re)capture snippet output into code-snippets/runs/*.md (--mock | --live)
 ├── capstone-support-assistant/  the 4-week build track: a lookup tool + an action tool + a system prompt + a cost budget
 ├── evals/ ..................... reusable golden-set harness (checks: contains/regex/json/structural/llm-judge)
 ├── assets/ ..................... shared deck CSS + visual layer, official logo, nav script, img/ (pass B)
@@ -153,6 +155,7 @@ your browser; `--lan` to share on Wi-Fi), or host on GitHub Pages — see `porta
 | `portal/decks/` — all 12 episode decks extracted to full-res PNG (144 MB) + `manifest.json` each + `catalog.json`; ep09 ships `source.pptx` (vector), ep05 has no deck; `tools/extract_decks.py` rebuilds it | ✅ |
 | `portal/study/` — the **pjmgomez CCDV-F study web** (37 lessons + 14 ref sheets + spaced-review drill), Apache-2.0, vendored intact (`VENDORED.md`); `portal/study.html` wraps it in an Aizentify shell — nav + domain/topic sidebar, lessons in an iframe | ✅ |
 | `portal/cookbooks.html` + `portal/cookbooks/catalog.json` — **~56 Anthropic Claude Cookbooks (MIT) curated by CCDV-F domain / bootcamp day**; open rendered via nbviewer; 6 distilled into runnable `code-snippets/` (`workflow_patterns` · `orchestrator_workers` · `evaluator_optimizer` · `cookbook_building_evals` · `usage_cost_api` · `extended_thinking`); `CB:<slug>` reference chips wired into decks + exam runner | ✅ |
+| `portal/examples.html` + `code-snippets/runs/*.md` — **worked-example page per snippet** (scenario + real input + actual code + captured output + read-it + exam hook + your-turn); predict-then-reveal on the output; `tools/capture_runs.py` (`--mock` offline via `code-snippets/_mockanthropic.py`, `--live` real); `cs:` chips in the exam runner point here | ✅ |
 | `code-snippets/` — 12 runnable references keyed to exam question types | ✅ |
 | `day0-prework/` (primer, `check_env.py`, `hello_claude.py`) | ✅ |
 | `day1-foundations/` — **deck (visual layer: chips · SVG diagrams · focus-code · ReAct · CoT)** · `recap.html` · trainer guide · 4 labs · exercises · quiz · exam questions | ✅ |

@@ -148,6 +148,10 @@
       return { src: url, ext: url, cookbook: true,
                label: label || ('Cookbook · ' + cb.title) };
     }
+    if ((m = token.match(/^cs:([a-z0-9_]+)$/i))) {
+      var ex = PORTAL + 'examples.html?f=' + m[1];
+      return { src: ex, ext: ex, label: label || ('Worked example · ' + m[1]) };
+    }
     return null;
   }
 

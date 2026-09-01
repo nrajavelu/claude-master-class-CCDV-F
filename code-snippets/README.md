@@ -40,5 +40,22 @@ All pinned to `claude-haiku-4-5`. Each costs a fraction of a cent.
 Full recipe index (≈40 cookbooks mapped to CCDV-F domain / bootcamp day):
 [`portal/cookbooks.html`](../portal/cookbooks.html).
 
+### Worked-example pages — `runs/`
+
+Each snippet has a `runs/<name>.md` page: **scenario + real input · the actual code ·
+captured output · "read the output" · the exam hook · a tweak to try**. Browse them in the
+portal at **`portal/examples.html`** (each has a predict-then-reveal toggle on the output),
+or open a single one at `examples.html?f=<name>`.
+
+```bash
+python tools/capture_runs.py            # re-capture all output with the offline mock SDK
+python tools/capture_runs.py --live     # ...with a real key (real numbers, small spend)
+python tools/capture_runs.py prompt_caching workflow_patterns   # just these
+```
+
+`--mock` (default) installs `code-snippets/_mockanthropic.py` — canned, deterministic; it
+shows real *program flow*, but reply text and token numbers are illustrative. Run `--live`
+for genuine model output.
+
 > These are *illustrations*, not the graded labs. The labs (`dayN/.../labs/`) have
 > `starter/` + `solution/` and an expected-output contract; these are shorter and just run.
