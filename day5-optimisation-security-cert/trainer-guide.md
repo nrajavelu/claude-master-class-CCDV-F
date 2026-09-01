@@ -6,6 +6,16 @@
 
 ---
 
+## Project this — worked examples
+
+Open the **worked-example page** for a snippet mid-explanation — it has the scenario, the code, and the *captured output* with a predict-then-reveal toggle: `portal/examples.html?f=<name>`. Hide the output, ask the room to predict it, then reveal.
+
+This day's demos: `prompt_caching` (call 0 write, calls 1-2 read; sabotaged → reads stay 0) · `batch_custom_id` (results keyed by custom_id, any order).
+
+Offline / no budget: `python tools/capture_runs.py <name>` (mock) shows real program flow; `--live` for real numbers.
+
+---
+
 ## Before this session
 - [ ] Day 4 recap quiz. Print the mock + key. Load the roster scorecard.
 - [ ] Dry-run `code-snippets/prompt_caching.py` and `code-snippets/batch_custom_id.py` (batch takes a few minutes to end — start it before class).

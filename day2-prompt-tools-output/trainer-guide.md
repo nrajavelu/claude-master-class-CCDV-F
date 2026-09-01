@@ -7,6 +7,16 @@
 
 ---
 
+## Project this — worked examples
+
+Open the **worked-example page** for a snippet mid-explanation — it has the scenario, the code, and the *captured output* with a predict-then-reveal toggle: `portal/examples.html?f=<name>`. Hide the output, ask the room to predict it, then reveal.
+
+This day's demos: `prompt_structure` (contract in system) · `strict_tool` (schema + validate() layer) · `cot_structured`.
+
+Offline / no budget: `python tools/capture_runs.py <name>` (mock) shows real program flow; `--live` for real numbers.
+
+---
+
 ## Before this session
 - [ ] Day 1 recap quiz (10 min, live). Confirm every candidate's env still green.
 - [ ] Dry-run `code-snippets/prompt_structure.py`, `cot_structured.py`, `strict_tool.py` on a clean machine.

@@ -9,6 +9,16 @@
 
 ---
 
+## Project this — worked examples
+
+Open the **worked-example page** for a snippet mid-explanation — it has the scenario, the code, and the *captured output* with a predict-then-reveal toggle: `portal/examples.html?f=<name>`. Hide the output, ask the room to predict it, then reveal.
+
+This day's demos: `workflow_patterns` (routing prints `-- routed to: billing --`) · `orchestrator_workers` (model invents the subtasks) · `evaluator_optimizer` (round 1: PASS).
+
+Offline / no budget: `python tools/capture_runs.py <name>` (mock) shows real program flow; `--live` for real numbers.
+
+---
+
 ## Before this session
 - [ ] Day 2 recap quiz. `claude` signed in on your machine (needed live from Module 5).
 - [ ] Dry-run `code-snippets/blocking_hook.py` and `code-snippets/mcp_server.py` (needs `claude-agent-sdk` + `mcp`).

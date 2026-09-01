@@ -10,6 +10,16 @@
 
 ---
 
+## Project this — worked examples
+
+Open the **worked-example page** for a snippet mid-explanation — it has the scenario, the code, and the *captured output* with a predict-then-reveal toggle: `portal/examples.html?f=<name>`. Hide the output, ask the room to predict it, then reveal.
+
+This day's demos: `cookbook_building_evals` (code-graded vs judge on a 3-case golden set).
+
+Offline / no budget: `python tools/capture_runs.py <name>` (mock) shows real program flow; `--live` for real numbers.
+
+---
+
 ## Before this session
 - [ ] Day 3 recap quiz. Decide the RAG embedding path (Voyage vs local) and confirm `requirements.txt`.
 - [ ] Dry-run the Day 4 RAG + eval lab specs on whichever path you picked.

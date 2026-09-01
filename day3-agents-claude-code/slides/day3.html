@@ -52,7 +52,7 @@
     <a class="watch-chip" href="../../portal/watch.html?s=guide&t=471" target="_blank">Guide · 7:51 · D1</a>
   </section>
 
-  <section class="slide" data-refs="L22|The five workflow patterns; R:workflow-patterns|Workflow patterns; CB:wf-basic|Cookbook · basic workflows">
+  <section class="slide" data-refs="cs:workflow_patterns|worked example · chain/parallel/route; L22|The five workflow patterns; R:workflow-patterns|Workflow patterns; CB:wf-basic|Cookbook · basic workflows">
     <span class="chip concept">Concept</span>
     <h2>Five <span class="accent">workflow patterns</span> (your code, the path)</h2>
     <ul class="clean">
@@ -62,7 +62,10 @@
       <li><b>Orchestrator–workers</b> — one model plans, others execute.</li>
       <li><b>Evaluator–optimiser</b> — one model generates, another critiques, in a loop.</li>
     </ul>
-    <p class="muted">Reaching for an agent when a three-step chain would do is the <b>overbuild</b> in its natural habitat.</p>
+    <pre class="out"><code>### routing ###
+-- routed to: billing --          &larr; a cheap classify call, then the billing-specialist prompt
+Billing Support Response: We see the duplicate charge on … next steps …</code></pre>
+    <p class="refs">Run it: <code>python code-snippets/workflow_patterns.py</code> · worked example: <code>portal/examples.html?f=workflow_patterns</code></p>
   </section>
 
   <section class="slide" data-refs="L21|Workflow vs agent; L25|Agent frameworks">
