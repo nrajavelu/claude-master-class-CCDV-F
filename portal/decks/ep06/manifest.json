@@ -1,0 +1,73 @@
+{
+  "ep": "ep06",
+  "title": "Memory, Sessions & Context That Survives",
+  "mapping": "Day 4 \u00b7 M6 (context engineering)",
+  "blueprint": "6.1",
+  "youtube": null,
+  "renderable": true,
+  "slides": [
+    {
+      "n": 1,
+      "img": "ep06-01.png"
+    },
+    {
+      "n": 2,
+      "img": "ep06-02.png"
+    },
+    {
+      "n": 3,
+      "img": "ep06-03.png"
+    },
+    {
+      "n": 4,
+      "img": "ep06-04.png"
+    },
+    {
+      "n": 5,
+      "img": "ep06-05.png"
+    },
+    {
+      "n": 6,
+      "img": "ep06-06.png"
+    },
+    {
+      "n": 7,
+      "img": "ep06-07.png"
+    },
+    {
+      "n": 8,
+      "img": "ep06-08.png"
+    },
+    {
+      "n": 9,
+      "img": "ep06-09.png"
+    },
+    {
+      "n": 10,
+      "img": "ep06-10.png"
+    },
+    {
+      "n": 11,
+      "img": "ep06-11.png"
+    },
+    {
+      "n": 12,
+      "img": "ep06-12.png"
+    },
+    {
+      "n": 13,
+      "img": "ep06-13.png"
+    },
+    {
+      "n": 14,
+      "img": "ep06-14.png"
+    },
+    {
+      "n": 15,
+      "img": "ep06-15.png"
+    }
+  ],
+  "source_pptx": null,
+  "count": 15,
+  "cover": "ep06-01.png"
+}

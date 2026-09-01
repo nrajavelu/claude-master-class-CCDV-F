@@ -1,0 +1,73 @@
+{
+  "ep": "ep04",
+  "title": "Hooks & Guardrails",
+  "mapping": "Day 3 \u00b7 M4 \u00b7 Lab 2 (blocking hook)",
+  "blueprint": "7.3 \u00b7 7.2",
+  "youtube": null,
+  "renderable": true,
+  "slides": [
+    {
+      "n": 1,
+      "img": "ep04-01.png"
+    },
+    {
+      "n": 2,
+      "img": "ep04-02.png"
+    },
+    {
+      "n": 3,
+      "img": "ep04-03.png"
+    },
+    {
+      "n": 4,
+      "img": "ep04-04.png"
+    },
+    {
+      "n": 5,
+      "img": "ep04-05.png"
+    },
+    {
+      "n": 6,
+      "img": "ep04-06.png"
+    },
+    {
+      "n": 7,
+      "img": "ep04-07.png"
+    },
+    {
+      "n": 8,
+      "img": "ep04-08.png"
+    },
+    {
+      "n": 9,
+      "img": "ep04-09.png"
+    },
+    {
+      "n": 10,
+      "img": "ep04-10.png"
+    },
+    {
+      "n": 11,
+      "img": "ep04-11.png"
+    },
+    {
+      "n": 12,
+      "img": "ep04-12.png"
+    },
+    {
+      "n": 13,
+      "img": "ep04-13.png"
+    },
+    {
+      "n": 14,
+      "img": "ep04-14.png"
+    },
+    {
+      "n": 15,
+      "img": "ep04-15.png"
+    }
+  ],
+  "source_pptx": null,
+  "count": 15,
+  "cover": "ep04-01.png"
+}

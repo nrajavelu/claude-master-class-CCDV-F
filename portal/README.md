@@ -10,7 +10,10 @@ server code — plain HTML/CSS/JS. Works opened from disk **or** hosted.
 | `trainer.html` | trainers | Links to every guide / deck / logistics doc / question file, **and a candidate-link generator** (paste a roster → get one personal link per candidate, copy or CSV). |
 | `practice.html` | everyone | Interactive exam-style questions from `questions.js` — pick, check, read the per-distractor rationale. Running score + per-domain tally, saved per candidate. Deep-links: `?day=1`, `?domain=D2`. |
 | `view.html` | everyone | **Markdown reader.** `view.html?f=../path/to/file.md` fetches the `.md` and renders it themed (headings, tables, code, task-lists). All `.md` links in the portal route through it; every rendered link opens in a new tab; YouTube deep-links inside a doc are rewritten to the in-portal player. **Requires the portal to be served over http(s)** — see Hosting; on `file://` it shows the raw file instead. Uses `marked` from cdnjs. |
-| `watch.html` | everyone | **In-page video player** (YouTube IFrame API, privacy-enhanced embed) — no trip to youtube.com. Two tabs: **Exam walkthrough** (`Lan-CbQ2IKM`, 17 chapters, click to seek) and **Build-along course** (one video per episode, mirrors the `epNN/` folders). Deep links: `watch.html?t=597` (walkthrough seconds), `watch.html?l=2` (walkthrough lesson #), `watch.html?s=build&e=3` (build-along episode #). Chapter/episode rail stays in sync with playback. **Paste the remaining build-along episode video IDs into the `BUILD.ep` array in `watch.html` and the table in `../video-companion.md` when you have the playlist.** |
+| `watch.html` | everyone | **In-page video player** (YouTube IFrame API, privacy-enhanced embed) — no trip to youtube.com. Three tabs: **Exam walkthrough** (`Lan-CbQ2IKM`, 17 chapters), **Exam guide** (`zEH83eIU5-0`, blueprint), **Build-along course** (one video per episode). Deep links: `watch.html?t=597` (seconds), `watch.html?l=2` (lesson #), `watch.html?s=build&e=3` (build-along episode #). **Paste the remaining build-along episode video IDs into `watch.html` + `../video-companion.md` when you have the playlist.** |
+| `decks.html` | everyone | Grid of all 12 build-along **episode decks**, each card showing the cover slide, its bootcamp day/module, exam sub-skills, and a ▶ link into `watch.html`. Data from `decks/catalog.json`. |
+| `deck.html` | everyone | **Episode slide viewer** — `deck.html?ep=03&s=7`. Large slide, ◀ ▶ / arrow keys / space, `F` fullscreen, a thumbnail filmstrip, slide counter, and the episode's video deep-link. ep09 (vector) offers its `source.pptx`; ep05 has no deck. Data from `decks/<ep>/manifest.json`. |
+| `resources.html` | everyone | Curated **external references** — official Anthropic docs + the CCDV-F exam guide, the three video series, the public study repos the course was cross-checked against, and the Udemy prep course. |
 | `portal.css` | — | Shared theme (Aizentify tokens, Sora/Inter, light with a dark hero). Uses the real logo in `../assets/`. |
 | `app.js` | — | Shared helpers: query params, per-candidate storage, checklist wiring, progress bars, `?c=` propagation. |
 | `questions.js` | — | The practice question bank as data. **Day 1 set (20 items) is in;** append Day 2–5 items in the same shape as those days are built. |
@@ -43,6 +46,20 @@ and is per-browser. Generate the links in bulk on `trainer.html`.
 The `.md` files (quizzes, guides) will render as raw text in a browser — that's fine, they're
 meant to be read in an editor during the session. The **decks** (`day1-foundations/slides/day1.html`)
 and all portal pages render fully.
+
+### Episode decks
+
+`decks.html` / `deck.html` read `portal/decks/`, which is generated from the read-only
+`epNN/*.pptx` in the parent repo:
+
+```
+python tools/extract_decks.py          # rebuild all 12
+python tools/extract_decks.py ep10     # just one
+```
+
+Stdlib only. Most episode decks are one full-bleed image per slide, so extraction is
+lossless (the PNGs are copied out in true slide order). `deck.html` needs http (`./start.sh`)
+so it can `fetch` the manifest.
 
 ### Local (no hosting)
 Open `portal/index.html` directly and the landing / candidate / trainer / practice pages all

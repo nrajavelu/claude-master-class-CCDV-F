@@ -224,3 +224,30 @@ footer a{color:var(--cyan-300)}
 code{font-family:var(--font-mono); font-size:.86em; background:var(--paper-100); border:1px solid var(--line); border-radius:5px; padding:1px 5px}
 hr{border:none; border-top:1px solid var(--line); margin:28px 0}
 .center{text-align:center}
+
+/* ---------- episode decks (decks.html / deck.html) ---------- */
+.deckgrid{display:grid; gap:20px; grid-template-columns:repeat(3,1fr)}
+@media (max-width:900px){.deckgrid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:600px){.deckgrid{grid-template-columns:1fr}}
+.deckcard{display:flex; flex-direction:column; background:var(--paper-0); border:1px solid var(--line); border-radius:14px; overflow:hidden; transition:box-shadow .18s ease, transform .18s ease}
+.deckcard:hover{box-shadow:var(--shadow-md); transform:translateY(-2px)}
+.deckcard .cover{aspect-ratio:16/9; background:#0b0d10 center/cover no-repeat; border-bottom:1px solid var(--line)}
+.deckcard .body{padding:14px 16px 16px; flex:1; display:flex; flex-direction:column; gap:6px}
+.deckcard .ep{font-family:var(--font-mono); font-size:.72rem; letter-spacing:.05em; color:var(--ink-500); text-transform:uppercase}
+.deckcard h3{margin:0; font-size:1.02rem; line-height:1.3}
+.deckcard .row{margin-top:auto; display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-size:.82rem; color:var(--ink-500)}
+.deckcard.disabled{opacity:.55}
+
+.viewer{max-width:1200px; margin:0 auto; padding:0 24px}
+.viewer .stage{position:relative; background:#0b0d10; border:1px solid var(--navy-800); border-radius:14px; overflow:hidden}
+.viewer .stage img{display:block; width:100%; height:auto}
+.viewer .navbtn{position:absolute; top:0; bottom:0; width:14%; border:none; background:transparent; color:#fff; font-size:2rem; cursor:pointer; opacity:0; transition:opacity .15s}
+.viewer .stage:hover .navbtn{opacity:.5}
+.viewer .navbtn:hover{opacity:1 !important; background:linear-gradient(90deg,rgba(0,0,0,.35),transparent)}
+.viewer .navbtn.next{right:0; background:linear-gradient(270deg,rgba(0,0,0,.35),transparent)}
+.viewer .bar{display:flex; align-items:center; justify-content:space-between; gap:16px; margin:12px 0; flex-wrap:wrap}
+.viewer .count{font-family:var(--font-mono); font-size:.85rem; color:var(--ink-500)}
+.strip{display:flex; gap:8px; overflow-x:auto; padding:10px 0 4px}
+.strip img{height:60px; width:auto; border-radius:5px; border:2px solid transparent; cursor:pointer; flex:none; opacity:.6}
+.strip img.on{border-color:var(--blue-500); opacity:1}
+.deck-src{background:var(--paper-100); border:1px solid var(--line); border-radius:12px; padding:22px; text-align:center; color:var(--ink-700)}

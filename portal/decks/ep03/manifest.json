@@ -1,0 +1,73 @@
+{
+  "ep": "ep03",
+  "title": "Custom Tool: Docstring Coverage Checker",
+  "mapping": "Day 2 \u00b7 Lab 2 \u00b7 Day 3 \u00b7 M7",
+  "blueprint": "8.1 \u00b7 8.3",
+  "youtube": null,
+  "renderable": true,
+  "slides": [
+    {
+      "n": 1,
+      "img": "ep03-01.png"
+    },
+    {
+      "n": 2,
+      "img": "ep03-02.png"
+    },
+    {
+      "n": 3,
+      "img": "ep03-03.png"
+    },
+    {
+      "n": 4,
+      "img": "ep03-04.png"
+    },
+    {
+      "n": 5,
+      "img": "ep03-05.png"
+    },
+    {
+      "n": 6,
+      "img": "ep03-06.png"
+    },
+    {
+      "n": 7,
+      "img": "ep03-07.png"
+    },
+    {
+      "n": 8,
+      "img": "ep03-08.png"
+    },
+    {
+      "n": 9,
+      "img": "ep03-09.png"
+    },
+    {
+      "n": 10,
+      "img": "ep03-10.png"
+    },
+    {
+      "n": 11,
+      "img": "ep03-11.png"
+    },
+    {
+      "n": 12,
+      "img": "ep03-12.png"
+    },
+    {
+      "n": 13,
+      "img": "ep03-13.png"
+    },
+    {
+      "n": 14,
+      "img": "ep03-14.png"
+    },
+    {
+      "n": 15,
+      "img": "ep03-15.png"
+    }
+  ],
+  "source_pptx": null,
+  "count": 15,
+  "cover": "ep03-01.png"
+}

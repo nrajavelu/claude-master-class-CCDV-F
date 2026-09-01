@@ -1,0 +1,73 @@
+{
+  "ep": "ep07",
+  "title": "Structured Output You Can Trust",
+  "mapping": "Day 2 \u00b7 Lab 3 (strict schema + validation)",
+  "blueprint": "6.3",
+  "youtube": null,
+  "renderable": true,
+  "slides": [
+    {
+      "n": 1,
+      "img": "ep07-01.png"
+    },
+    {
+      "n": 2,
+      "img": "ep07-02.png"
+    },
+    {
+      "n": 3,
+      "img": "ep07-03.png"
+    },
+    {
+      "n": 4,
+      "img": "ep07-04.png"
+    },
+    {
+      "n": 5,
+      "img": "ep07-05.png"
+    },
+    {
+      "n": 6,
+      "img": "ep07-06.png"
+    },
+    {
+      "n": 7,
+      "img": "ep07-07.png"
+    },
+    {
+      "n": 8,
+      "img": "ep07-08.png"
+    },
+    {
+      "n": 9,
+      "img": "ep07-09.png"
+    },
+    {
+      "n": 10,
+      "img": "ep07-10.png"
+    },
+    {
+      "n": 11,
+      "img": "ep07-11.png"
+    },
+    {
+      "n": 12,
+      "img": "ep07-12.png"
+    },
+    {
+      "n": 13,
+      "img": "ep07-13.png"
+    },
+    {
+      "n": 14,
+      "img": "ep07-14.png"
+    },
+    {
+      "n": 15,
+      "img": "ep07-15.png"
+    }
+  ],
+  "source_pptx": null,
+  "count": 15,
+  "cover": "ep07-01.png"
+}

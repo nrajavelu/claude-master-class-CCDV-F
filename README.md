@@ -103,7 +103,9 @@ aizentify-cdf-bootcamp/
 ├── reasoning-patterns.md ....... Chain-of-Thought vs ReAct vs adaptive thinking (candidates + trainers)
 ├── video-companion.md .......... exam walkthrough + exam guide + build-along, all with frame-level deep links
 ├── start.sh / stop.sh ......... launch the portal locally over http
-├── portal/ .................... index · candidate (?c=Name) · trainer · practice · view (md reader) · watch (3 video series)
+├── portal/ .................... index · candidate (?c=Name) · trainer · practice · view (md reader) · watch (3 video series) · decks (episode slide viewer) · resources (external refs)
+│   └── decks/ ................. epNN slide PNGs + manifest.json, extracted from the parent repo (read-only source)
+├── tools/extract_decks.py .... (re)build portal/decks/ from epNN/*.pptx — stdlib only
 ├── code-snippets/ ............. 12 runnable references keyed to exam question types
 ├── capstone-support-assistant/  the 4-week build track: a lookup tool + an action tool + a system prompt + a cost budget
 ├── evals/ ..................... reusable golden-set harness (checks: contains/regex/json/structural/llm-judge)
@@ -145,7 +147,8 @@ your browser; `--lan` to share on Wi-Fi), or host on GitHub Pages — see `porta
 | Brand assets (official logo), README, THEME, requirements | ✅ |
 | `logistics/00`–`05` · `video-companion.md` · **`reasoning-patterns.md`** (CoT/ReAct) · **`curriculum-map.md`** (coverage) | ✅ |
 | **`blueprint-mastery-map.md`** — 24 sub-skills, each with day/module/deck + entry & exit checklist + sample Q · **`topic-briefings.md`** — deep per-topic reference (from 3 external study repos + the exam guide) | ✅ |
-| `portal/` — landing · candidate (`?c=`) · trainer · **practice** (38 items, code-ref'd) · **`view.html`** (md reader) · **`watch.html`** (2-series in-page player) · `start.sh` | ✅ |
+| `portal/` — landing · candidate (`?c=`) · trainer · **practice** (43 items, code-ref'd) · `view.html` (md reader) · `watch.html` (3-series in-page player) · **`decks.html`+`deck.html`** (episode slide viewer, arrow-key + filmstrip) · **`resources.html`** (external refs) · `start.sh` | ✅ |
+| `portal/decks/` — all 12 episode decks extracted to full-res PNG (144 MB) + `manifest.json` each + `catalog.json`; ep09 ships `source.pptx` (vector), ep05 has no deck; `tools/extract_decks.py` rebuilds it | ✅ |
 | `code-snippets/` — 12 runnable references keyed to exam question types | ✅ |
 | `day0-prework/` (primer, `check_env.py`, `hello_claude.py`) | ✅ |
 | `day1-foundations/` — **deck (visual layer: chips · SVG diagrams · focus-code · ReAct · CoT)** · `recap.html` · trainer guide · 4 labs · exercises · quiz · exam questions | ✅ |

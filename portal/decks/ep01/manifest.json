@@ -1,0 +1,73 @@
+{
+  "ep": "ep01",
+  "title": "Your First Agent on the Raw Messages API",
+  "mapping": "Day 1 \u00b7 Lab 4 (agent loop by hand)",
+  "blueprint": "2.3 \u00b7 5.1 \u00b7 1.1",
+  "youtube": "https://www.youtube.com/watch?v=RheXq2HKJmY",
+  "renderable": true,
+  "slides": [
+    {
+      "n": 1,
+      "img": "ep01-01.png"
+    },
+    {
+      "n": 2,
+      "img": "ep01-02.png"
+    },
+    {
+      "n": 3,
+      "img": "ep01-03.png"
+    },
+    {
+      "n": 4,
+      "img": "ep01-04.png"
+    },
+    {
+      "n": 5,
+      "img": "ep01-05.png"
+    },
+    {
+      "n": 6,
+      "img": "ep01-06.png"
+    },
+    {
+      "n": 7,
+      "img": "ep01-07.png"
+    },
+    {
+      "n": 8,
+      "img": "ep01-08.png"
+    },
+    {
+      "n": 9,
+      "img": "ep01-09.png"
+    },
+    {
+      "n": 10,
+      "img": "ep01-10.png"
+    },
+    {
+      "n": 11,
+      "img": "ep01-11.png"
+    },
+    {
+      "n": 12,
+      "img": "ep01-12.png"
+    },
+    {
+      "n": 13,
+      "img": "ep01-13.png"
+    },
+    {
+      "n": 14,
+      "img": "ep01-14.png"
+    },
+    {
+      "n": 15,
+      "img": "ep01-15.png"
+    }
+  ],
+  "source_pptx": null,
+  "count": 15,
+  "cover": "ep01-01.png"
+}

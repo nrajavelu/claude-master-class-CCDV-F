@@ -1,0 +1,73 @@
+{
+  "ep": "ep02",
+  "title": "Same Job on the Claude Agent SDK",
+  "mapping": "Day 3 \u00b7 M3 (Agent SDK tour)",
+  "blueprint": "1.2 \u00b7 1.1",
+  "youtube": null,
+  "renderable": true,
+  "slides": [
+    {
+      "n": 1,
+      "img": "ep02-01.png"
+    },
+    {
+      "n": 2,
+      "img": "ep02-02.png"
+    },
+    {
+      "n": 3,
+      "img": "ep02-03.png"
+    },
+    {
+      "n": 4,
+      "img": "ep02-04.png"
+    },
+    {
+      "n": 5,
+      "img": "ep02-05.png"
+    },
+    {
+      "n": 6,
+      "img": "ep02-06.png"
+    },
+    {
+      "n": 7,
+      "img": "ep02-07.png"
+    },
+    {
+      "n": 8,
+      "img": "ep02-08.png"
+    },
+    {
+      "n": 9,
+      "img": "ep02-09.png"
+    },
+    {
+      "n": 10,
+      "img": "ep02-10.png"
+    },
+    {
+      "n": 11,
+      "img": "ep02-11.png"
+    },
+    {
+      "n": 12,
+      "img": "ep02-12.png"
+    },
+    {
+      "n": 13,
+      "img": "ep02-13.png"
+    },
+    {
+      "n": 14,
+      "img": "ep02-14.png"
+    },
+    {
+      "n": 15,
+      "img": "ep02-15.png"
+    }
+  ],
+  "source_pptx": null,
+  "count": 15,
+  "cover": "ep02-01.png"
+}

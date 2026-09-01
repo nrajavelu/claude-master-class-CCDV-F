@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aizentify · Episode decks</title>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Aizentify"></a>
+    <div class="links">
+      <a href="index.html">Overview</a>
+      <a href="candidate.html">Candidate portal</a>
+      <a href="trainer.html">Trainer console</a>
+      <a href="practice.html">Practice</a>
+      <a href="watch.html">Video</a>
+      <a href="decks.html" class="active">Decks</a>
+      <a href="resources.html">Resources</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" style="padding:54px 0 40px">
+  <div class="wrap">
+    <div class="brand"></div>
+    <div class="kicker">Build-along source material</div>
+    <h1>Episode <span class="gradient">decks</span></h1>
+    <p class="lead">The original <code>Coding&nbsp;Claude&nbsp;Agents</code> build-along slides
+      (episodes 1&ndash;12), previewed in the browser and mapped to the bootcamp day and the
+      exam sub-skills they support. Source: the read-only <code>claude-api-masterclass</code>
+      parent repo.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div id="grid" class="deckgrid"></div>
+    <p class="note" style="margin-top:24px"><b>How to use these.</b> The bootcamp decks
+      (<code>dayN/slides/</code>) are the taught material. These episode decks are the
+      build-along they draw from &mdash; hand them to candidates the night before a hands-on
+      day, or when a topic needs the "watch it get built" version. The
+      <a href="watch.html">video companion</a> plays the same episodes with chapter markers.</p>
+  </div>
+</section>
+
+<footer class="foot"><div class="wrap">Aizentify &middot; Claude Certified Developer &ndash; Foundations &middot; &copy; 2026 Aizentify LLP</div></footer>
+
+<script src="app.js"></script>
+<script>
+(function () {
+  var grid = document.getElementById('grid');
+  fetch('decks/catalog.json').then(function (r) { return r.json(); }).then(function (eps) {
+    eps.forEach(function (e) {
+      var a = document.createElement(e.renderable ? 'a' : 'div');
+      a.className = 'deckcard' + (e.renderable ? '' : ' disabled');
+      if (e.renderable) a.href = 'deck.html?ep=' + e.ep;
+      else if (e.source_pptx) { a.className = 'deckcard'; a.href = 'deck.html?ep=' + e.ep; }
+      var cover = e.cover ? 'decks/' + e.ep + '/' + e.cover : '';
+      a.innerHTML =
+        '<div class="cover"' + (cover ? ' style="background-image:url(\'' + cover + '\')"' : '') + '></div>' +
+        '<div class="body">' +
+          '<span class="ep">' + e.ep.toUpperCase().replace('EP', 'Episode ') + '</span>' +
+          '<h3>' + e.title + '</h3>' +
+          '<div class="row">' +
+            '<span class="pill">' + e.mapping + '</span>' +
+            (e.count ? '<span>' + e.count + ' slides</span>' : '<span>' + (e.note || '') + '</span>') +
+            (e.blueprint ? '<span class="pill dark">blueprint ' + e.blueprint + '</span>' : '') +
+            (e.youtube ? '<a href="watch.html?s=build&e=' + (+e.ep.slice(2)) + '">&#9654; watch</a>' : '') +
+          '</div>' +
+        '</div>';
+      grid.appendChild(a);
+    });
+  }).catch(function () {
+    grid.innerHTML = '<p class="note">Run <code>python tools/extract_decks.py</code> first, ' +
+      'then serve the portal with <code>./start.sh</code> (needs http, not file://).</p>';
+  });
+})();
+</script>
+</body>
+</html>

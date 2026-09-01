@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aizentify · Deck viewer</title>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Aizentify"></a>
+    <div class="links">
+      <a href="index.html">Overview</a>
+      <a href="candidate.html">Candidate portal</a>
+      <a href="trainer.html">Trainer console</a>
+      <a href="practice.html">Practice</a>
+      <a href="watch.html">Video</a>
+      <a href="decks.html" class="active">Decks</a>
+      <a href="resources.html">Resources</a>
+    </div>
+  </div>
+</nav>
+
+<section style="padding-top:30px">
+  <div class="viewer">
+    <p style="margin-bottom:10px"><a href="decks.html">&larr; all episode decks</a></p>
+    <h2 id="title" style="margin-bottom:4px">&hellip;</h2>
+    <p class="muted" id="sub" style="margin-bottom:16px"></p>
+
+    <div id="stage" class="stage" hidden>
+      <img id="slide" alt="">
+      <button class="navbtn prev" id="prev" aria-label="Previous slide">&#8249;</button>
+      <button class="navbtn next" id="next" aria-label="Next slide">&#8250;</button>
+    </div>
+
+    <div id="srcbox" class="deck-src" hidden></div>
+
+    <div class="bar" id="bar" hidden>
+      <span class="count"><span id="cur">1</span> / <span id="tot">1</span></span>
+      <span style="display:flex; gap:14px; font-size:.85rem">
+        <a href="#" id="ytlink" hidden>&#9654; watch this episode</a>
+        <span class="muted">&larr; &rarr; to move &middot; F fullscreen</span>
+      </span>
+    </div>
+    <div class="strip" id="strip" hidden></div>
+  </div>
+</section>
+
+<footer class="foot"><div class="wrap">Aizentify &middot; Claude Certified Developer &ndash; Foundations &middot; &copy; 2026 Aizentify LLP</div></footer>
+
+<script src="app.js"></script>
+<script>
+(function () {
+  var qp = new URLSearchParams(location.search);
+  var ep = (qp.get('ep') || 'ep01').toLowerCase();
+  var start = Math.max(1, parseInt(qp.get('s') || '1', 10));
+  var base = 'decks/' + ep + '/';
+  var slides = [], i = 0;
+
+  var elImg = document.getElementById('slide'), elCur = document.getElementById('cur'),
+      elTot = document.getElementById('tot'), elStrip = document.getElementById('strip');
+
+  function show(n) {
+    i = (n + slides.length) % slides.length;
+    elImg.src = base + slides[i].img;
+    elCur.textContent = i + 1;
+    var hash = '#s=' + (i + 1);
+    history.replaceState(null, '', location.pathname + location.search.replace(/#.*/, '') + hash);
+    Array.prototype.forEach.call(elStrip.children, function (t, k) { t.classList.toggle('on', k === i); });
+    if (elStrip.children[i]) elStrip.children[i].scrollIntoView({inline: 'center', block: 'nearest'});
+  }
+
+  fetch(base + 'manifest.json').then(function (r) { return r.json(); }).then(function (m) {
+    document.getElementById('title').textContent = ep.toUpperCase().replace('EP', 'Episode ') + ' — ' + m.title;
+    document.getElementById('sub').textContent = m.mapping + (m.blueprint ? '  ·  blueprint ' + m.blueprint : '');
+    if (m.youtube) {
+      var yl = document.getElementById('ytlink');
+      yl.hidden = false; yl.href = 'watch.html?s=build&e=' + (+ep.slice(2));
+    }
+    if (!m.renderable || !(m.slides && m.slides.length)) {
+      var box = document.getElementById('srcbox');
+      box.hidden = false;
+      box.innerHTML = (m.note || 'This deck is not available as slide images.') +
+        (m.source_pptx
+          ? '<br><br><a class="btn btn-primary" href="' + base + m.source_pptx + '" download>Download source .pptx</a>'
+          : '<br><br><span class="muted">Open <code>' + ep + '/</code> in the parent repo.</span>');
+      return;
+    }
+    slides = m.slides;
+    elTot.textContent = slides.length;
+    document.getElementById('stage').hidden = false;
+    document.getElementById('bar').hidden = false;
+    elStrip.hidden = false;
+    slides.forEach(function (s, k) {
+      var t = document.createElement('img');
+      t.src = base + s.img; t.alt = 'Slide ' + (k + 1); t.loading = 'lazy';
+      t.addEventListener('click', function () { show(k); });
+      elStrip.appendChild(t);
+    });
+    show(start - 1);
+  }).catch(function () {
+    document.getElementById('title').textContent = 'Deck not found';
+    var box = document.getElementById('srcbox');
+    box.hidden = false;
+    box.innerHTML = 'Run <code>python tools/extract_decks.py</code>, then serve over http with <code>./start.sh</code>.';
+  });
+
+  document.getElementById('prev').addEventListener('click', function () { show(i - 1); });
+  document.getElementById('next').addEventListener('click', function () { show(i + 1); });
+  document.addEventListener('keydown', function (e) {
+    if (!slides.length) return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { show(i + 1); e.preventDefault(); }
+    else if (e.key === 'ArrowLeft') { show(i - 1); e.preventDefault(); }
+    else if (e.key === 'f' || e.key === 'F') {
+      var s = document.getElementById('stage');
+      if (document.fullscreenElement) document.exitFullscreen(); else s.requestFullscreen && s.requestFullscreen();
+    }
+  });
+})();
+</script>
+</body>
+</html>

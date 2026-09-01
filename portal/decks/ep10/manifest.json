@@ -1,0 +1,73 @@
+{
+  "ep": "ep10",
+  "title": "Choosing Your Model",
+  "mapping": "Day 5 \u00b7 M1 (trade-off triangle)",
+  "blueprint": "5.3",
+  "youtube": null,
+  "renderable": true,
+  "slides": [
+    {
+      "n": 1,
+      "img": "ep10-01.png"
+    },
+    {
+      "n": 2,
+      "img": "ep10-02.png"
+    },
+    {
+      "n": 3,
+      "img": "ep10-03.png"
+    },
+    {
+      "n": 4,
+      "img": "ep10-04.png"
+    },
+    {
+      "n": 5,
+      "img": "ep10-05.png"
+    },
+    {
+      "n": 6,
+      "img": "ep10-06.png"
+    },
+    {
+      "n": 7,
+      "img": "ep10-07.png"
+    },
+    {
+      "n": 8,
+      "img": "ep10-08.png"
+    },
+    {
+      "n": 9,
+      "img": "ep10-09.png"
+    },
+    {
+      "n": 10,
+      "img": "ep10-10.png"
+    },
+    {
+      "n": 11,
+      "img": "ep10-11.png"
+    },
+    {
+      "n": 12,
+      "img": "ep10-12.png"
+    },
+    {
+      "n": 13,
+      "img": "ep10-13.png"
+    },
+    {
+      "n": 14,
+      "img": "ep10-14.png"
+    },
+    {
+      "n": 15,
+      "img": "ep10-15.png"
+    }
+  ],
+  "source_pptx": null,
+  "count": 15,
+  "cover": "ep10-01.png"
+}

@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aizentify · External references</title>
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Aizentify"></a>
+    <div class="links">
+      <a href="index.html">Overview</a>
+      <a href="candidate.html">Candidate portal</a>
+      <a href="trainer.html">Trainer console</a>
+      <a href="practice.html">Practice</a>
+      <a href="watch.html">Video</a>
+      <a href="decks.html">Decks</a>
+      <a href="resources.html" class="active">Resources</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" style="padding:54px 0 40px">
+  <div class="wrap">
+    <div class="brand"></div>
+    <div class="kicker">Curated · outside this program</div>
+    <h1>External <span class="gradient">references</span></h1>
+    <p class="lead">Everything this bootcamp was built against or cross-checked with. Use the
+      bootcamp materials as the spine; reach for these for a second explanation, the official
+      wording, or extra reps.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap-narrow">
+    <h2>Official <span class="gradient">Anthropic</span></h2>
+    <p class="muted">The source of truth. If a community note and the docs disagree, the docs win.</p>
+    <div class="grid grid-2">
+      <a class="card link" href="https://docs.claude.com" target="_blank" rel="noopener">
+        <div class="meta">docs.claude.com</div><h3>Claude Developer Docs</h3>
+        <p>Messages API, streaming, tools, structured outputs, prompt caching, batch, vision,
+          extended/adaptive thinking, the Agent SDK. The reference behind every Day 1&ndash;5 deck.</p>
+      </a>
+      <a class="card link" href="https://docs.claude.com/en/api" target="_blank" rel="noopener">
+        <div class="meta">API reference</div><h3>Messages API reference</h3>
+        <p>Exact request/response shapes, error codes (400/401/402/403/413 vs 429/529), the
+          <code>usage</code> object, `stop_reason` values.</p>
+      </a>
+      <a class="card link" href="https://www.anthropic.com/learn/build-with-claude" target="_blank" rel="noopener">
+        <div class="meta">anthropic.com/learn</div><h3>Build with Claude / Academy</h3>
+        <p>The learning hub the <b>CCDV-F</b> credential sits under. Find the current official
+          <b>exam guide</b> here and reconcile the blueprint before every cohort.</p>
+      </a>
+      <a class="card link" href="https://github.com/anthropics/anthropic-cookbook" target="_blank" rel="noopener">
+        <div class="meta">github.com/anthropics</div><h3>Anthropic Cookbook</h3>
+        <p>Runnable notebooks &mdash; tool use, retrieval, evals, sub-agents. Good after Day 2.</p>
+      </a>
+    </div>
+
+    <hr>
+
+    <h2>Video <span class="gradient">series</span></h2>
+    <p class="muted">All three play inside the portal with chapter markers &mdash;
+      <a href="watch.html">open the player</a>. Frame-level index: <a href="view.html?f=../video-companion.md">video-companion.md</a>.</p>
+    <div class="grid grid-2">
+      <a class="card link" href="watch.html?s=walk" >
+        <div class="meta">17 lessons · in-portal</div><h3>Exam walkthrough</h3>
+        <p>How the exam <i>thinks</i> &mdash; the four decisions, distractor species, "name the
+          decision first". Best for revision. <code>Lan-CbQ2IKM</code></p>
+      </a>
+      <a class="card link" href="watch.html?s=guide">
+        <div class="meta">blueprint walkthrough · in-portal</div><h3>CCDV-F exam guide</h3>
+        <p>Domain-by-domain tour of the v1.0 blueprint. Pair with
+          <a href="view.html?f=../blueprint-mastery-map.md">blueprint-mastery-map.md</a>.
+          <code>zEH83eIU5-0</code></p>
+      </a>
+      <a class="card link" href="watch.html?s=build">
+        <div class="meta">build-along · in-portal</div><h3>Coding Claude Agents (Ep 1&ndash;12)</h3>
+        <p>How the <i>code</i> works, built up episode by episode. The slide decks are on the
+          <a href="decks.html">Decks</a> page. <code>RheXq2HKJmY</code> = Ep 01</p>
+      </a>
+    </div>
+
+    <hr>
+
+    <h2>Community <span class="gradient">study notes</span></h2>
+    <p class="muted">Public CCDV-F prep repos this course cross-checked against. Useful for a
+      second phrasing; verify anything surprising against the official docs. Digest:
+      <a href="view.html?f=../topic-briefings.md">topic-briefings.md</a>.</p>
+    <div class="grid grid-2">
+      <a class="card link" href="https://github.com/AndyMDH/claude_developer_foundations" target="_blank" rel="noopener">
+        <div class="meta">AndyMDH</div><h3>claude_developer_foundations</h3>
+        <p><b>Strong on:</b> per-domain summaries, a cheat sheet, flashcards, practice
+          questions. The densest of the set &mdash; source of the image-token formula, batch
+          limits, the four-way tool framework, settings precedence.</p>
+      </a>
+      <a class="card link" href="https://github.com/sumitgupta28/Claude-Certified-Developer-Foundations-Certification" target="_blank" rel="noopener">
+        <div class="meta">sumitgupta28</div><h3>MSO Foundations module notes</h3>
+        <p><b>Strong on:</b> non-determinism, zero/one/multi-shot, batch-vs-sync, the two
+          context-window failure modes, property assertions vs exact-string tests.</p>
+      </a>
+      <a class="card link" href="https://github.com/ashokgows/claude-certified-developer-foundations" target="_blank" rel="noopener">
+        <div class="meta">ashokgows</div><h3>STUDY_NOTES.md</h3>
+        <p><b>Strong on:</b> Pearson VUE logistics, M1/M2 lesson maps, the "reach for the
+          mechanism the stem names" instinct.</p>
+      </a>
+      <a class="card link" href="https://github.com/pjmgomez/claude-certified-developer-foundations" target="_blank" rel="noopener">
+        <div class="meta">pjmgomez</div><h3>Course HTML + reference sheets</h3>
+        <p><b>Strong on:</b> 37 lesson pages + 14 reference sheets in the same topic taxonomy
+          &mdash; a structural cross-check for coverage.</p>
+      </a>
+    </div>
+
+    <hr>
+
+    <h2>Paid <span class="gradient">course</span></h2>
+    <div class="grid grid-2">
+      <a class="card link" href="https://www.udemy.com/course/claude-certified-developer-foundations-ccdv-f-exam-prep/" target="_blank" rel="noopener">
+        <div class="meta">Udemy</div><h3>CCDV-F Exam Prep</h3>
+        <p>Third-party practice-test course. This bootcamp's sequencing and assessment set
+          were sanity-checked against its section list; it is <b>not required</b> for the program.</p>
+      </a>
+    </div>
+
+    <hr>
+
+    <h2>Inside this program</h2>
+    <p class="muted">
+      <a href="view.html?f=../blueprint-mastery-map.md">blueprint-mastery-map.md</a> ·
+      <a href="view.html?f=../topic-briefings.md">topic-briefings.md</a> ·
+      <a href="view.html?f=../curriculum-map.md">curriculum-map.md</a> ·
+      <a href="view.html?f=../reasoning-patterns.md">reasoning-patterns.md</a> ·
+      <a href="view.html?f=../logistics/03-assessment-and-certification.md">exam &amp; certification facts</a> ·
+      <a href="view.html?f=../logistics/05-exam-method.md">the exam method</a>
+    </p>
+  </div>
+</section>
+
+<footer class="foot"><div class="wrap">Aizentify &middot; Claude Certified Developer &ndash; Foundations &middot; &copy; 2026 Aizentify LLP</div></footer>
+
+<script src="app.js"></script>
+</body>
+</html>
