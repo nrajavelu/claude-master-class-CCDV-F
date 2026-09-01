@@ -149,6 +149,7 @@ your browser; `--lan` to share on Wi-Fi), or host on GitHub Pages — see `porta
 | **`blueprint-mastery-map.md`** — 24 sub-skills, each with day/module/deck + entry & exit checklist + sample Q · **`topic-briefings.md`** — deep per-topic reference (from 3 external study repos + the exam guide) | ✅ |
 | `portal/` — landing · candidate (`?c=`) · trainer · **practice** (43 items, code-ref'd) · `view.html` (md reader) · `watch.html` (3-series in-page player) · **`decks.html`+`deck.html`** (episode slide viewer, arrow-key + filmstrip) · **`resources.html`** (external refs) · `start.sh` | ✅ |
 | `portal/decks/` — all 12 episode decks extracted to full-res PNG (144 MB) + `manifest.json` each + `catalog.json`; ep09 ships `source.pptx` (vector), ep05 has no deck; `tools/extract_decks.py` rebuilds it | ✅ |
+| `portal/study/` — the **pjmgomez CCDV-F study web** (37 lessons + 14 ref sheets + spaced-review drill), Apache-2.0, vendored intact (`VENDORED.md`); `portal/study.html` wraps it in an Aizentify shell — nav + domain/topic sidebar, lessons in an iframe | ✅ |
 | `code-snippets/` — 12 runnable references keyed to exam question types | ✅ |
 | `day0-prework/` (primer, `check_env.py`, `hello_claude.py`) | ✅ |
 | `day1-foundations/` — **deck (visual layer: chips · SVG diagrams · focus-code · ReAct · CoT)** · `recap.html` · trainer guide · 4 labs · exercises · quiz · exam questions | ✅ |
