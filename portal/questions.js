@@ -52,9 +52,9 @@ window.AIZ_QUESTIONS = [
 
   { id:"d1-09", day:1, domain:"D4", sub:"Debugging & Error Handling", style:"MR",
     stem:"Which errors are worth RETRYING with backoff? (choose all)",
-    options:[{k:"A",t:"RateLimitError (429)"},{k:"B",t:"AuthenticationError (401)"},{k:"C",t:"APIStatusError with status 503"},{k:"D",t:"BadRequestError (400)"},{k:"E",t:"APIConnectionError"}],
+    options:[{k:"A",t:"RateLimitError (429)"},{k:"B",t:"AuthenticationError (401)"},{k:"C",t:"APIStatusError with status 529 (overloaded_error)"},{k:"D",t:"BadRequestError (400)"},{k:"E",t:"APIConnectionError"}],
     answer:["A","C","E"],
-    rationale:"Transient = 429 / >=500 / connection. 401 and 400 are caller errors — retrying can't fix a bad key or a malformed request.", ref:"code-snippets/retry_chain.py" },
+    rationale:"Transient = 429 / 529 / any >=500 / connection. 529 (not 503) is this API's overloaded code: 429 is your traffic, 529 is Anthropic-side load. 401/403/400/413 are caller errors — a retry can't fix a bad key or a malformed request.", ref:"code-snippets/retry_chain.py" },
 
   { id:"d1-10", day:1, domain:"D4", sub:"Debugging & Error Handling", style:"SBA",
     stem:"The Anthropic SDK, out of the box:",

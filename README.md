@@ -58,6 +58,14 @@ Cohort size: **6–16** + 1 trainer (+ 1 assistant at 12+).
 Full sub-area breakdown and where each is taught/practised/drilled:
 `logistics/03-assessment-and-certification.md`.
 
+**Sub-skill by sub-skill.** The guide weights **24 individual sub-skills** (not just the 8
+domains), and the spread is steep — D2's *Claude Application Design* alone is 8.6%, four
+sub-skills sit at ≤ 1.6%. **`blueprint-mastery-map.md`** takes every sub-skill in turn: what
+it covers (in depth), the exact day · module · deck it lands in, an **entry check** and an
+**exit / revision checklist**, and a worked sample question with its distractor species.
+Lessons and question pools are sized to these weights. Deeper prose per topic is in
+**`topic-briefings.md`**.
+
 **The method.** Every CCDV-F item is one of **four developer decisions** — *what runs* ·
 *how does it call Claude* · *what does Claude see and say* · *will it survive production* —
 and two elimination rules (mechanism-beats-knob; mechanism-beats-guidance) kill the wrong
@@ -89,6 +97,8 @@ aizentify-cdf-bootcamp/
 ├── README.md ..................... you are here
 ├── THEME.md ..................... Aizentify brand tokens + deck authoring + §4 visual layer
 ├── requirements.txt ............. pip install -r this
+├── blueprint-mastery-map.md .... every exam sub-skill → what it covers · day/module/deck · entry + exit checklist · sample Q
+├── topic-briefings.md .......... deeper per-topic reference (numbers, gotchas, exam instincts), day by day
 ├── curriculum-map.md ........... every "Claude way" component → day/module/episode/exam domain
 ├── reasoning-patterns.md ....... Chain-of-Thought vs ReAct vs adaptive thinking (candidates + trainers)
 ├── video-companion.md .......... exam walkthrough + exam guide + build-along, all with frame-level deep links
@@ -134,6 +144,7 @@ your browser; `--lan` to share on Wi-Fi), or host on GitHub Pages — see `porta
 |---|---|
 | Brand assets (official logo), README, THEME, requirements | ✅ |
 | `logistics/00`–`05` · `video-companion.md` · **`reasoning-patterns.md`** (CoT/ReAct) · **`curriculum-map.md`** (coverage) | ✅ |
+| **`blueprint-mastery-map.md`** — 24 sub-skills, each with day/module/deck + entry & exit checklist + sample Q · **`topic-briefings.md`** — deep per-topic reference (from 3 external study repos + the exam guide) | ✅ |
 | `portal/` — landing · candidate (`?c=`) · trainer · **practice** (38 items, code-ref'd) · **`view.html`** (md reader) · **`watch.html`** (2-series in-page player) · `start.sh` | ✅ |
 | `code-snippets/` — 12 runnable references keyed to exam question types | ✅ |
 | `day0-prework/` (primer, `check_env.py`, `hello_claude.py`) | ✅ |

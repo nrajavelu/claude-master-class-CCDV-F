@@ -39,7 +39,7 @@ After a streaming call, how do you get the final `usage` and `stop_reason`?
 
 ### Q9 (D4)
 Sort these by "retry or not": `BadRequestError` (400), `RateLimitError` (429),
-`AuthenticationError` (401), `APIStatusError` (503), `APIConnectionError`.
+`AuthenticationError` (401), `APIStatusError` (529), `APIConnectionError`.
 
 ### Q10 (D4)
 Is `stop_reason: "refusal"` something you catch in an `except` block? Explain.
@@ -83,8 +83,11 @@ responsive UI; can start processing early. *(D2 · API Mechanics)*
 **Q8** — `stream.get_final_message()` after the `with` block — returns the full `Message`
 (usage, stop_reason, all blocks). Don't hand-assemble from events. *(D2)*
 
-**Q9** — **Retry:** `RateLimitError` (429), `APIStatusError` (503 / any ≥ 500),
-`APIConnectionError`. **Don't retry:** `BadRequestError` (400), `AuthenticationError` (401).
+**Q9** — **Retry:** `RateLimitError` (429), `APIStatusError` (**529 `overloaded_error`** /
+any ≥ 500), `APIConnectionError`. **Don't retry:** `BadRequestError` (400),
+`AuthenticationError` (401), `PermissionDeniedError` (403), `request_too_large` (413).
+Note: **529**, not 503, is this API's overloaded code — 429 is *your* traffic, 529 is
+*Anthropic-side* load.
 *(D4 · Debugging & Error Handling)*
 
 **Q10** — **No.** HTTP 200 with `stop_reason == "refusal"` (+ a `stop_details` category). It

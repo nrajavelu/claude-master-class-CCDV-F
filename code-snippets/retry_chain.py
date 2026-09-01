@@ -2,13 +2,15 @@
 retry_chain.py — catch a CHAIN, most-specific first. Retry vs fail-fast.
 
 Exam angles (D4 · Eval, Testing & Debugging):
-  * RETRY (transient): RateLimitError 429 · APIStatusError >=500 · APIConnectionError
-  * FAIL FAST (yours): BadRequestError 400 · AuthenticationError 401 ·
-                       PermissionDeniedError 403 · NotFoundError 404
+  * RETRY (transient): RateLimitError 429 · overloaded_error 529 · APIStatusError >=500
+                       · APIConnectionError
+  * FAIL FAST (yours): BadRequestError 400 · AuthenticationError 401 · billing_error 402 ·
+                       PermissionDeniedError 403 · NotFoundError 404 · request_too_large 413
   * a single `except Exception` throws the distinction away
   * the SDK already retries 408/409/429/5xx + connection, max_retries=2 (default)
-  * `overloaded` = their load; `rate_limit` = your spike (yours to fix)
-  * `refusal` is NOT an exception -- it's a stop_reason
+  * 529 (NOT 503) is this API's overloaded code. `overloaded` (529) = Anthropic-side load;
+    `rate_limit` (429) = your traffic spike (yours to fix)
+  * `refusal` is NOT an exception -- it's a stop_reason (check stop_details for the category)
 
     cd aizentify-cdf-bootcamp && python code-snippets/retry_chain.py
 """

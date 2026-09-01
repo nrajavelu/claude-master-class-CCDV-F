@@ -55,6 +55,12 @@
 exercise) *and* drilled (`question-bank/`). D2 is a third of the exam, so it spans three
 days; D3/D4 are small, so they're modules, not days.
 
+**Sub-skill by sub-skill:** `blueprint-mastery-map.md` takes all 24 sub-skills in turn —
+what each covers in depth, the exact day · module · deck, an **entry check** (grasp this
+first) and an **exit / revision checklist**, plus a worked sample question with its
+distractor species. Give candidates the exit checks as their night-before revision list,
+ordered by domain weight. Deeper prose per topic: `topic-briefings.md`.
+
 ### Where a generic practice-test course is weak — and we are not
 
 | Gap in typical CCDV-F prep | What this bootcamp does instead |

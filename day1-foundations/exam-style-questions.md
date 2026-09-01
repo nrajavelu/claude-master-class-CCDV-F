@@ -83,7 +83,7 @@ D. `max_tokens` is set to 64000
 **9. (MR · D4 — choose ALL that apply)** Which errors are worth **retrying** with backoff?
 A. `RateLimitError` (429)
 B. `AuthenticationError` (401)
-C. `APIStatusError` with `status_code == 503`
+C. `APIStatusError` with `status_code == 529` (`overloaded_error`)
 D. `BadRequestError` (400)
 E. `APIConnectionError`
 

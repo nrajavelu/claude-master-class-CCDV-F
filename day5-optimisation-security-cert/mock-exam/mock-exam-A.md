@@ -33,7 +33,7 @@ A. concatenating `stream.text_stream`  B. `stream.get_final_message()`  C. `stre
 A. a WebSocket  B. Server-Sent Events over the same HTTP call  C. long polling  D. gRPC
 
 ### 9. (Choose ALL that apply) Worth retrying with backoff:
-A. `RateLimitError` 429  B. `AuthenticationError` 401  C. `APIStatusError` 503  D. `BadRequestError` 400  E. `APIConnectionError`
+A. `RateLimitError` 429  B. `AuthenticationError` 401  C. `APIStatusError` 529  D. `BadRequestError` 400  E. `APIConnectionError`
 
 ### 10. The Anthropic SDK, by default:
 A. never retries  B. retries every error forever  C. retries 408/409/429/5xx + connection with backoff, `max_retries=2`  D. retries only 429, once

@@ -290,7 +290,7 @@ D. `BadRequestError`; retry
 ---
 
 ### 23. (MR — choose ALL retryable) 
-A. `RateLimitError` 429  B. `AuthenticationError` 401  C. 503 via `APIStatusError`
+A. `RateLimitError` 429  B. `AuthenticationError` 401  C. 529 via `APIStatusError`
 D. `APIConnectionError`  E. `BadRequestError` 400
 
 > **Answer:** A, C, D
