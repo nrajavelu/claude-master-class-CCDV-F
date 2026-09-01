@@ -67,7 +67,7 @@
   var lessonByNum = {};   // "14" -> "lessons/0014-prompt-caching.html"
   var titleByFile = {};   // file -> human title
   var cbBySlug = {};      // "caching" -> {title, path}  (Claude Cookbooks)
-  var NBVIEWER = 'https://nbviewer.org/github/anthropics/claude-cookbooks/blob/main/';
+  var COOKBOOK_BASE = 'https://github.com/anthropics/claude-cookbooks/blob/main/';
 
   // ---- drawer ---------------------------------------------------------------
   var dr = document.createElement('div');
@@ -144,7 +144,7 @@
     if ((m = token.match(/^CB:([a-z0-9-]+)$/i))) {
       var cb = cbBySlug[m[1]];
       if (!cb) return null;
-      var url = NBVIEWER + cb.path;
+      var url = COOKBOOK_BASE + cb.path;
       return { src: url, ext: url, cookbook: true,
                label: label || ('Cookbook · ' + cb.title) };
     }

@@ -140,7 +140,7 @@
 
   var isMock = /mock-exam/i.test(f);
   var lessonByNum = {}, cbBySlug = {};
-  var NBVIEWER = 'https://nbviewer.org/github/anthropics/claude-cookbooks/blob/main/';
+  var COOKBOOK_BASE = 'https://github.com/anthropics/claude-cookbooks/blob/main/';
 
   Promise.all([
     fetch('study/catalog.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
@@ -235,7 +235,7 @@
     function addE(n) { if (seen['E' + n]) return; seen['E' + n] = 1;
       out.push({ cls: 'deck', label: 'Ep ' + n, href: 'deck.html?ep=' + (+n) }); }
     function addCB(s) { if (seen['CB' + s] || !cbBySlug[s]) return; seen['CB' + s] = 1;
-      out.push({ cls: 'cb', label: 'cookbook', href: NBVIEWER + cbBySlug[s].path, ext: true }); }
+      out.push({ cls: 'cb', label: 'cookbook', href: COOKBOOK_BASE + cbBySlug[s].path, ext: true }); }
 
     (why.match(/`cs:([a-z0-9_]+)`/gi) || []).forEach(function (t) { addCs(t.replace(/[`]/g, '').split(':')[1]); });
 

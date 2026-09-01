@@ -46,8 +46,9 @@
     <h1>Claude <span class="gradient">Cookbooks</span></h1>
     <p class="lead">A curated ~56 of the <a href="https://github.com/anthropics/claude-cookbooks" target="_blank" rel="noopener">Claude Cookbooks</a>
       (Anthropic, MIT), mapped to the CCDV-F domain and the bootcamp day each one reinforces.
-      Every card opens the notebook <b>rendered in your browser</b> (via nbviewer — no install)
-      or on GitHub. Six of these are also distilled into runnable
+      Each card opens the notebook <b>rendered on GitHub</b> (reliable, read-only), with
+      <b>Colab</b> (run it) and <b>nbviewer</b> as alternates. Six of these are also distilled
+      into runnable
       <a href="view.html?f=../code-snippets/README.md">code-snippets/</a>.</p>
   </div>
 </header>
@@ -71,6 +72,7 @@
 (function () {
   var GH = 'https://github.com/anthropics/claude-cookbooks/blob/main/';
   var NB = 'https://nbviewer.org/github/anthropics/claude-cookbooks/blob/main/';
+  var COLAB = 'https://colab.research.google.com/github/anthropics/claude-cookbooks/blob/main/';
   var host = document.getElementById('groups');
   fetch('cookbooks/catalog.json').then(function (r) { return r.json(); }).then(function (c) {
     c.groups.forEach(function (g) {
@@ -86,8 +88,9 @@
           '<h4>' + it.title + '</h4>' +
           '<p>' + (it.note || '') + '</p>' +
           '<div class="links">' +
-            '<a href="' + NB + it.path + '" target="_blank" rel="noopener">open rendered &#8599;</a>' +
-            '<a href="' + GH + it.path + '" target="_blank" rel="noopener">GitHub &#8599;</a>' +
+            '<a href="' + GH + it.path + '" target="_blank" rel="noopener">open (GitHub) &#8599;</a>' +
+            '<a href="' + COLAB + it.path + '" target="_blank" rel="noopener">Colab &#8599;</a>' +
+            '<a href="' + NB + it.path + '" target="_blank" rel="noopener">nbviewer &#8599;</a>' +
             '<span class="slug">CB:' + it.slug + '</span>' +
           '</div>';
         grid.appendChild(card);
