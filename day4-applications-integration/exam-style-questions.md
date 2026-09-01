@@ -79,43 +79,59 @@ the cited docs?")  C. "is this good?"  D. a free-text critique
 ---
 ## Answers & rationale
 
-**1 — B.** Infrastructure = what it runs on **and** what the team must be able to do to it.
+**1 — B.** Infrastructure = what it runs on **and** what the team must be able to do to it.  
+`refs: L30`
 
-**2 — B.** Deploy where users are. Production credit is operate + maintain.
+**2 — B.** Deploy where users are. Production credit is operate + maintain.  
+`refs: L30`
 
 **3 — C.** Rule 2 — a doc is guidance; committed, pinned config is the mechanism. **A —
-overbuild. B — symptom-treater. D — the story of how it got broken.**
+overbuild. B — symptom-treater. D — the story of how it got broken.**  
+`refs: L29`
 
 **4 — C.** Keys server-side only. **A / B — symptom-treaters** (still shipped). D helps but
-isn't the fix.
+isn't the fix.  
+`refs: L35`
 
 **5 — B.** An API endpoint needs its own timeout + error contract. **A / C** belong to a
-chat interface. **D — generic knob.**
+chat interface. **D — generic knob.**  
+`refs: cs:retry_chain L30`
 
-**6 — B.** Versioned, tested before rollout — run the golden set.
+**6 — B.** Versioned, tested before rollout — run the golden set.  
+`refs: L29`
 
 **7 — A & C.** "Nightly / nobody reads it till morning" → batch; "same system prompt … many
 times" → cache the prefix. **B — backwards. D — symptom-treater** (pennies on output while
-the architecture wastes dollars).
+the architecture wastes dollars).  
+`refs: cs:batch_custom_id cs:prompt_caching L14 L15`
 
-**8 — A & C.** **B / D** are anti-patterns dressed as advice.
+**8 — A & C.** **B / D** are anti-patterns dressed as advice.  
+`refs: L30`
 
-**9 — B.** All of it is billed — "input_tokens is not your input".
+**9 — B.** All of it is billed — "input_tokens is not your input".  
+`refs: cs:count_tokens L19`
 
-**10 — B.** Summarise vs clear. The memory tool is a third option.
+**10 — B.** Summarise vs clear. The memory tool is a third option.  
+`refs: R:context-management L20`
 
-**11 — B.** Clear the stale context (a mechanism). **A — overbuild.** **C / D — generic knobs.**
+**11 — B.** Clear the stale context (a mechanism). **A — overbuild.** **C / D — generic knobs.**  
+`refs: R:context-management L20`
 
 **12 — B.** Retrieve when knowledge is large / changing / must be cited. A / C are
-extremist.
+extremist.  
+`refs: L19`
 
-**13 — B.** Grounding + citation is the mechanism. **A / C — overbuild-ish.** **D — backwards.**
+**13 — B.** Grounding + citation is the mechanism. **A / C — overbuild-ish.** **D — backwards.**  
+`refs: L19`
 
 **14 — B.** Test the contract; wording varies by design. C / D try to force determinism the
-model doesn't guarantee.
+model doesn't guarantee.  
+`refs: L37`
 
 **15 — B.** A crisp yes/no criterion is repeatable; a 1–10 score is not.
 
+`refs: L37`
+
 ---
 ### Mark yourself
-15 items · **≥ 12** = on track for the heaviest domain. Any sub-area < 60% → revise tonight.
+15 items · **≥ 12** = on track for the heaviest domain. Any sub-area < 60% → revise tonight.  

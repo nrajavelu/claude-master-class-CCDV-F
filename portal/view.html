@@ -64,7 +64,14 @@
     return r.text();
   }).then(function (src) {
     marked.setOptions({ gfm: true, breaks: false });
-    target.innerHTML = marked.parse(src);
+    var banner = "";
+    if (/exam-style-questions\.md$|mock-exam\/mock-exam-[A-Z]\.md$/.test(f)) {
+      var ex = "exam.html?f=" + encodeURIComponent(f) + (AIZ.qp("c") ? "&c=" + encodeURIComponent(AIZ.qp("c")) : "");
+      banner = '<p class="note" style="margin-bottom:18px"><b>Practice mode available.</b> ' +
+        '<a href="' + ex + '">Open this as an interactive exam &rarr;</a> — pick answers, then reveal ' +
+        'the key, the reasoning, and why each wrong option is wrong, with a per-domain score.</p>';
+    }
+    target.innerHTML = banner + marked.parse(src);
     // make in-doc links to other .md files open in this reader
     target.querySelectorAll('a[href$=".md"]').forEach(function (a) {
       const h = a.getAttribute("href");

@@ -165,78 +165,95 @@ D. batch the requests
 
 **1 — D.** Token counting is its own endpoint (`/v1/messages/count_tokens`).
 - A/B/C wrong: tools, vision, and thinking are all *parameters* of `POST /v1/messages`.
-  Recognising that "one endpoint, many parameters" model is a D2 staple.
+  Recognising that "one endpoint, many parameters" model is a D2 staple.  
+`refs: cs:count_tokens L1`
 
 **2 — C.** A typed block object; access `.type` then `.text`.
 - A: you *can* often `str()` it but `content[0]` isn't a `str`. B: that's the *input* shape
   you send, not what you get back. D: `response.model_dump_json()` would give that; not
-  `content[0]`.
+  `content[0]`.  
+`refs: cs:messages_basics L2`
 
 **3 — A & C.** `end_turn` and `max_tokens` are real.
 - B `tool_call` — the real value is `tool_use`. D `content_filter` — that's an
   OpenAI-ism; Claude uses `refusal`. E `token_limit` — invented. Distractors here are all
-  "plausible name, wrong system".
+  "plausible name, wrong system".  
+`refs: cs:messages_basics R:http-errors L2`
 
 **4 — B.** Stream with more room — no timeout risk, no truncation.
 - A: retrying an identical request just truncates again. C: "stops cleanly" but still
   incomplete — doesn't deliver the report. D: a `\n\n` stop sequence would cut it off even
-  *earlier*.
+  *earlier*.  
+`refs: cs:messages_basics R:http-errors L5`
 
 **5 — B.** The `system` field is the durable, every-turn contract.
 - A: works but drifts and wastes tokens; not "most reliable". C: **prefill is removed on
-  current models** (400). D: `output_config` has no `style` key — invented.
+  current models** (400). D: `output_config` has no `style` key — invented.  
+`refs: cs:prompt_structure L16`
 
 **6 — C.** `budget_tokens` is deprecated and rejected on current models; use
 `{"type": "adaptive"}` + `output_config.effort`.
 - A/B: no such rule. D: `thinking` *is* a dict parameter — that part is fine. This is the
-  canonical "your training data is stale" exam question.
+  canonical "your training data is stale" exam question.  
+`refs: cs:messages_basics L2`
 
 **7 — B.** `stream.get_final_message()` reconstructs the whole `Message`.
 - A: gives you text only — no usage/stop_reason/other blocks. C: `usage` isn't final
-  mid-stream. D: correct data, but a wasteful second call and it re-bills you.
+  mid-stream. D: correct data, but a wasteful second call and it re-bills you.  
+`refs: cs:streaming R:streaming-events L3`
 
 **8 — C.** If you must have the whole answer before acting and latency is irrelevant,
 streaming buys you little. (Even then it avoids timeouts on huge outputs, but it's the
 weakest case listed.)
-- A, B, D are all *strong* reasons to stream (timeout risk, live UI, huge `max_tokens`).
+- A, B, D are all *strong* reasons to stream (timeout risk, live UI, huge `max_tokens`).  
+`refs: cs:streaming L3`
 
 **9 — A, C, E.** 429, ≥ 500, and connection errors are transient.
-- B (401) and D (400) are your fault — retrying can't fix a bad key or a malformed request.
+- B (401) and D (400) are your fault — retrying can't fix a bad key or a malformed request.  
+`refs: cs:retry_chain R:http-errors L5`
 
 **10 — C.** 408/409/429/5xx + connection errors, exponential backoff, `max_retries` default
 2.
-- A: false — it does retry. B: never "indefinitely". D: understates it.
+- A: false — it does retry. B: never "indefinitely". D: understates it.  
+`refs: cs:retry_chain R:http-errors`
 
 **11 — B.** A refusal is HTTP 200; `content` may lack a text block. Always check
 `stop_reason` (and `stop_details`) before indexing `content`.
 - A: no auth error occurred. C: refusals don't raise. D: refusals aren't transient; blind
-  retry can trip safety systems.
+  retry can trip safety systems.  
+`refs: cs:messages_basics L5`
 
 **12 — B.** Append the assistant turn first, always — the API is stateless and needs the
 full alternation in `messages`.
 - A: you do check `stop_reason`, but *after* appending. C: only when `stop_reason` is
-  `tool_use`. D: optional logging, not required.
+  `tool_use`. D: optional logging, not required.  
+`refs: cs:agent_loop_react L6`
 
 **13 — B.** One user message, a list of `tool_result` blocks, `tool_use_id`s matching.
 - A: splitting across messages trains the model to stop parallelising. C: loses the id
-  linkage; wrong block type. D: tool results go in a **user** message.
+  linkage; wrong block type. D: tool results go in a **user** message.  
+`refs: cs:agent_loop_react L6`
 
 **14 — B.** The assistant turn (`r.content`) is never appended, so `messages` goes
 `user → user(tool_result)` — roles don't alternate.
 - A: `tools` should be passed every call. C: `tool_result` content can be a list/blocks; a
-  list of results is fine. D: `continue` is correct here.
+  list of results is fine. D: `continue` is correct here.  
+`refs: cs:agent_loop_react L6`
 
 **15 — A.** `model`, `system`, `messages`, and `tools` (so tool tokens are counted).
 - B/D: it does **not** take `max_tokens` / sampling params. C: it takes full message
-  structure, not a bare string.
+  structure, not a bare string.  
+`refs: cs:count_tokens`
 
 **16 — B.** HTTP 400 — the first message must be role `user`.
-- A: no. C: it errors, doesn't refuse. D: the SDK doesn't paper over this.
+- A: no. C: it errors, doesn't refuse. D: the SDK doesn't paper over this.  
+`refs: cs:messages_basics L2`
 
 **17 — B.** A concrete example usually steers format better than piling on rules, and it's
 cheaper. The exam rewards "simpler / cheaper / example-driven" when quality is equal.
 - A: "always" is the tell of a wrong option. C: quality isn't "regardless". D: `output_config`
-  doesn't do arbitrary formatting.
+  doesn't do arbitrary formatting.  
+`refs: cs:prompt_structure L16`
 
 **18 — C.** Caching the stable 12 KB prefix drops repeated input cost by ~90% for the
 cached portion — huge at 20k calls/day, and it's free quality-wise.
@@ -246,7 +263,9 @@ cached portion — huge at 20k calls/day, and it's free quality-wise.
 
 ---
 
+`refs: cs:prompt_caching R:caching-batch L14 E11`
+
 ### Mark yourself
 
 18 items. **≥ 14** = on track for this domain cluster. Log per-domain hits/misses on the
-roster. Any domain < 60%: revise it tonight against `question-bank/domain-N-*.md`.
+roster. Any domain < 60%: revise it tonight against `question-bank/domain-N-*.md`.  

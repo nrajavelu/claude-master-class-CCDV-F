@@ -88,33 +88,39 @@ instructions" to the system prompt  D. stop processing email
 **D — right-word-wrong-place** (no `role:"system"` message). `cs:prompt_structure`
 
 **3 — B & D.** Concrete example + structure. **A — symptom-treater / ceremony.**
-**C — actively backwards** for format consistency.
+**C — actively backwards** for format consistency.  
+`refs: cs:prompt_structure L16`
 
 **4 — B.** `tool_result` is the untrusted channel. And your own instructions must **not** go
 there — the rule runs both ways. `cs:blocking_hook`
 
 **5 — B.** Next turn, your own channel. A / D put your instruction in the untrusted channel
-(it may be ignored or flagged). C — mid-conversation `system` is model-gated and not this.
+(it may be ignored or flagged). C — mid-conversation `system` is model-gated and not this.  
+`refs: L31 R:prompt-injection`
 
 **6 — C.** The description is the biggest factor in correct tool use. **A / B — overbuild**
 (more machinery than the problem deserves). **D — generic knob.** `cs:strict_tool`
 
 **7 — B.** An interface for a reader; say what, when, and when-not. A undersells it; C is
-false (description dominates); D confuses it with few-shot.
+false (description dominates); D confuses it with few-shot.  
+`refs: L8 R:tool-choice`
 
 **8 — B.** `strict` has no "optional" — express it as a nullable type; everything stays in
 `required`; `additionalProperties` stays false. `cs:strict_tool`
 
-**9 — B.** Rejected, not ignored — a favourite exam fact.
+**9 — B.** Rejected, not ignored — a favourite exam fact.  
+`refs: L18 R:structured-outputs`
 
 **10 — B.** The shape must be **guaranteed** and the code must fail safely. **A —
 symptom-treater. C — extremist. D — true-but-irrelevant with a price tag.** *Trust the
 schema in code, never in hope.* `cs:strict_tool`
 
-**11 — B.** Validates against your schema; returns a typed object or raises.
+**11 — B.** Validates against your schema; returns a typed object or raises.  
+`refs: cs:strict_tool L18`
 
 **12 — B.** Rejected on the newest models; `output_config.format` is the replacement. (The
-*exam* may still reference prefilling as a technique — know both.)
+*exam* may still reference prefilling as a technique — know both.)  
+`refs: L17 R:structured-outputs`
 
 **13 — B.** A capability that crosses apps/teams → an MCP server. **A — symptom-treater.
 C — true-but-irrelevant. D — overbuild.** `cs:mcp_server`

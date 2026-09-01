@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aizentify · Exam practice</title>
+<link rel="stylesheet" href="portal.css">
+<style>
+  .exhead{max-width:900px;margin:0 auto;padding:0 24px}
+  .method{border:1px solid var(--line);border-radius:14px;background:var(--paper-0);margin:16px 0 24px;overflow:hidden}
+  .method summary{cursor:pointer;padding:14px 18px;font-weight:600;font-family:var(--font-head);background:var(--paper-100);list-style:none}
+  .method summary::-webkit-details-marker{display:none}
+  .method summary::before{content:"▸ ";color:var(--blue-500)}
+  .method[open] summary::before{content:"▾ "}
+  .method .body{padding:16px 20px;font-size:.92rem;line-height:1.6}
+  .method ol{margin:.4em 0 .4em 1.3em} .method li{margin:.35em 0}
+  .method .sp{display:inline-block;font-family:var(--font-mono);font-size:.75rem;background:var(--paper-100);border:1px solid var(--line);border-radius:5px;padding:1px 6px;margin:2px}
+
+  .exbar{position:sticky;top:0;z-index:20;background:var(--paper-50);border-bottom:1px solid var(--line);
+    display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:10px 24px;font-size:.86rem}
+  .exbar .sc{font-family:var(--font-mono);color:var(--ink-700)}
+  .exbar button{font:inherit;border:1px solid var(--line);background:var(--paper-0);color:var(--ink-900);
+    border-radius:8px;padding:5px 12px;cursor:pointer}
+  .exbar button:hover{border-color:var(--blue-400)}
+  .exbar .prog{flex:1;min-width:120px;height:8px;background:var(--paper-200);border-radius:999px;overflow:hidden}
+  .exbar .prog>i{display:block;height:100%;width:0;background:var(--gradient-brand);transition:width .3s}
+
+  .q{max-width:900px;margin:0 auto;padding:22px 24px;border-bottom:1px solid var(--line)}
+  .q .qmeta{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--blue-500);margin-bottom:6px}
+  .q .stem{font-size:1.02rem;line-height:1.6;margin-bottom:12px}
+  .q .stem :is(p){margin:.4em 0}
+  .q .opts{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+  .q .opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:10px;
+    padding:9px 12px;cursor:pointer;background:var(--paper-0);font-size:.95rem;line-height:1.45}
+  .q .opt:hover{border-color:var(--blue-400)}
+  .q .opt input{margin-top:3px;flex:none;accent-color:var(--blue-500)}
+  .q .opt .ol{font-family:var(--font-mono);font-weight:600;color:var(--ink-500);flex:none}
+  .q.revealed .opt.correct{border-color:#3aa564;background:#eef8f1}
+  .q.revealed .opt.correct .ol{color:#0b7a43}
+  .q.revealed .opt.wrongpick{border-color:#c0392b;background:#fbeeec}
+  .q.revealed .opt.wrongpick .ol{color:#b0281a}
+  .q.revealed .opt input{pointer-events:none}
+  .q .note{width:100%;box-sizing:border-box;font:inherit;font-size:.86rem;border:1px dashed var(--line);
+    border-radius:8px;padding:8px 10px;background:var(--paper-50);resize:vertical;min-height:38px;margin:4px 0}
+  .q .act{display:flex;gap:10px;align-items:center;margin-top:8px}
+  .q .act button{font:inherit;border:1px solid var(--blue-500);background:var(--blue-500);color:#fff;
+    border-radius:8px;padding:6px 16px;cursor:pointer}
+  .q .act button.ghost{background:var(--paper-0);color:var(--blue-600)}
+  .q .verdict{font-weight:600;font-size:.9rem}
+  .q .verdict.ok{color:#0b7a43} .q .verdict.no{color:#b0281a}
+  .rationale{margin-top:12px;border-left:3px solid var(--blue-400);background:var(--paper-100);
+    border-radius:0 10px 10px 0;padding:12px 16px;font-size:.92rem;line-height:1.6}
+  .rationale .ans{font-weight:700}
+  .refrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+  .refrow a{font-family:var(--font-mono);font-size:.76rem;color:var(--blue-600);text-decoration:none;
+    border:1px solid var(--line);border-radius:999px;padding:3px 9px;background:var(--paper-0)}
+  .refrow a:hover{border-color:var(--blue-400)}
+  .refrow a.cs::before{content:"‹›  "} .refrow a.study::before{content:"📖 "} .refrow a.deck::before{content:"▦ "}
+  #tally{max-width:900px;margin:24px auto;padding:0 24px}
+  #tally table{width:100%;border-collapse:collapse;font-size:.9rem}
+  #tally th,#tally td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+  #tally th{background:var(--paper-100);font-family:var(--font-head)}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Aizentify"></a>
+    <div class="links">
+      <a href="index.html">Overview</a>
+      <a href="candidate.html">Candidate portal</a>
+      <a href="trainer.html">Trainer console</a>
+      <a href="practice.html">Practice</a>
+      <a href="watch.html">Video</a>
+      <a href="decks.html">Decks</a>
+      <a href="study.html">Study</a>
+      <a href="resources.html">Resources</a>
+    </div>
+  </div>
+</nav>
+
+<div class="exhead">
+  <p style="margin:16px 0 4px"><a id="rawlink" href="#">&larr; read as a document</a></p>
+  <h1 id="title" style="margin:.2em 0">Exam practice</h1>
+  <p class="muted" id="sub"></p>
+
+  <details class="method" open>
+    <summary>How to work an item — read · note · eliminate</summary>
+    <div class="body">
+      <ol>
+        <li><b>Read the stem twice.</b> Underline the <b>constraint word</b> — <i>must, never,
+          always, cannot, only, cheapest, overnight, high-volume, one call</i>. That word decides the answer.</li>
+        <li><b>Name the decision.</b> ① what runs · ② how it calls Claude · ③ what Claude sees &amp; says ·
+          ④ will it survive production. Write the number in the notes box.</li>
+        <li><b>Rule 1 — mechanism beats knob.</b> A generic dial (temperature, model tier,
+          <code>max_tokens</code>) is almost always a distractor when the stem names a constraint.</li>
+        <li><b>Rule 2 — mechanism beats guidance.</b> On a <i>must / never</i> stem, every option that is
+          only advice ("tell the model to…", "write it down", "ask users to…") is dead.</li>
+        <li><b>Name ≥ 2 wrong-answer species</b> before you pick — say <i>why</i> each loser loses:
+          <span class="sp">overbuild</span><span class="sp">symptom-treater</span><span class="sp">extremist</span>
+          <span class="sp">true-but-irrelevant</span><span class="sp">stale-API</span>
+          <span class="sp">right-word-wrong-place</span><span class="sp">wrong-system</span></li>
+        <li><b>Pick the elegant minimal fix.</b> The developer exam punishes over-engineering — the
+          smallest thing that actually removes the failure wins.</li>
+      </ol>
+      <p class="muted">Use the notes box under each question to jot your constraint word, decision number,
+        and species guesses <i>before</i> you hit Check. Your notes are saved on this device.</p>
+    </div>
+  </details>
+</div>
+
+<div class="exbar">
+  <span class="sc" id="score">0 / 0 correct</span>
+  <div class="prog"><i id="progbar"></i></div>
+  <button id="revealAll">Reveal all</button>
+  <button id="reset">Reset</button>
+</div>
+
+<div id="items"></div>
+<div id="tally"></div>
+
+<footer class="foot"><div class="wrap">Aizentify &middot; Claude Certified Developer &ndash; Foundations &middot; &copy; 2026 Aizentify LLP</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+<script src="app.js"></script>
+<script>
+(function () {
+  var A = window.AIZ || {};
+  var f = A.qp ? A.qp('f') : new URLSearchParams(location.search).get('f');
+  if (!f) { document.getElementById('items').innerHTML = '<p class="q">No file. Use <code>exam.html?f=../dayN/exam-style-questions.md</code>.</p>'; return; }
+  document.getElementById('rawlink').href = 'view.html?f=' + encodeURIComponent(f) + (A.qp && A.qp('c') ? '&c=' + encodeURIComponent(A.qp('c')) : '');
+  var store = 'exam::' + f.replace(/[^\w]+/g, '-');
+  var state = (A.get ? A.get(store, null) : null) || { ans: {}, note: {}, rev: {} };
+  var save = function () { if (A.set) A.set(store, state); };
+  if (window.marked) marked.setOptions({ gfm: true, breaks: false });
+  var md = function (s) { return window.marked ? marked.parseInline(s || '') : (s || ''); };
+  var mdb = function (s) { return window.marked ? marked.parse(s || '') : ('<p>' + (s || '') + '</p>'); };
+
+  var isMock = /mock-exam/i.test(f);
+  var lessonByNum = {};
+
+  fetch('study/catalog.json').then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (c) { if (c) c.lessons.forEach(function (l) { lessonByNum[l.n] = l.file; }); })
+    .catch(function () {})
+    .then(function () { return fetch(f).then(function (r) { if (!r.ok) throw 0; return r.text(); }); })
+    .then(function (txt) { return isMock ? loadMock(txt) : parseDay(txt); })
+    .then(render)
+    .catch(function () {
+      document.getElementById('items').innerHTML = '<p class="q">Could not load <code>' + f +
+        '</code>. Serve the portal over http (<code>./start.sh</code>).</p>';
+    });
+
+  // ---------- split "…stem…  A. x  B. y  C. z" -> {stem, opts[]} ----------
+  function splitOpts(blob) {
+    var letters = 'ABCDEF'.split(''), marks = [], from = 0;
+    for (var i = 0; i < letters.length; i++) {
+      var re = new RegExp('(^|[\\s(])' + letters[i] + '[.)]([ \\t])', 'g');
+      re.lastIndex = from;
+      var mm = re.exec(blob);
+      if (!mm) break;
+      marks.push({ letter: letters[i], matchStart: mm.index + mm[1].length, contentStart: mm.index + mm[0].length });
+      from = mm.index + mm[0].length;
+    }
+    if (marks.length < 2) return null;
+    return {
+      stem: blob.slice(0, marks[0].matchStart).trim(),
+      opts: marks.map(function (mk, i) {
+        var end = i + 1 < marks.length ? marks[i + 1].matchStart : blob.length;
+        return { letter: mk.letter, text: blob.slice(mk.contentStart, end).replace(/\s+/g, ' ').trim() };
+      })
+    };
+  }
+
+  function lettersFrom(s) {
+    var r = (s.match(/[A-F]/g) || []);
+    return r.filter(function (x, k) { return r.indexOf(x) === k; });
+  }
+
+  // ---------- parse a dayN exam-style-questions.md ----------
+  function parseDay(txt) {
+    var parts = txt.split(/^#{1,3}\s*Answers?\b[^\n]*$/mi);
+    var qpart = parts[0], apart = parts.slice(1).join('\n');
+    var items = [], m;
+    var qre = /^\*\*(\d+)\.\s*\(([^)]*)\)\*\*\s*([\s\S]*?)(?=^\*\*\d+\.\s*\(|\n---|$(?![\s\S]))/gm;
+    while ((m = qre.exec(qpart))) {
+      var so = splitOpts(m[3].trim());
+      if (!so) continue;
+      items.push({ n: +m[1], meta: m[2].replace(/\s+/g, ' ').trim(), stem: so.stem, opts: so.opts,
+        multi: /\bMR\b|choose (two|three|all|\d)/i.test(m[2] + ' ' + so.stem) });
+    }
+    var are = /^\*\*\s*(\d+)\s*[—–-]\s*([A-F](?:\s*(?:&|,|and|\/|\+)\s*[A-F])*)\s*\.?\*\*\s*([\s\S]*?)(?=^\*\*\s*\d+\s*[—–-]\s*[A-F]|$(?![\s\S]))/gm;
+    var ans = {};
+    while ((m = are.exec(apart))) ans[+m[1]] = { correct: lettersFrom(m[2]), why: m[3].trim() };
+    items.forEach(function (it) { var a = ans[it.n] || {}; it.correct = a.correct || []; it.why = a.why || ''; });
+    return items;
+  }
+
+  // ---------- parse a mock-exam-*.md (+ its -key.md table) ----------
+  function loadMock(txt) {
+    return fetch(f.replace(/\.md$/, '-key.md')).then(function (r) { return r.ok ? r.text() : ''; }).then(function (keytxt) {
+      var items = [], m;
+      var qre = /^###\s*(\d+)\.\s*([\s\S]*?)(?=^###\s*\d+\.|\n---|$(?![\s\S]))/gm;
+      while ((m = qre.exec(txt))) {
+        var so = splitOpts(m[2].trim());
+        if (!so) continue;
+        items.push({ n: +m[1], meta: '', stem: so.stem, opts: so.opts,
+          multi: /choose (two|three|all|\d)/i.test(so.stem) });
+      }
+      var kre = /^\|\s*(\d+)\s*\|\s*([A-F](?:\s*[,&+]\s*[A-F])*)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|/gm;
+      var ans = {};
+      while ((m = kre.exec(keytxt))) ans[+m[1]] = { correct: lettersFrom(m[2]), meta: m[3].trim(), why: m[4].trim() };
+      items.forEach(function (it) { var a = ans[it.n] || {}; it.correct = a.correct || []; it.why = a.why || ''; it.meta = a.meta || ''; });
+      return items;
+    });
+  }
+
+  // ---------- reference chips ----------
+  //  Always: `cs:name` backtick tokens anywhere in the rationale.
+  //  Plus: an explicit "refs: cs:x L14 R:slug E11" run (backticked or not) at the end.
+  function refChips(why) {
+    var out = [], seen = {};
+    function addCs(n) { if (seen['cs' + n]) return; seen['cs' + n] = 1;
+      out.push({ cls: 'cs', label: n + '.py', href: 'view.html?f=' + encodeURIComponent('../code-snippets/' + n + '.py') }); }
+    function addL(n) { n = +n; if (seen['L' + n] || !lessonByNum[n]) return; seen['L' + n] = 1;
+      out.push({ cls: 'study', label: 'study L' + n, href: 'study.html?p=' + encodeURIComponent(lessonByNum[n]) }); }
+    function addR(s) { if (seen['R' + s]) return; seen['R' + s] = 1;
+      out.push({ cls: 'study', label: s, href: 'study.html?p=' + encodeURIComponent('reference/' + s + '.html') }); }
+    function addE(n) { if (seen['E' + n]) return; seen['E' + n] = 1;
+      out.push({ cls: 'deck', label: 'Ep ' + n, href: 'deck.html?ep=' + (+n) }); }
+
+    (why.match(/`cs:([a-z0-9_]+)`/gi) || []).forEach(function (t) { addCs(t.replace(/[`]/g, '').split(':')[1]); });
+
+    var seg = why.match(/refs:\s*([`\w:.\-\s]+?)(?:`|$|\n)/i);
+    if (seg) seg[1].split(/\s+/).forEach(function (tok) {
+      tok = tok.replace(/[`]/g, '');
+      var mm;
+      if ((mm = tok.match(/^cs:([a-z0-9_]+)$/i))) addCs(mm[1]);
+      else if ((mm = tok.match(/^L(\d{1,2})$/i))) addL(mm[1]);
+      else if ((mm = tok.match(/^R:([a-z0-9-]+)$/i))) addR(mm[1]);
+      else if ((mm = tok.match(/^E(\d{1,2})$/i))) addE(mm[1]);
+    });
+    return out;
+  }
+
+  // ---------- render ----------
+  var ITEMS = [];
+  function render(items) {
+    ITEMS = items;
+    document.getElementById('title').textContent = (isMock ? 'Mock exam' : 'Exam-style questions')
+      + ' · ' + (f.split('/').filter(Boolean).slice(-2, -1)[0] || '').replace(/-/g, ' ');
+    document.getElementById('sub').textContent = items.length + ' items · pick, then Check to reveal the key, '
+      + 'the reasoning, and why each wrong option is wrong.';
+    var host = document.getElementById('items');
+    host.innerHTML = '';
+    items.forEach(function (it) {
+      var el = document.createElement('div');
+      el.className = 'q'; el.id = 'q' + it.n;
+      var picked = state.ans[it.n] || [];
+      el.innerHTML =
+        '<div class="qmeta">' + it.n + '. ' + (it.meta || (isMock ? 'CCDV-F' : '')) +
+          (it.multi ? ' · choose all that apply' : '') + '</div>' +
+        '<div class="stem">' + mdb(it.stem) + '</div>' +
+        '<div class="opts">' + it.opts.map(function (o) {
+          return '<label class="opt" data-l="' + o.letter + '">' +
+            '<input type="' + (it.multi ? 'checkbox' : 'radio') + '" name="q' + it.n + '" value="' + o.letter + '"' +
+            (picked.indexOf(o.letter) > -1 ? ' checked' : '') + '>' +
+            '<span class="ol">' + o.letter + '</span><span>' + md(o.text) + '</span></label>';
+        }).join('') + '</div>' +
+        '<textarea class="note" placeholder="your read — constraint word · decision # · ≥2 species guesses">' +
+          (state.note[it.n] || '') + '</textarea>' +
+        '<div class="act"><button class="check">Check</button>' +
+        '<button class="ghost show">Just show me</button>' +
+        '<span class="verdict"></span></div>' +
+        '<div class="rationale" hidden></div>';
+      host.appendChild(el);
+
+      el.querySelectorAll('input').forEach(function (inp) {
+        inp.addEventListener('change', function () {
+          var picks = Array.prototype.map.call(el.querySelectorAll('input:checked'), function (x) { return x.value; });
+          state.ans[it.n] = picks; save();
+        });
+      });
+      el.querySelector('.note').addEventListener('input', function () { state.note[it.n] = this.value; save(); });
+      el.querySelector('.check').addEventListener('click', function () { reveal(it, el, true); });
+      el.querySelector('.show').addEventListener('click', function () { reveal(it, el, false); });
+      if (state.rev[it.n]) reveal(it, el, true, true);
+    });
+    updateScore();
+    buildTally();
+  }
+
+  function reveal(it, el, grade, silent) {
+    state.rev[it.n] = true; if (!silent) save();
+    el.classList.add('revealed');
+    var picks = state.ans[it.n] || [];
+    el.querySelectorAll('.opt').forEach(function (op) {
+      var L = op.dataset.l;
+      if (it.correct.indexOf(L) > -1) op.classList.add('correct');
+      else if (picks.indexOf(L) > -1) op.classList.add('wrongpick');
+    });
+    var ok = picks.length && picks.slice().sort().join('') === it.correct.slice().sort().join('');
+    var v = el.querySelector('.verdict');
+    if (grade && picks.length) { v.textContent = ok ? '✓ correct' : '✗ not quite'; v.className = 'verdict ' + (ok ? 'ok' : 'no'); }
+    var r = el.querySelector('.rationale');
+    r.hidden = false;
+    r.innerHTML = '<span class="ans">Answer: ' + (it.correct.join(' & ') || '—') + '</span> ' +
+      mdb(it.why || '_(no rationale in the source file)_');
+    var chips = refChips(it.why || '');
+    if (chips.length) {
+      var rr = document.createElement('div'); rr.className = 'refrow';
+      chips.forEach(function (c) {
+        var a = document.createElement('a'); a.className = c.cls; a.href = c.href;
+        a.target = '_blank'; a.rel = 'noopener'; a.textContent = c.label; rr.appendChild(a);
+      });
+      r.appendChild(rr);
+    }
+    updateScore();
+  }
+
+  function updateScore() {
+    var done = 0, right = 0;
+    ITEMS.forEach(function (it) {
+      if (!state.rev[it.n]) return;
+      done++;
+      var p = (state.ans[it.n] || []).slice().sort().join('');
+      if (p && p === it.correct.slice().sort().join('')) right++;
+    });
+    document.getElementById('score').textContent = right + ' / ' + done + ' correct  ·  ' + done + ' of ' + ITEMS.length + ' done';
+    document.getElementById('progbar').style.width = (ITEMS.length ? done / ITEMS.length * 100 : 0) + '%';
+  }
+
+  function buildTally() {
+    var by = {};
+    ITEMS.forEach(function (it) {
+      var d = (it.meta.match(/D\d/) || ['—'])[0];
+      by[d] = by[d] || { t: 0, r: 0, done: 0 };
+      by[d].t++;
+      if (state.rev[it.n]) {
+        by[d].done++;
+        var p = (state.ans[it.n] || []).slice().sort().join('');
+        if (p && p === it.correct.slice().sort().join('')) by[d].r++;
+      }
+    });
+    var rows = Object.keys(by).sort().map(function (d) {
+      var b = by[d];
+      return '<tr><td>' + d + '</td><td>' + b.done + ' / ' + b.t + '</td><td>' + b.r + ' / ' + b.done + '</td></tr>';
+    }).join('');
+    document.getElementById('tally').innerHTML = ITEMS.length
+      ? '<h3>By domain</h3><table><tr><th>Domain</th><th>Answered</th><th>Correct</th></tr>' + rows + '</table>'
+      : '';
+  }
+
+  document.getElementById('revealAll').addEventListener('click', function () {
+    ITEMS.forEach(function (it) { reveal(it, document.getElementById('q' + it.n), true); });
+    save();
+  });
+  document.getElementById('reset').addEventListener('click', function () {
+    if (!confirm('Clear your answers, notes and reveals for this set?')) return;
+    state = { ans: {}, note: {}, rev: {} }; save(); render(ITEMS);
+  });
+})();
+</script>
+</body>
+</html>

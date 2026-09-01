@@ -76,7 +76,8 @@ symptom-treater. D — extremist with a passport.** `cs:count_tokens`
 **2 — B.** Volume + mostly-easy → fast tier + the engineering move. **C — cost blowout.**
 `cs:count_tokens`
 
-**3 — B.** Perceived latency only.
+**3 — B.** Perceived latency only.  
+`refs: cs:streaming L3`
 
 **4 — C.** Caching the stable prefix drops repeated input cost ~90% — lever #1, before model
 choice. **B — quality trade (and the question excludes it). A — output's already short.
@@ -89,7 +90,8 @@ cost. C — quality trade. D — truncates.** `cs:batch_custom_id`
 
 **7 — B.** Any order — key by `custom_id`. `cs:batch_custom_id`
 
-**8 — C.** Twice. If you have the text, send the text.
+**8 — C.** Twice. If you have the text, send the text.  
+`refs: L4`
 
 **9 — B.** Read the events; `message_delta` carries the real `stop_reason`. `cs:retry_chain`
 
@@ -98,12 +100,16 @@ cost. C — quality trade. D — truncates.** `cs:batch_custom_id`
 **11 — A & B.** Mechanisms. **C — symptom-treater / guidance. D — extremist.**
 `cs:blocking_hook`
 
-**12 — B.** The stronger model follows the *injected* instruction better too.
+**12 — B.** The stronger model follows the *injected* instruction better too.  
+`refs: L31 R:prompt-injection E04`
 
-**13 — B.** Keys server-side only, no exceptions. **A / C / D — symptom-treaters.**
+**13 — B.** Keys server-side only, no exceptions. **A / C / D — symptom-treaters.**  
+`refs: L35`
 
 **14 — B.** Server tools run on Anthropic's servers regardless of where your agent runs.
 
+`refs: L10`
+
 ---
 ### Mark yourself
-14 items · **≥ 11** = ready for the mock.
+14 items · **≥ 11** = ready for the mock.  

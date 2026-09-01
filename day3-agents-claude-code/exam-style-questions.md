@@ -64,11 +64,14 @@ like a dependency  C. read-only  D. reversible with no risk
 **1 — B.** Fixed path → a workflow (cheaper, testable). **A — overbuild.** **C — extremist.**
 **D — overbuild + true-but-irrelevant.** `cs:agent_loop_react`
 
-**2 — C.** Complexity — the task is single-step and fully specifiable, so no loop is needed.
+**2 — C.** Complexity — the task is single-step and fully specifiable, so no loop is needed.  
+`refs: L21 E01`
 
-**3 — A & C.** **B / D** describe an *agent's* strengths, not a workflow's.
+**3 — A & C.** **B / D** describe an *agent's* strengths, not a workflow's.  
+`refs: L21 R:workflow-patterns`
 
-**4 — B.** Loop guardrails are the mechanism. **A — overbuild.** **C / D — generic knobs.**
+**4 — B.** Loop guardrails are the mechanism. **A — overbuild.** **C / D — generic knobs.**  
+`refs: cs:agent_loop_react L21`
 
 **5 — B.** Tool Runner = harness only, your tools, you host, per-turn hooks. C adds hosting;
 D adds built-in tools; A makes you write the harness. `cs:blocking_hook`
@@ -78,11 +81,14 @@ stronger model follows the *injected* instruction better too. Only C is a mechan
 `cs:blocking_hook`
 
 **7 — B.** It's observability — too late to rescue anything that only lived in the
-conversation.
+conversation.  
+`refs: L20 R:context-management`
 
-**8 — B.** The conversation channel. **C — right-word-wrong-place** (no such message).
+**8 — B.** The conversation channel. **C — right-word-wrong-place** (no such message).  
+`refs: L26 R:claude-code-files`
 
-**9 — B.** Standing knowledge goes in the config file, not re-told every session.
+**9 — B.** Standing knowledge goes in the config file, not re-told every session.  
+`refs: L27 R:claude-code-config`
 
 **10 — B.** A local server is a program: `stdio`, command + args. `cs:mcp_server`
 
@@ -91,6 +97,8 @@ true-but-irrelevant. D — overbuild.** `cs:mcp_server`
 
 **12 — B.** A plugin runs code with your privileges — a trust decision.
 
+`refs: L27`
+
 ---
 ### Mark yourself
-12 items · **≥ 10** = on track.
+12 items · **≥ 10** = on track.  
