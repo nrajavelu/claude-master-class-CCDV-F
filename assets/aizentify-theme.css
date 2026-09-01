@@ -282,3 +282,43 @@ pre .focus, pre mark.focus {
   #counter, #progress, #hint { display: none; }
   .watch-chip { display: none; }
 }
+
+/* ---------- per-slide study-reference chips + drawer (deck-refs.js) ---------- */
+.slide-refs {
+  position: absolute; left: 8vw; bottom: 3.2vh; display: flex; flex-wrap: wrap;
+  gap: .4rem; max-width: 60vw;
+}
+.slide-refs .ref-chip {
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .03em;
+  color: var(--cyan-300); text-decoration: none;
+  border: 1px solid rgba(61,209,242,.3); border-radius: 999px;
+  padding: .22rem .6rem; background: rgba(61,209,242,.07);
+  transition: background .12s ease;
+}
+.slide-refs .ref-chip::before { content: "📖 "; filter: grayscale(1) opacity(.8); }
+.slide-refs .ref-chip.vid::before { content: "▶ "; filter: none; }
+.slide-refs .ref-chip:hover { background: rgba(61,209,242,.18); }
+
+#refdrawer { position: fixed; inset: 0; z-index: 9999; display: none; }
+#refdrawer.on { display: block; }
+#refdrawer .rd-back { position: absolute; inset: 0; background: rgba(6,8,12,.55); }
+#refdrawer .rd-panel {
+  position: absolute; top: 0; right: 0; height: 100%;
+  width: min(760px, 94vw); background: #fff; display: flex; flex-direction: column;
+  box-shadow: -20px 0 60px rgba(0,0,0,.4); transform: translateX(0);
+}
+#refdrawer header {
+  display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+  border-bottom: 1px solid #e2e9f2; font-family: var(--font-body); background: #f6f9fc;
+}
+#refdrawer .rd-title { flex: 1; font-weight: 600; font-size: .92rem; color: #17181b;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#refdrawer .rd-ext { font-size: .8rem; color: #1450e8; text-decoration: none; white-space: nowrap; }
+#refdrawer .rd-x {
+  border: 0; background: #e2e9f2; color: #3d4045; width: 26px; height: 26px;
+  border-radius: 6px; cursor: pointer; font-size: 13px; line-height: 1;
+}
+#refdrawer iframe { flex: 1; width: 100%; border: 0; background: #fff; }
+@media (max-width: 640px) { #refdrawer .rd-panel { width: 100vw; } }
+
+@media print { .slide-refs { position: static; max-width: none; margin-top: .6rem; } #refdrawer { display: none !important; } }

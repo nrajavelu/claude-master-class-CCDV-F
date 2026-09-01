@@ -215,7 +215,7 @@
   <section class="slide section"><div class="num">Module 1</div><h1>Claude &amp; the Messages API</h1></section>
 
   <!-- 7 · model family -->
-  <section class="slide">
+  <section class="slide" data-refs="L11|Choosing a model; L12|Thinking + effort; E10|Ep 10 · Choosing your model">
     <span class="chip concept">Concept</span>
     <h2>The model <span class="accent">family</span></h2>
     <ul class="clean">
@@ -247,7 +247,7 @@ tools=[...]  thinking={"type":"adaptive"}  output_config={...}   # same call</co
   </section>
 
   <!-- 9 · anatomy of a request (diagram) -->
-  <section class="slide">
+  <section class="slide" data-refs="L2|Messages API anatomy; R:streaming-events|SSE event flow; V:l2|Walkthrough · One Call">
     <span class="chip concept">Concept</span>
     <h2>Anatomy of a <span class="accent">request</span></h2>
     <div class="diagram">
@@ -318,7 +318,7 @@ tools=[...]  thinking={"type":"adaptive"}  output_config={...}   # same call</co
   </section>
 
   <!-- 11 · stop_reason table -->
-  <section class="slide">
+  <section class="slide" data-refs="L5|Errors + recovery; R:http-errors|HTTP + error taxonomy; V:l9|Walkthrough · where a call breaks">
     <span class="chip exam">Exam watch</span>
     <h2><span class="accent">stop_reason</span> — know all of them</h2>
     <table class="k">
@@ -334,7 +334,7 @@ tools=[...]  thinking={"type":"adaptive"}  output_config={...}   # same call</co
   </section>
 
   <!-- 12 · stateless (diagram + metaphor) -->
-  <section class="slide">
+  <section class="slide" data-refs="L2|Messages API anatomy; L19|Context engineering">
     <span class="chip concept">Concept</span>
     <h2>The API has <span class="accent">amnesia</span> — your <code>messages</code> list is its memory</h2>
     <div class="diagram">
@@ -419,7 +419,7 @@ python labs/lab1_explainer/starter/explainer.py labs/lab1_explainer/sample.py</c
   </section>
 
   <!-- 17 · output steering -->
-  <section class="slide">
+  <section class="slide" data-refs="L17|Steering output; L18|Structured outputs">
     <span class="chip concept">Concept</span>
     <h2>Steering the <span class="accent">output shape</span></h2>
     <ul class="clean">
@@ -459,7 +459,7 @@ python labs/lab1_explainer/starter/explainer.py labs/lab1_explainer/sample.py</c
   </section>
 
   <!-- 18 · thinking & effort -->
-  <section class="slide">
+  <section class="slide" data-refs="L12|Thinking + effort">
     <span class="chip exam">Exam watch</span>
     <h2><span class="accent">Adaptive thinking</span> = Claude's built-in CoT</h2>
     <ul class="clean">
@@ -498,7 +498,7 @@ python labs/lab1_explainer/starter/explainer.py labs/lab1_explainer/sample.py</c
   <section class="slide section"><div class="num">Module 3</div><h1>Streaming</h1></section>
 
   <!-- 21 · why stream (focus code) -->
-  <section class="slide">
+  <section class="slide" data-refs="L3|Streaming, event by event; R:streaming-events|SSE event flow; V:l3|Walkthrough · Streaming">
     <span class="chip concept">Concept</span>
     <h2>Streaming stops the <span class="accent">timeout</span></h2>
     <ul class="clean">
@@ -530,7 +530,7 @@ python labs/lab1_explainer/starter/explainer.py labs/lab1_explainer/sample.py</c
   <section class="slide section"><div class="num">Module 4</div><h1>Errors, retries, timeouts</h1></section>
 
   <!-- 23 · retry / don't-retry (diagram) -->
-  <section class="slide">
+  <section class="slide" data-refs="L5|Errors + recovery; R:http-errors|HTTP + error taxonomy">
     <span class="chip exam">Exam watch</span>
     <h2>Catch a <span class="accent">chain</span> — retry or fail fast</h2>
     <div class="diagram">
@@ -590,7 +590,7 @@ python labs/lab3_resilient/starter/resilient.py labs/lab1_explainer/sample.py --
   <section class="slide section"><div class="num">Module 5</div><h1>Tokens, cost &amp; the agentic loop</h1></section>
 
   <!-- 26 · count before you spend (focus code) -->
-  <section class="slide">
+  <section class="slide" data-refs="L13|Tokens, sampling + non-determinism; L15|The Batch API; V:l10|Walkthrough · input_tokens">
     <span class="chip concept">Concept</span>
     <h2>Count before you <span class="accent">spend</span></h2>
     <ul class="clean">
@@ -605,7 +605,7 @@ python labs/lab3_resilient/starter/resilient.py labs/lab1_explainer/sample.py --
   </section>
 
   <!-- 27a · ReAct -->
-  <section class="slide">
+  <section class="slide" data-refs="L21|Workflow vs agent; L6|The tool-use loop; E01|Ep 01 · first agent; V:e1|Build-along · Ep 01">
     <span class="chip concept">Concept</span>
     <h2>The loop is <span class="accent">ReAct</span> — Reason · Act · Observe</h2>
     <div class="cols">
@@ -727,5 +727,6 @@ python labs/lab3_resilient/starter/resilient.py labs/lab1_explainer/sample.py --
 
 </div>
 <script src="../../assets/deck.js"></script>
+<script src="../../assets/deck-refs.js"></script>
 </body>
 </html>

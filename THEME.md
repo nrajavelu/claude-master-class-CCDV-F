@@ -161,6 +161,29 @@ Put one on a concept slide when the video companion covers the same idea. `?l=<n
 walkthrough lesson; `?t=<seconds>` = exact time; `?s=build&e=<n>` = build-along episode.
 Auto-hidden in print.
 
+### Per-slide study references — `data-refs` + `assets/deck-refs.js`
+
+Add `data-refs` to any `<section class="slide">` to hang a row of "go deeper" chips on it.
+`deck-refs.js` (loaded after `deck.js` in every deck) parses it, renders the chips, and
+opens the target in a right-side drawer (`<iframe>`); cmd/middle-click still opens the
+standalone page in a new tab.
+
+```html
+<section class="slide"
+  data-refs="L14|Prompt caching; R:caching-batch|Cost levers; E11|Ep 11 · caching; V:e11|Build-along Ep 11">
+```
+
+| Token | Resolves to | Drawer / new-tab |
+|---|---|---|
+| `L<nn>` | pjmgomez study lesson `nn` | `portal/study/lessons/00nn-*.html` / `portal/study.html?p=…` |
+| `R:<slug>` | study reference sheet | `portal/study/reference/<slug>.html` |
+| `E<nn>` or `E<nn>#<s>` | our episode deck `nn`, slide `s` | `portal/deck.html?ep=nn&s=s` |
+| `V:l<nn>` / `V:g#<sec>` / `V:e<nn>` | walkthrough lesson / exam-guide time / build-along episode | `portal/watch.html?…` (▶ chip) |
+
+Each token takes an optional `|label`. `L`/`R` labels auto-fill from `portal/study/catalog.json`
+when the portal is served over http. Regenerate that catalog with
+`python tools/build_study_catalog.py`.
+
 ### Focus-code — dim the block, spotlight the line
 
 ```html

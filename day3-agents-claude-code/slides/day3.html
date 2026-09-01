@@ -40,7 +40,7 @@
 
   <section class="slide section"><div class="num">Module 1</div><h1>Should you build an agent?</h1></section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L21|Workflow vs agent; R:workflow-patterns|Workflow patterns">
     <span class="chip concept">Concept</span>
     <h2>Workflow vs agent — <span class="accent">who decides the path?</span></h2>
     <ul class="clean">
@@ -52,7 +52,7 @@
     <a class="watch-chip" href="../../portal/watch.html?s=guide&t=471" target="_blank">Guide · 7:51 · D1</a>
   </section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L22|The five workflow patterns; R:workflow-patterns|Workflow patterns">
     <span class="chip concept">Concept</span>
     <h2>Five <span class="accent">workflow patterns</span> (your code, the path)</h2>
     <ul class="clean">
@@ -65,7 +65,7 @@
     <p class="muted">Reaching for an agent when a three-step chain would do is the <b>overbuild</b> in its natural habitat.</p>
   </section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L21|Workflow vs agent; L25|Agent frameworks">
     <span class="chip concept">Concept</span>
     <h2>Four checks + the <span class="accent">loop guardrails</span></h2>
     <div class="cols">
@@ -93,7 +93,7 @@
 
   <section class="slide section"><div class="num">Module 2</div><h1>Four ways to build an agent</h1></section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L23|The Claude Agent SDK; L25|Agent frameworks; R:agent-sdk|Claude Agent SDK; E02|Ep 02 · Agent SDK; V:e2|Build-along · Ep 02">
     <span class="chip exam">Exam watch</span>
     <h2>Harness × <span class="accent">deployment</span></h2>
     <div class="diagram">
@@ -126,7 +126,7 @@
 
   <section class="slide section"><div class="num">Module 3</div><h1>Hooks — code the model can't talk out of</h1></section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L24|Subagents + hooks; L33|Claude hooks for guardrails; R:hooks|Claude Code hooks; E04|Ep 04 · Hooks; V:e4|Build-along · Ep 04">
     <span class="chip exam">Exam watch</span>
     <h2>The hook <span class="accent">lifecycle</span></h2>
     <div class="diagram">
@@ -160,7 +160,7 @@
 
   <section class="slide section"><div class="num">Module 4</div><h1>Subagents — usually fewer</h1></section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L24|Subagents + hooks; L28|Agents + Agent Memory; V:e5|Build-along · Ep 05">
     <span class="chip concept">Concept</span>
     <h2>Coordinator <span class="accent">fans out</span></h2>
     <div class="diagram">
@@ -195,7 +195,7 @@
 
   <section class="slide section"><div class="num">Module 5</div><h1>Claude Code operation</h1></section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L26|The CLAUDE.md hierarchy; R:claude-code-files|Claude Code files + loading">
     <span class="chip exam">Exam watch</span>
     <h2>Project config is discovered <span class="accent">cwd upward</span></h2>
     <div class="diagram">
@@ -221,7 +221,7 @@
     <a class="watch-chip" href="../../portal/watch.html?l=6" target="_blank">50:01 · L6</a>
   </section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L27|Rules, Skills + Commands; R:claude-code-config|Claude Code config + modes">
     <span class="chip exam">Exam watch · Claude Code Operation · D3</span>
     <h2><code>settings.json</code> precedence — and the <span class="accent">one exception</span></h2>
     <p class="focus-code"><b>managed</b> &nbsp;&gt;&nbsp; CLI flags &nbsp;&gt;&nbsp; <b>local</b> (<code>.claude/settings.local.json</code>, gitignored) &nbsp;&gt;&nbsp; <b>project</b> (<code>.claude/settings.json</code>, checked in) &nbsp;&gt;&nbsp; <b>user</b> (<code>~/.claude/settings.json</code>)</p>
@@ -245,7 +245,7 @@
 
   <section class="slide section"><div class="num">Module 6</div><h1>MCP</h1></section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L9|Build an MCP server; R:mcp|MCP essentials; V:e9|Build-along · Ep 09">
     <span class="chip exam">Exam watch</span>
     <h2>An MCP server is <span class="accent">not a bag of tools</span></h2>
     <div class="diagram">
@@ -268,7 +268,7 @@
     <a class="watch-chip" href="../../portal/watch.html?l=13" target="_blank">2:02:43 · L13</a>
   </section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L10|Choosing your mechanism; L27|Rules, Skills + Commands">
     <span class="chip exam">Exam watch · Agentic Customisation · D8</span>
     <h2>Four ways to extend an agent — <span class="accent">pick one</span></h2>
     <table class="k">
@@ -311,5 +311,6 @@
 
 </div>
 <script src="../../assets/deck.js"></script>
+<script src="../../assets/deck-refs.js"></script>
 </body>
 </html>

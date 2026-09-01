@@ -39,7 +39,7 @@
 
   <section class="slide section"><div class="num">Module 1</div><h1>Prompt engineering, deliberately</h1></section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L16|Prompt engineering essentials">
     <span class="chip concept">Concept</span>
     <h2>Contract in <code>system</code> · task in <code>messages</code></h2>
     <ul class="clean">
@@ -51,7 +51,7 @@
 <span class="keep">messages=[{"role":"user","content": "&lt;ticket&gt;...&lt;/ticket&gt;"}]</span></code></pre>
   </section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L16|Prompt engineering essentials; L17|Steering output">
     <span class="chip concept">Concept</span>
     <h2>Explicit · structure · <span class="accent">show don't tell</span></h2>
     <div class="cols">
@@ -64,7 +64,7 @@
 
   <section class="slide section"><div class="num">Module 2</div><h1>The three surfaces</h1></section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L26|The CLAUDE.md hierarchy; L27|Rules, Skills + Commands">
     <span class="chip exam">Exam watch</span>
     <h2>Three surfaces · <span class="accent">three contracts</span></h2>
     <div class="diagram">
@@ -96,7 +96,7 @@
 
   <section class="slide section"><div class="num">Module 3</div><h1>Boundaries &amp; untrusted content</h1></section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L31|Prompt injection + jailbreaks; R:prompt-injection|Prompt injection + security; V:l16|Walkthrough · attack as a ticket">
     <span class="chip exam">Exam watch</span>
     <h2><code>tool_result</code> is the <span class="accent">untrusted</span> channel — both ways</h2>
     <div class="diagram">
@@ -124,7 +124,7 @@
 
   <section class="slide section"><div class="num">Module 4</div><h1>Tools — the description is the interface</h1></section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L8|Writing tools Claude uses well; L7|Directing tools; R:tool-choice|Directing tools; E03|Ep 03 · custom tool; V:l12|Walkthrough · description is the interface">
     <span class="chip concept">Concept</span>
     <h2>A tool description is a <span class="accent">job posting</span></h2>
     <div class="diagram">
@@ -160,7 +160,7 @@
 
   <section class="slide section"><div class="num">Module 5</div><h1>Structured output you can trust</h1></section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L18|Structured outputs; L17|Steering output">
     <span class="chip exam">Exam watch</span>
     <h2>Asking is <span class="accent">not making sure</span></h2>
     <div class="diagram">
@@ -195,7 +195,7 @@
     <p class="muted">On the SDK's <code>@tool</code> path <code>strict</code> isn't forwarded yet — the schema <i>guides</i>, <code>validate()</code> <i>enforces</i>. Send precise errors back so the model can fix and resubmit.</p>
   </section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L18|Structured outputs; R:structured-outputs|Structured outputs; V:e7|Build-along · Ep 07">
     <span class="chip exam">Exam watch · Output Handling · D6</span>
     <h2>The schema is a <span class="accent">grammar</span>, not a guarantee</h2>
     <ul class="clean">
@@ -220,7 +220,7 @@
     </ul>
   </section>
 
-  <section class="slide">
+  <section class="slide" data-refs="L23|The Claude Agent SDK; E03|Ep 03 · custom tool">
     <span class="chip concept">Concept</span>
     <h2>Bridge · the same tool on the <span class="accent">SDK</span></h2>
     <ul class="clean">
@@ -245,5 +245,6 @@
 
 </div>
 <script src="../../assets/deck.js"></script>
+<script src="../../assets/deck-refs.js"></script>
 </body>
 </html>
