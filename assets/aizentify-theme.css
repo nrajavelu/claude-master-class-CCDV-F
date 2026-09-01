@@ -285,8 +285,8 @@ pre .focus, pre mark.focus {
 
 /* ---------- per-slide study-reference chips + drawer (deck-refs.js) ---------- */
 .slide-refs {
-  position: absolute; left: 8vw; bottom: 3.2vh; display: flex; flex-wrap: wrap;
-  gap: .4rem; max-width: 60vw;
+  position: absolute; left: 8vw; right: 8vw; bottom: 7vh; z-index: 6;
+  display: flex; flex-wrap: wrap; gap: .4rem;
 }
 .slide-refs .ref-chip {
   font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .03em;
@@ -298,6 +298,11 @@ pre .focus, pre mark.focus {
 .slide-refs .ref-chip::before { content: "📖 "; filter: grayscale(1) opacity(.8); }
 .slide-refs .ref-chip.vid::before { content: "▶ "; filter: none; }
 .slide-refs .ref-chip:hover { background: rgba(61,209,242,.18); }
+
+/* file-path mentions in slide prose, auto-linked by deck-refs.js */
+a.code-link { text-decoration: none; border-bottom: 1px dashed rgba(61,209,242,.5); }
+a.code-link:hover { border-bottom-style: solid; }
+a.code-link code { color: var(--cyan-300); cursor: pointer; }
 
 #refdrawer { position: fixed; inset: 0; z-index: 9999; display: none; }
 #refdrawer.on { display: block; }

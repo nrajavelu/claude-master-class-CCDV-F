@@ -11,10 +11,53 @@
    <iframe> (cmd/middle-click still opens the standalone page in a new tab).
    Loaded AFTER deck.js. No dependencies. */
 (function () {
+  var PORTAL = '../../portal/';
+
+  // ======================================================================
+  //  Auto-link file paths mentioned in slide text (<code>…/foo.md</code> etc.)
+  //  so "Stuck? labs/lab1_explainer/README.md" is a clickable new-tab link.
+  // ======================================================================
+  (function linkifyPaths() {
+    var seg = location.pathname.split('/').filter(Boolean);          // …/dayN-x/slides/dayN.html
+    var dayFolder = seg.length >= 3 ? seg[seg.length - 3] : '';       // "day1-foundations"
+    var ROOT_FILES = ['topic-briefings.md', 'blueprint-mastery-map.md', 'curriculum-map.md',
+      'reasoning-patterns.md', 'video-companion.md', 'THEME.md', 'README.md'];
+    var ROOT_DIRS = ['question-bank/', 'code-snippets/', 'logistics/', 'evals/',
+      'capstone-support-assistant/', 'day0-prework/', 'portal/', 'assets/'];
+    var DAY_FILES = ['quiz.md', 'exercises.md', 'exam-style-questions.md', 'recap.html'];
+    var pathRe = /^(?:[\w.@-]+\/)*[\w.@-]+\.(md|py|html|jsonl|txt|toml|json|sh)$/;
+
+    function toPortalRel(p) {                       // -> path relative to portal/ (null = can't link)
+      if (/^ep\d\d\//.test(p)) return null;                          // parent repo — not served here
+      if (/^day[0-9]/.test(p.split('/')[0])) return '../' + p;       // day4-…/labs/…
+      if (p.indexOf('labs/') === 0 && dayFolder) return '../' + dayFolder + '/' + p;
+      for (var i = 0; i < ROOT_DIRS.length; i++) if (p.indexOf(ROOT_DIRS[i]) === 0) return '../' + p;
+      if (p.indexOf('/') === -1) {
+        if (ROOT_FILES.indexOf(p) > -1) return '../' + p;
+        if (DAY_FILES.indexOf(p) > -1 && dayFolder) return '../' + dayFolder + '/' + p;
+        return null;
+      }
+      return '../' + p;                                             // default: bootcamp-root relative
+    }
+
+    document.querySelectorAll('.slide code').forEach(function (el) {
+      if (el.children.length || el.closest('a') || el.closest('pre')) return;   // skip code blocks / already-linked
+      var t = el.textContent.trim();
+      if (!pathRe.test(t)) return;
+      var rel = toPortalRel(t);
+      if (!rel) return;
+      var isMd = /\.md$/.test(t);
+      var a = document.createElement('a');
+      a.href = isMd ? (PORTAL + 'view.html?f=' + encodeURIComponent(rel)) : (PORTAL + rel);
+      a.target = '_blank'; a.rel = 'noopener';
+      a.className = 'code-link'; a.title = 'Open ' + t + ' in a new tab';
+      el.replaceWith(a); a.appendChild(el);
+    });
+  })();
+
   var slides = document.querySelectorAll('.slide[data-refs]');
   if (!slides.length) return;
 
-  var PORTAL = '../../portal/';
   var lessonByNum = {};   // "14" -> "lessons/0014-prompt-caching.html"
   var titleByFile = {};   // file -> human title
 
