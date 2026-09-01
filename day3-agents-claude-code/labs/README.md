@@ -6,10 +6,10 @@ checkpoints).
 
 | Lab | Goal | Runnable reference | Built |
 |---|---|---|---|
-| `lab1_subagent_auditor/` | A coordinator `query()` fans out to `docstring-reviewer` + `security-reviewer` `AgentDefinition`s (narrow tools, cheap model); one combined result | `ep05/agent.py`, `ep05/subagents.py` | spec + starter |
+| `lab1_subagent_auditor/` | A coordinator `query()` fans out to `docstring-reviewer` + `security-reviewer` `AgentDefinition`s (narrow tools, cheap model); one combined result. Coordinator holds only `Task` — structurally forced to delegate | `ep05/agent.py`, `ep05/subagents.py` | **starter + solution + `mini_repo/` fixture** |
 | **`lab2_blocking_hook/`** | A `PreToolUse` hook that **denies** `refund` unless approved; a `PostToolUse` hook that taints fetched text as untrusted; try to get past it | **`code-snippets/blocking_hook.py`** (runnable) · `ep04/hooks.py` | **starter + solution** |
 | `lab3_claude_code/` | Add a `CLAUDE.md` + `.claude/skills/<n>/SKILL.md` + a slash command to a scratch project; show each picked up without re-prompting; run headless `claude -p "..."` | `ep06/CLAUDE.md`, `ep08/.claude/` | spec |
-| `lab4_mcp_server/` | Write a FastMCP **stdio** server (one `@mcp.tool()`); smoke-test with JSON-RPC; wire it + a remote GitHub http server into `.mcp.json`, scoped to one tool each | **`code-snippets/mcp_server.py`** (runnable) · `ep09/` | spec + `mcp_test_input.jsonl` |
+| `lab4_mcp_server/` | Write a FastMCP **stdio** server (`count_todos`); smoke-test with JSON-RPC and no agent; wire it + a remote GitHub http server into `.mcp.json`, scoped to one tool each | **`code-snippets/mcp_server.py`** (runnable) · `ep09/` | **starter + solution + `.mcp.json` + `mcp_test_input.jsonl`** |
 
 ---
 

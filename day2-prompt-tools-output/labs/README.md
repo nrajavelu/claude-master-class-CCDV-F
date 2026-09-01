@@ -2,10 +2,10 @@
 
 | Lab | Goal | Reference | Built |
 |---|---|---|---|
-| `lab1_prompt_surgery/` | Improve a weak `system` prompt over 3 passes against a fixed rubric; score each pass | Day 1 `exercises.md` B · `code-snippets/prompt_structure.py` | spec + starter |
-| `lab2_tool_description/` | Define `lookup_order` twice (vague vs detailed); run 5 prompts through each; the vague one mis-calls, the detailed one doesn't | `ep03/tools.py` · `code-snippets/strict_tool.py` | spec + starter |
+| `lab1_prompt_surgery/` | Improve a weak `system` prompt over 3 passes against a fixed rubric; score each pass | Day 1 `exercises.md` B · `code-snippets/prompt_structure.py` | **starter + solution + rubric.py** |
+| `lab2_tool_description/` | Define `lookup_order` twice (vague vs detailed); run 5 prompts through each; the vague one mis-calls, the detailed one doesn't | `ep03/tools.py` · `code-snippets/strict_tool.py` | **starter + solution** |
 | **`lab3_strict_output/`** | `submit_finding` with `strict:true` + a `validate_finding()` layer + `messages.parse()`; feed clean / wrong-severity / missing-line | `ep07/schemas.py` · `code-snippets/strict_tool.py` | **starter + solution** |
-| `lab4_sdk_port/` | Wrap lab 2's tool as `@tool` + `create_sdk_mcp_server`; call from `query()` scoped to that tool | `ep03/agent.py` | spec + starter |
+| `lab4_sdk_port/` | Wrap lab 2's tool as `@tool` + `create_sdk_mcp_server`; call from `query()` scoped to that tool | `ep03/agent.py` | **starter + solution** |
 
 Run everything from `aizentify-cdf-bootcamp/` with the venv active. Model pinned to
 `claude-haiku-4-5`.

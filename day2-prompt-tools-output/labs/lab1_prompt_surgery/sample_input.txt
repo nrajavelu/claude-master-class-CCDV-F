@@ -1,0 +1,7 @@
+Subject: Deploy script fails intermittently on CI
+
+Our deploy.sh works locally every time but on CI it fails maybe 1 run in 4 with
+"connection refused" talking to the migration service. The migration service is
+started by the same script, in the background, right before deploy.sh calls it.
+There's no wait/health-check between starting it and hitting it. Retrying locally
+never reproduces because the local machine is slower to get to that line.

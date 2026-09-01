@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "facts": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["day3-agents-claude-code/labs/lab4_mcp_server/solution/facts_server.py"]
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_PAT}"
+      }
+    }
+  }
+}

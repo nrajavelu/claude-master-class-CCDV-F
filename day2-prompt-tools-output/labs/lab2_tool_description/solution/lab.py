@@ -1,0 +1,78 @@
+"""Day 2 · Lab 2 — the description IS the interface (SOLUTION).
+
+    cd aizentify-cdf-bootcamp
+    python day2-prompt-tools-output/labs/lab2_tool_description/solution/lab.py
+
+The only difference between the two runs is the `description` string. The detailed one
+tells the model what the tool returns, WHEN to reach for it, and — critically — WHEN NOT
+to, plus what `order_id` actually is.
+"""
+from dotenv import load_dotenv
+import anthropic
+
+load_dotenv()
+client = anthropic.Anthropic()
+MODEL = "claude-haiku-4-5"  # pinned for classroom cost — Day 5 covers model selection
+
+PROMPTS = [
+    ("order 10231", "Where's my order 10231?"),
+    ("order 55012", "I ordered a lamp last week and it hasn't come — order 55012."),
+    ("return window", "What's your return window?"),
+    ("recent purchase", "Can you check on my recent purchase?"),
+    ("order 9", "Order number 9 — status please."),
+]
+
+DESC_VAGUE = "Look up an order."
+
+DESC_DETAILED = (
+    "Fetch the current status, line items, and totals for ONE specific order, given its "
+    "numeric order id (the integer printed in the customer's confirmation email). "
+    "Use this whenever the user names or unambiguously identifies a specific order and "
+    "wants its status or contents. "
+    "Do NOT use it for general policy questions (returns, shipping, warranty) and do NOT "
+    "guess an id — if the user refers to 'my recent order' without a number, ask them for "
+    "the order id instead of calling this tool."
+)
+
+
+def run(description: str):
+    tool = {
+        "name": "lookup_order",
+        "description": description,
+        "input_schema": {
+            "type": "object",
+            "properties": {"order_id": {"type": "integer"}},
+            "required": ["order_id"],
+        },
+    }
+    out = []
+    for label, text in PROMPTS:
+        msg = client.messages.create(
+            model=MODEL, max_tokens=300, tools=[tool],
+            messages=[{"role": "user", "content": text}],
+        )
+        call = next((b for b in msg.content if b.type == "tool_use" and b.name == "lookup_order"), None)
+        out.append((label, call is not None, call.input.get("order_id") if call else None))
+    return out
+
+
+def main():
+    vague, detailed = run(DESC_VAGUE), run(DESC_DETAILED)
+    want_call = {"order 10231", "order 55012", "order 9"}
+    print(f"{'':22}{'VAGUE':<18}{'DETAILED'}")
+    v_score = d_score = 0
+    for (label, vc, vid), (_, dc, did) in zip(vague, detailed):
+        expect = label in want_call
+        v_ok, d_ok = (vc == expect), (dc == expect)
+        v_score += v_ok; d_score += d_ok
+        print(f"{label:22}{f'call({vid})' if vc else 'no call':<12}{'ok' if v_ok else 'X':<6}"
+              f"{f'call({did})' if dc else 'no call':<12}{'ok' if d_ok else 'X'}")
+    print(f"\nDETAILED: {d_score}/5   VAGUE: {v_score}/5")
+    print("\nWhy: the vague description gives the model no signal about WHEN the tool applies,")
+    print("so it over-fires (policy questions) and invents ids. The detailed description")
+    print("moves that judgement out of guesswork and into the interface. Minimal fix — no")
+    print("routing model, no fine-tune.")
+
+
+if __name__ == "__main__":
+    main()
