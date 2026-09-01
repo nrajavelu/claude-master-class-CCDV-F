@@ -6,17 +6,30 @@
 <title>Aizentify · Study library</title>
 <link rel="stylesheet" href="portal.css">
 <style>
-  .phasegrp{margin:22px 0}
-  .phasegrp h3{margin:0 0 4px; font-size:1.05rem}
-  .phasegrp .day{font-family:var(--font-mono); font-size:.72rem; color:var(--blue-500); text-transform:uppercase; letter-spacing:.05em}
-  .lz{list-style:none; margin:10px 0 0; padding:0; display:grid; gap:6px; grid-template-columns:repeat(2,1fr)}
-  @media(max-width:760px){.lz{grid-template-columns:1fr}}
-  .lz a{display:flex; gap:10px; padding:9px 12px; border:1px solid var(--line); border-radius:9px; background:var(--paper-0); font-size:.9rem; color:var(--ink-900)}
-  .lz a:hover{border-color:var(--blue-400); box-shadow:var(--shadow-sm)}
-  .lz a b{font-family:var(--font-mono); color:var(--ink-500); font-size:.8rem; flex:none}
-  .refz{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px}
-  .refz a{font-size:.85rem; padding:6px 11px; border:1px solid var(--line); border-radius:999px; background:var(--paper-100); color:var(--ink-800)}
-  .refz a:hover{border-color:var(--blue-400)}
+  .studywrap{display:grid; grid-template-columns:290px 1fr; gap:0; height:calc(100vh - 62px)}
+  .studyside{border-right:1px solid var(--line); background:var(--paper-50); overflow-y:auto; padding:16px 14px 40px}
+  .studyside .home{display:block; font-family:var(--font-head); font-weight:600; color:var(--ink-900); margin-bottom:4px}
+  .studyside .sub{font-size:.82rem; color:var(--ink-500); margin-bottom:12px}
+  .studyside .quick{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px}
+  .studyside .quick a{font-size:.78rem; padding:5px 9px; border:1px solid var(--line); border-radius:999px; background:var(--paper-0); color:var(--ink-700)}
+  .studyside .grp{font-family:var(--font-mono); font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--blue-500); margin:16px 0 6px}
+  .studyside .grp .d{color:var(--ink-500)}
+  .studyside a.item{display:flex; gap:8px; padding:6px 8px; border-radius:7px; font-size:.86rem; color:var(--ink-700); line-height:1.35}
+  .studyside a.item:hover{background:var(--paper-100)}
+  .studyside a.item.on{background:rgba(20,80,232,.1); color:var(--blue-600); font-weight:600}
+  .studyside a.item b{font-family:var(--font-mono); color:var(--ink-500); font-size:.78rem; flex:none}
+  .studyside a.item.on b{color:var(--blue-500)}
+  .studymain{display:flex; flex-direction:column; min-width:0}
+  .studybar{display:flex; align-items:center; gap:12px; padding:8px 16px; border-bottom:1px solid var(--line); background:var(--paper-0); font-size:.82rem}
+  .studybar .crumb{color:var(--ink-700); flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .studybar a.ext{color:var(--blue-500); flex:none}
+  .studymain iframe{flex:1; width:100%; border:0; background:#fff}
+  .sideToggle{display:none}
+  @media (max-width:820px){
+    .studywrap{grid-template-columns:1fr; height:auto}
+    .studyside{border-right:0; border-bottom:1px solid var(--line); max-height:44vh}
+    .studymain iframe{height:70vh; flex:none}
+  }
 </style>
 </head>
 <body>
@@ -37,93 +50,87 @@
   </div>
 </nav>
 
-<header class="hero" style="padding:54px 0 40px">
-  <div class="wrap">
-    <div class="brand"></div>
-    <div class="kicker">Collated study library</div>
-    <h1>Study <span class="gradient">library</span></h1>
-    <p class="lead">A second, independent pass over the same CCDV-F material &mdash; 37 short
-      lessons, 14 reference sheets, a spaced-repetition drill and local progress tracking,
-      hosted here so it works offline next to the bootcamp. Use it for a different explanation,
-      quick fact lookup, and daily retrieval practice between sessions.</p>
-    <div class="btn-row" style="margin-top:20px">
-      <a class="btn btn-primary" href="study/index.html">Open the study course &rarr;</a>
-      <a class="btn btn-ghost" href="study/review.html">Daily spaced-review drill</a>
-      <a class="btn btn-ghost" href="study/progress.html">My progress</a>
+<div class="studywrap">
+  <aside class="studyside">
+    <a class="home" href="study.html">Study library</a>
+    <div class="sub">37 lessons &middot; 14 reference sheets &middot; an independent CCDV-F
+      course by <a href="https://github.com/pjmgomez/claude-certified-developer-foundations" target="_blank" rel="noopener">pjmgomez</a>
+      (Apache-2.0), hosted here. <a href="view.html?f=study/VENDORED.md">what we changed</a></div>
+    <div class="quick">
+      <a href="#" data-load="index.html">Course map</a>
+      <a href="#" data-load="review.html">Spaced review</a>
+      <a href="#" data-load="progress.html">Progress</a>
     </div>
-  </div>
-</header>
+    <div id="nav"></div>
+  </aside>
 
-<section>
-  <div class="wrap-narrow">
-    <div class="note">
-      <b>Attribution.</b> The study course below is the work of
-      <a href="https://github.com/pjmgomez/claude-certified-developer-foundations" target="_blank" rel="noopener">pjmgomez</a>,
-      redistributed here under the <b>Apache&nbsp;License&nbsp;2.0</b>
-      (<a href="study/LICENSE">LICENSE</a> &middot; <a href="view.html?f=study/VENDORED.md">what we changed</a>).
-      It is <i>not</i> Aizentify material. The bootcamp's own materials &mdash;
-      <a href="view.html?f=../blueprint-mastery-map.md">blueprint-mastery-map</a>,
-      <a href="view.html?f=../topic-briefings.md">topic-briefings</a>,
-      the day decks, labs and question bank &mdash; remain the primary path; this is a
-      supplement.
+  <div class="studymain">
+    <div class="studybar">
+      <span class="crumb" id="crumb">Pick a lesson &rarr;</span>
+      <a class="ext" id="ext" href="#" target="_blank" rel="noopener" hidden>open standalone &#8599;</a>
     </div>
+    <iframe id="frame" title="Study content" src="study/index.html"></iframe>
   </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <h2>Lessons <span class="muted" style="font-size:1rem">· mapped to our week</span></h2>
-    <div id="lessons"></div>
-
-    <h2 style="margin-top:34px">Reference sheets</h2>
-    <p class="muted">Quick-review, print-friendly. Good the night before the exam.</p>
-    <div id="refs" class="refz"></div>
-
-    <hr>
-    <h2>Also in that repo <span class="muted" style="font-size:1rem">· linked at source</span></h2>
-    <ul>
-      <li><a href="https://github.com/pjmgomez/claude-certified-developer-foundations/blob/main/compass_artifact_wf-3f1484e0-5795-5b85-bd74-771261436e90_text_markdown.md" target="_blank" rel="noopener">The "compass" study guide</a> &mdash; a single long-form pass over the 8 domains.</li>
-      <li><a href="https://github.com/pjmgomez/claude-certified-developer-foundations/blob/main/study/capstone/capstone.py" target="_blank" rel="noopener">Their capstone <code>capstone.py</code></a> &mdash; a support-triage app (makes live API calls). Our equivalent: <a href="view.html?f=../capstone-support-assistant/README.md">capstone-support-assistant/</a>.</li>
-      <li>The <b>official Anthropic exam PDFs</b> (Exam Guide, Certification Terms, Exam Policy) &mdash; Anthropic's copyright; get them from <a href="resources.html">Resources &rarr; Official</a> or the <a href="https://github.com/pjmgomez/claude-certified-developer-foundations" target="_blank" rel="noopener">source repo</a>.</li>
-    </ul>
-    <p class="muted">More collated study material &mdash; the other public repos, the video
-      series, official docs &mdash; is on the <a href="resources.html">Resources</a> page.</p>
-  </div>
-</section>
-
-<footer class="foot"><div class="wrap">Aizentify &middot; Claude Certified Developer &ndash; Foundations &middot; &copy; 2026 Aizentify LLP &middot; study course &copy; pjmgomez, Apache-2.0</div></footer>
+</div>
 
 <script src="app.js"></script>
 <script>
 (function () {
+  var frame = document.getElementById('frame'),
+      crumb = document.getElementById('crumb'),
+      ext = document.getElementById('ext'),
+      nav = document.getElementById('nav');
+  var qp = new URLSearchParams(location.search);
+
+  function load(path, label) {
+    frame.src = 'study/' + path;
+    crumb.textContent = label || path;
+    ext.hidden = false; ext.href = 'study/' + path;
+    history.replaceState(null, '', 'study.html?p=' + encodeURIComponent(path));
+    Array.prototype.forEach.call(nav.querySelectorAll('a.item'), function (a) {
+      a.classList.toggle('on', a.dataset.load === path);
+    });
+  }
+
+  document.querySelectorAll('[data-load]').forEach(function (a) {
+    a.addEventListener('click', function (e) { e.preventDefault(); load(a.dataset.load, a.textContent.trim()); });
+  });
+
   fetch('study/catalog.json').then(function (r) { return r.json(); }).then(function (c) {
     var byPhase = {};
     c.lessons.forEach(function (l) { (byPhase[l.phase] = byPhase[l.phase] || []).push(l); });
-    var host = document.getElementById('lessons');
     Object.keys(byPhase).forEach(function (ph) {
-      var g = document.createElement('div');
-      g.className = 'phasegrp';
       var day = byPhase[ph][0].day;
-      g.innerHTML = '<span class="day">' + (day ? day + ' · ' : '') + '</span>' +
-        '<h3>' + ph + '</h3><ul class="lz"></ul>';
-      var ul = g.querySelector('.lz');
+      var h = document.createElement('div');
+      h.className = 'grp';
+      h.innerHTML = ph + (day ? ' <span class="d">· ' + day + '</span>' : '');
+      nav.appendChild(h);
       byPhase[ph].forEach(function (l) {
         var a = document.createElement('a');
-        a.href = 'study/' + l.file;
+        a.className = 'item'; a.href = '#'; a.dataset.load = l.file;
         a.innerHTML = '<b>' + String(l.n).padStart(2, '0') + '</b><span>' + l.title + '</span>';
-        ul.appendChild(a);
+        a.addEventListener('click', function (e) { e.preventDefault(); load(l.file, l.title); });
+        nav.appendChild(a);
       });
-      host.appendChild(g);
     });
-    var rf = document.getElementById('refs');
+    var rh = document.createElement('div');
+    rh.className = 'grp'; rh.textContent = 'Reference sheets';
+    nav.appendChild(rh);
     c.references.forEach(function (r) {
       var a = document.createElement('a');
-      a.href = 'study/' + r.file; a.textContent = r.title;
-      rf.appendChild(a);
+      a.className = 'item'; a.href = '#'; a.dataset.load = r.file;
+      a.innerHTML = '<b>&sect;</b><span>' + r.title + '</span>';
+      a.addEventListener('click', function (e) { e.preventDefault(); load(r.file, r.title); });
+      nav.appendChild(a);
     });
+
+    var p = qp.get('p');
+    if (p) {
+      var hit = c.lessons.concat(c.references).find(function (x) { return x.file === p; });
+      load(p, hit ? hit.title : p);
+    }
   }).catch(function () {
-    document.getElementById('lessons').innerHTML =
-      '<p class="note">Serve the portal over http (<code>./start.sh</code>) to load the study index. ' +
+    nav.innerHTML = '<p class="note">Serve the portal over http (<code>./start.sh</code>) to load the index. ' +
       'Or open <a href="study/index.html">study/index.html</a> directly.</p>';
   });
 })();
