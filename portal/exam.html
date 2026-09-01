@@ -55,7 +55,7 @@
   .refrow a{font-family:var(--font-mono);font-size:.76rem;color:var(--blue-600);text-decoration:none;
     border:1px solid var(--line);border-radius:999px;padding:3px 9px;background:var(--paper-0)}
   .refrow a:hover{border-color:var(--blue-400)}
-  .refrow a.cs::before{content:"‹›  "} .refrow a.study::before{content:"📖 "} .refrow a.deck::before{content:"▦ "}
+  .refrow a.cs::before{content:"‹›  "} .refrow a.study::before{content:"📖 "} .refrow a.deck::before{content:"▦ "} .refrow a.cb::before{content:"🍳 "}
   #tally{max-width:900px;margin:24px auto;padding:0 24px}
   #tally table{width:100%;border-collapse:collapse;font-size:.9rem}
   #tally th,#tally td{border:1px solid var(--line);padding:7px 10px;text-align:left}
@@ -75,6 +75,7 @@
       <a href="watch.html">Video</a>
       <a href="decks.html">Decks</a>
       <a href="study.html">Study</a>
+      <a href="cookbooks.html">Cookbooks</a>
       <a href="resources.html">Resources</a>
     </div>
   </div>
@@ -138,11 +139,16 @@
   var mdb = function (s) { return window.marked ? marked.parse(s || '') : ('<p>' + (s || '') + '</p>'); };
 
   var isMock = /mock-exam/i.test(f);
-  var lessonByNum = {};
+  var lessonByNum = {}, cbBySlug = {};
+  var NBVIEWER = 'https://nbviewer.org/github/anthropics/claude-cookbooks/blob/main/';
 
-  fetch('study/catalog.json').then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (c) { if (c) c.lessons.forEach(function (l) { lessonByNum[l.n] = l.file; }); })
-    .catch(function () {})
+  Promise.all([
+    fetch('study/catalog.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+    fetch('cookbooks/catalog.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+  ]).then(function (res) {
+      if (res[0]) res[0].lessons.forEach(function (l) { lessonByNum[l.n] = l.file; });
+      if (res[1]) res[1].groups.forEach(function (g) { g.items.forEach(function (it) { cbBySlug[it.slug] = it; }); });
+    })
     .then(function () { return fetch(f).then(function (r) { if (!r.ok) throw 0; return r.text(); }); })
     .then(function (txt) { return isMock ? loadMock(txt) : parseDay(txt); })
     .then(render)
@@ -228,6 +234,8 @@
       out.push({ cls: 'study', label: s, href: 'study.html?p=' + encodeURIComponent('reference/' + s + '.html') }); }
     function addE(n) { if (seen['E' + n]) return; seen['E' + n] = 1;
       out.push({ cls: 'deck', label: 'Ep ' + n, href: 'deck.html?ep=' + (+n) }); }
+    function addCB(s) { if (seen['CB' + s] || !cbBySlug[s]) return; seen['CB' + s] = 1;
+      out.push({ cls: 'cb', label: 'cookbook', href: NBVIEWER + cbBySlug[s].path, ext: true }); }
 
     (why.match(/`cs:([a-z0-9_]+)`/gi) || []).forEach(function (t) { addCs(t.replace(/[`]/g, '').split(':')[1]); });
 
@@ -239,6 +247,7 @@
       else if ((mm = tok.match(/^L(\d{1,2})$/i))) addL(mm[1]);
       else if ((mm = tok.match(/^R:([a-z0-9-]+)$/i))) addR(mm[1]);
       else if ((mm = tok.match(/^E(\d{1,2})$/i))) addE(mm[1]);
+      else if ((mm = tok.match(/^CB:([a-z0-9-]+)$/i))) addCB(mm[1]);
     });
     return out;
   }

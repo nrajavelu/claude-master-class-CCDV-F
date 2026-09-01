@@ -99,24 +99,26 @@ there — the rule runs both ways. `cs:blocking_hook`
 `refs: L31 R:prompt-injection`
 
 **6 — C.** The description is the biggest factor in correct tool use. **A / B — overbuild**
-(more machinery than the problem deserves). **D — generic knob.** `cs:strict_tool`
+(more machinery than the problem deserves). **D — generic knob.** `cs:strict_tool`  
+`refs: CB:tool-choice`
+
 
 **7 — B.** An interface for a reader; say what, when, and when-not. A undersells it; C is
 false (description dominates); D confuses it with few-shot.  
-`refs: L8 R:tool-choice`
+`refs: L8 R:tool-choice CB:tool-choice`
 
 **8 — B.** `strict` has no "optional" — express it as a nullable type; everything stays in
 `required`; `additionalProperties` stays false. `cs:strict_tool`
 
 **9 — B.** Rejected, not ignored — a favourite exam fact.  
-`refs: L18 R:structured-outputs`
+`refs: L18 R:structured-outputs CB:tool-json`
 
 **10 — B.** The shape must be **guaranteed** and the code must fail safely. **A —
 symptom-treater. C — extremist. D — true-but-irrelevant with a price tag.** *Trust the
 schema in code, never in hope.* `cs:strict_tool`
 
 **11 — B.** Validates against your schema; returns a typed object or raises.  
-`refs: cs:strict_tool L18`
+`refs: cs:strict_tool L18 CB:tool-json`
 
 **12 — B.** Rejected on the newest models; `output_config.format` is the replacement. (The
 *exam* may still reference prefilling as a technique — know both.)  

@@ -62,19 +62,23 @@ like a dependency  C. read-only  D. reversible with no risk
 ## Answers & rationale  *(sample code in `code-snippets/`)*
 
 **1 — B.** Fixed path → a workflow (cheaper, testable). **A — overbuild.** **C — extremist.**
-**D — overbuild + true-but-irrelevant.** `cs:agent_loop_react`
+**D — overbuild + true-but-irrelevant.** `cs:agent_loop_react`  
+`refs: CB:wf-basic`
+
 
 **2 — C.** Complexity — the task is single-step and fully specifiable, so no loop is needed.  
 `refs: L21 E01`
 
 **3 — A & C.** **B / D** describe an *agent's* strengths, not a workflow's.  
-`refs: L21 R:workflow-patterns`
+`refs: L21 R:workflow-patterns CB:wf-basic`
 
 **4 — B.** Loop guardrails are the mechanism. **A — overbuild.** **C / D — generic knobs.**  
 `refs: cs:agent_loop_react L21`
 
 **5 — B.** Tool Runner = harness only, your tools, you host, per-turn hooks. C adds hosting;
-D adds built-in tools; A makes you write the harness. `cs:blocking_hook`
+D adds built-in tools; A makes you write the harness. `cs:blocking_hook`  
+`refs: CB:sdk-host`
+
 
 **6 — C.** Rule 2 — "must never" kills guidance (A). **B / D — generic knobs**, and a
 stronger model follows the *injected* instruction better too. Only C is a mechanism.
@@ -93,7 +97,9 @@ conversation.
 **10 — B.** A local server is a program: `stdio`, command + args. `cs:mcp_server`
 
 **11 — B.** Crosses apps/teams → an MCP server. **A — symptom-treater. C —
-true-but-irrelevant. D — overbuild.** `cs:mcp_server`
+true-but-irrelevant. D — overbuild.** `cs:mcp_server`  
+`refs: CB:skills-intro`
+
 
 **12 — B.** A plugin runs code with your privileges — a trust decision.
 

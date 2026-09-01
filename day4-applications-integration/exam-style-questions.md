@@ -103,34 +103,34 @@ chat interface. **D — generic knob.**
 **7 — A & C.** "Nightly / nobody reads it till morning" → batch; "same system prompt … many
 times" → cache the prefix. **B — backwards. D — symptom-treater** (pennies on output while
 the architecture wastes dollars).  
-`refs: cs:batch_custom_id cs:prompt_caching L14 L15`
+`refs: cs:batch_custom_id cs:prompt_caching L14 L15 CB:batch`
 
 **8 — A & C.** **B / D** are anti-patterns dressed as advice.  
 `refs: L30`
 
 **9 — B.** All of it is billed — "input_tokens is not your input".  
-`refs: cs:count_tokens L19`
+`refs: cs:count_tokens L19 CB:ctx-eng`
 
 **10 — B.** Summarise vs clear. The memory tool is a third option.  
-`refs: R:context-management L20`
+`refs: R:context-management L20 CB:ctx-eng`
 
 **11 — B.** Clear the stale context (a mechanism). **A — overbuild.** **C / D — generic knobs.**  
 `refs: R:context-management L20`
 
 **12 — B.** Retrieve when knowledge is large / changing / must be cited. A / C are
 extremist.  
-`refs: L19`
+`refs: L19 CB:rag`
 
 **13 — B.** Grounding + citation is the mechanism. **A / C — overbuild-ish.** **D — backwards.**  
-`refs: L19`
+`refs: L19 CB:rag`
 
 **14 — B.** Test the contract; wording varies by design. C / D try to force determinism the
 model doesn't guarantee.  
-`refs: L37`
+`refs: L37 CB:build-evals`
 
 **15 — B.** A crisp yes/no criterion is repeatable; a 1–10 score is not.
 
-`refs: L37`
+`refs: L37 CB:build-evals`
 
 ---
 ### Mark yourself

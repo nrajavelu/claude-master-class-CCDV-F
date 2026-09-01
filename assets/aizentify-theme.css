@@ -297,6 +297,7 @@ pre .focus, pre mark.focus {
 }
 .slide-refs .ref-chip::before { content: "📖 "; filter: grayscale(1) opacity(.8); }
 .slide-refs .ref-chip.vid::before { content: "▶ "; filter: none; }
+.slide-refs .ref-chip.cb::before { content: "🍳 "; filter: none; }
 .slide-refs .ref-chip:hover { background: rgba(61,209,242,.18); }
 
 /* file-path mentions in slide prose, auto-linked by deck-refs.js */

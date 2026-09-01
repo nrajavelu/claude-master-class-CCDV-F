@@ -66,6 +66,8 @@
 
   var lessonByNum = {};   // "14" -> "lessons/0014-prompt-caching.html"
   var titleByFile = {};   // file -> human title
+  var cbBySlug = {};      // "caching" -> {title, path}  (Claude Cookbooks)
+  var NBVIEWER = 'https://nbviewer.org/github/anthropics/claude-cookbooks/blob/main/';
 
   // ---- drawer ---------------------------------------------------------------
   var dr = document.createElement('div');
@@ -139,6 +141,13 @@
       return { src: PORTAL + we, ext: PORTAL + we, video: true,
                label: label || ('Build-along · Ep ' + (+m[1])) };
     }
+    if ((m = token.match(/^CB:([a-z0-9-]+)$/i))) {
+      var cb = cbBySlug[m[1]];
+      if (!cb) return null;
+      var url = NBVIEWER + cb.path;
+      return { src: url, ext: url, cookbook: true,
+               label: label || ('Cookbook · ' + cb.title) };
+    }
     return null;
   }
 
@@ -152,10 +161,14 @@
             r = resolve(bits[0], bits.slice(1).join('|').trim());
         if (!r) return;
         var a = document.createElement('a');
-        a.className = 'ref-chip' + (r.video ? ' vid' : ''); a.href = r.ext; a.textContent = r.label;
-        a.title = r.video ? 'Play in the portal video player' : 'Open study reference';
+        a.className = 'ref-chip' + (r.video ? ' vid' : '') + (r.cookbook ? ' cb' : '');
+        a.href = r.ext; a.textContent = r.label;
+        a.title = r.cookbook ? 'Open the cookbook (new tab)'
+                : r.video ? 'Play in the portal video player' : 'Open study reference';
+        if (r.cookbook) { a.target = '_blank'; a.rel = 'noopener'; }
         a.addEventListener('click', function (e) {
           if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return; // let the browser open a tab
+          if (r.cookbook) return;   // nbviewer is cross-origin — just open the tab
           e.preventDefault(); e.stopPropagation();
           openDrawer(r.src, r.ext, r.label);
         });
@@ -165,15 +178,16 @@
     });
   }
 
-  // catalog is optional — Lxx / R:slug labels get nicer text when it loads
-  fetch(PORTAL + 'study/catalog.json')
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (c) {
-      if (c) {
-        c.lessons.forEach(function (l) { lessonByNum[String(l.n)] = l.file; titleByFile[l.file] = l.title; });
-        c.references.forEach(function (r) { titleByFile[r.file] = r.title; });
-      }
-    })
-    .catch(function () {})
-    .then(build);
+  // catalogs are optional — they give Lxx / R:slug / CB:slug nicer labels
+  Promise.all([
+    fetch(PORTAL + 'study/catalog.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+    fetch(PORTAL + 'cookbooks/catalog.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+  ]).then(function (res) {
+    var c = res[0], cb = res[1];
+    if (c) {
+      c.lessons.forEach(function (l) { lessonByNum[String(l.n)] = l.file; titleByFile[l.file] = l.title; });
+      c.references.forEach(function (r) { titleByFile[r.file] = r.title; });
+    }
+    if (cb) cb.groups.forEach(function (g) { g.items.forEach(function (it) { cbBySlug[it.slug] = it; }); });
+  }).then(build);
 })();

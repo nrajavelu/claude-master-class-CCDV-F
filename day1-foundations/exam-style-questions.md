@@ -227,12 +227,12 @@ weakest case listed.)
 full alternation in `messages`.
 - A: you do check `stop_reason`, but *after* appending. C: only when `stop_reason` is
   `tool_use`. D: optional logging, not required.  
-`refs: cs:agent_loop_react L6`
+`refs: cs:agent_loop_react L6 CB:wf-basic`
 
 **13 — B.** One user message, a list of `tool_result` blocks, `tool_use_id`s matching.
 - A: splitting across messages trains the model to stop parallelising. C: loses the id
   linkage; wrong block type. D: tool results go in a **user** message.  
-`refs: cs:agent_loop_react L6`
+`refs: cs:agent_loop_react L6 CB:wf-basic`
 
 **14 — B.** The assistant turn (`r.content`) is never appended, so `messages` goes
 `user → user(tool_result)` — roles don't alternate.
@@ -243,7 +243,7 @@ full alternation in `messages`.
 **15 — A.** `model`, `system`, `messages`, and `tools` (so tool tokens are counted).
 - B/D: it does **not** take `max_tokens` / sampling params. C: it takes full message
   structure, not a bare string.  
-`refs: cs:count_tokens`
+`refs: cs:count_tokens CB:usage-cost`
 
 **16 — B.** HTTP 400 — the first message must be role `user`.
 - A: no. C: it errors, doesn't refuse. D: the SDK doesn't paper over this.  
@@ -263,7 +263,7 @@ cached portion — huge at 20k calls/day, and it's free quality-wise.
 
 ---
 
-`refs: cs:prompt_caching R:caching-batch L14 E11`
+`refs: cs:prompt_caching R:caching-batch L14 E11 CB:cost-opt`
 
 ### Mark yourself
 

@@ -26,5 +26,19 @@ All pinned to `claude-haiku-4-5`. Each costs a fraction of a cent.
 | `blocking_hook.py` | a `PreToolUse` hook that **denies** — the mechanism answer to a *must/never* stem | D7 · SCN (needs `claude-agent-sdk`) |
 | `mcp_server.py` | a minimal FastMCP **stdio** server · smoke-test with JSON-RPC | D8 · SBA (needs `mcp`) |
 
+### Adapted from the [Anthropic Claude Cookbooks](https://github.com/anthropics/claude-cookbooks) (MIT)
+
+| File | Demonstrates | Exam domain | Cookbook source |
+|---|---|---|---|
+| `workflow_patterns.py` | prompt chaining · parallelisation · routing (your code owns the path) | D1 · SCN | `patterns/agents/basic_workflows.ipynb` |
+| `orchestrator_workers.py` | a lead LLM decomposes at runtime, then delegates (≠ parallelisation) | D1 · SBA/SCN | `patterns/agents/orchestrator_workers.ipynb` |
+| `evaluator_optimizer.py` | generate → critique → loop until PASS, with a max-rounds cap | D1·D4 · SCN | `patterns/agents/evaluator_optimizer.ipynb` |
+| `cookbook_building_evals.py` | the eval loop: task → **code-graded** vs **LLM-judge** (reasoning before score) | D4 · JDG | `misc/building_evals.ipynb` |
+| `usage_cost_api.py` | Admin API `usage_report/messages` + `cost_report` — cost per task, from data | D5 · SBA | `observability/usage_cost_api.ipynb` |
+| `extended_thinking.py` | `thinking={"type":"enabled"}` on Haiku 4.5 · thinking blocks + signature · streamed | D5·D2 · SBA | `extended_thinking/extended_thinking.ipynb` |
+
+Full recipe index (≈40 cookbooks mapped to CCDV-F domain / bootcamp day):
+[`portal/cookbooks.html`](../portal/cookbooks.html).
+
 > These are *illustrations*, not the graded labs. The labs (`dayN/.../labs/`) have
 > `starter/` + `solution/` and an expected-output contract; these are shorter and just run.

@@ -77,16 +77,22 @@ symptom-treater. D — extremist with a passport.** `cs:count_tokens`
 `cs:count_tokens`
 
 **3 — B.** Perceived latency only.  
-`refs: cs:streaming L3`
+`refs: cs:streaming L3 CB:thinking`
 
 **4 — C.** Caching the stable prefix drops repeated input cost ~90% — lever #1, before model
 choice. **B — quality trade (and the question excludes it). A — output's already short.
-D — adds latency, doesn't touch the repeated prefix.** `cs:prompt_caching`
+D — adds latency, doesn't touch the repeated prefix.** `cs:prompt_caching`  
+`refs: CB:caching`
 
-**5 — B.** Any byte change in the prefix invalidates everything after it. `cs:prompt_caching`
+
+**5 — B.** Any byte change in the prefix invalidates everything after it. `cs:prompt_caching`  
+`refs: CB:caching`
+
 
 **6 — B.** Rule 1 — the stem names the exact constraint Batch exists for. **A — doesn't cut
-cost. C — quality trade. D — truncates.** `cs:batch_custom_id`
+cost. C — quality trade. D — truncates.** `cs:batch_custom_id`  
+`refs: CB:batch`
+
 
 **7 — B.** Any order — key by `custom_id`. `cs:batch_custom_id`
 
@@ -101,10 +107,10 @@ cost. C — quality trade. D — truncates.** `cs:batch_custom_id`
 `cs:blocking_hook`
 
 **12 — B.** The stronger model follows the *injected* instruction better too.  
-`refs: L31 R:prompt-injection E04`
+`refs: L31 R:prompt-injection E04 CB:moderation`
 
 **13 — B.** Keys server-side only, no exceptions. **A / C / D — symptom-treaters.**  
-`refs: L35`
+`refs: L35 CB:cma-geo`
 
 **14 — B.** Server tools run on Anthropic's servers regardless of where your agent runs.
 

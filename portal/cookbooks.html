@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aizentify · Claude Cookbooks</title>
+<link rel="stylesheet" href="portal.css">
+<style>
+  .cbgroup{margin:26px 0}
+  .cbgroup > h3{margin:0 0 2px;font-size:1.05rem}
+  .cbgroup .day{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;color:var(--blue-500)}
+  .cbgrid{display:grid;gap:14px;grid-template-columns:repeat(2,1fr);margin-top:12px}
+  @media(max-width:820px){.cbgrid{grid-template-columns:1fr}}
+  .cbcard{border:1px solid var(--line);border-radius:12px;background:var(--paper-0);padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+  .cbcard h4{margin:0;font-size:.98rem;line-height:1.35}
+  .cbcard p{margin:0;font-size:.86rem;color:var(--ink-700);line-height:1.5}
+  .cbcard .links{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+  .cbcard .links a{font-family:var(--font-mono);font-size:.76rem;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:3px 10px;color:var(--blue-600);background:var(--paper-50)}
+  .cbcard .links a:hover{border-color:var(--blue-400)}
+  .cbcard .slug{font-family:var(--font-mono);font-size:.7rem;color:var(--ink-500)}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="index.html" aria-label="Aizentify"></a>
+    <div class="links">
+      <a href="index.html">Overview</a>
+      <a href="candidate.html">Candidate portal</a>
+      <a href="trainer.html">Trainer console</a>
+      <a href="practice.html">Practice</a>
+      <a href="watch.html">Video</a>
+      <a href="decks.html">Decks</a>
+      <a href="study.html">Study</a>
+      <a href="cookbooks.html" class="active">Cookbooks</a>
+      <a href="resources.html">Resources</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" style="padding:54px 0 40px">
+  <div class="wrap">
+    <div class="brand"></div>
+    <div class="kicker">Anthropic's own runnable recipes</div>
+    <h1>Claude <span class="gradient">Cookbooks</span></h1>
+    <p class="lead">A curated ~56 of the <a href="https://github.com/anthropics/claude-cookbooks" target="_blank" rel="noopener">Claude Cookbooks</a>
+      (Anthropic, MIT), mapped to the CCDV-F domain and the bootcamp day each one reinforces.
+      Every card opens the notebook <b>rendered in your browser</b> (via nbviewer — no install)
+      or on GitHub. Six of these are also distilled into runnable
+      <a href="view.html?f=../code-snippets/README.md">code-snippets/</a>.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="note" style="margin-bottom:20px">
+      <b>Run them locally:</b> <code>git clone https://github.com/anthropics/claude-cookbooks</code> ·
+      <code>pip install anthropic jupyter</code> · <code>jupyter lab</code>. Notebooks make
+      <b>live API calls</b> — set <code>ANTHROPIC_API_KEY</code>. Recipes reference newer model
+      IDs; swap in <code>claude-haiku-4-5</code> for classroom cost. MIT-licensed; © Anthropic.
+    </div>
+    <div id="groups"></div>
+  </div>
+</section>
+
+<footer class="foot"><div class="wrap">Aizentify &middot; Claude Certified Developer &ndash; Foundations &middot; &copy; 2026 Aizentify LLP &middot; recipes &copy; Anthropic, MIT</div></footer>
+
+<script src="app.js"></script>
+<script>
+(function () {
+  var GH = 'https://github.com/anthropics/claude-cookbooks/blob/main/';
+  var NB = 'https://nbviewer.org/github/anthropics/claude-cookbooks/blob/main/';
+  var host = document.getElementById('groups');
+  fetch('cookbooks/catalog.json').then(function (r) { return r.json(); }).then(function (c) {
+    c.groups.forEach(function (g) {
+      var sec = document.createElement('div');
+      sec.className = 'cbgroup';
+      sec.innerHTML = '<span class="day">' + (g.day || '') + '</span><h3>' + g.domain + '</h3>' +
+        '<div class="cbgrid"></div>';
+      var grid = sec.querySelector('.cbgrid');
+      g.items.forEach(function (it) {
+        var card = document.createElement('div');
+        card.className = 'cbcard';
+        card.innerHTML =
+          '<h4>' + it.title + '</h4>' +
+          '<p>' + (it.note || '') + '</p>' +
+          '<div class="links">' +
+            '<a href="' + NB + it.path + '" target="_blank" rel="noopener">open rendered &#8599;</a>' +
+            '<a href="' + GH + it.path + '" target="_blank" rel="noopener">GitHub &#8599;</a>' +
+            '<span class="slug">CB:' + it.slug + '</span>' +
+          '</div>';
+        grid.appendChild(card);
+      });
+      host.appendChild(sec);
+    });
+  }).catch(function () {
+    host.innerHTML = '<p class="note">Serve the portal over http (<code>./start.sh</code>) to load the recipe index.</p>';
+  });
+})();
+</script>
+</body>
+</html>

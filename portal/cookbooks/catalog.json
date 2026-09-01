@@ -1,0 +1,111 @@
+{
+  "source": "https://github.com/anthropics/claude-cookbooks",
+  "license": "MIT",
+  "note": "Curated subset mapped to CCDV-F domains and bootcamp days. Recipes open rendered via nbviewer (no hosting); code is on GitHub.",
+  "groups": [
+    {
+      "domain": "D1 · Agents & Workflows (14.7%)",
+      "day": "Day 3",
+      "items": [
+        {"slug": "wf-basic", "title": "Basic workflows — chaining · parallelisation · routing", "path": "patterns/agents/basic_workflows.ipynb", "note": "The three 'your code owns the path' patterns. Local twin: code-snippets/workflow_patterns.py"},
+        {"slug": "wf-orch", "title": "Orchestrator-workers", "path": "patterns/agents/orchestrator_workers.ipynb", "note": "A lead LLM decomposes at runtime — not the same as parallelisation. Twin: code-snippets/orchestrator_workers.py"},
+        {"slug": "wf-eval-opt", "title": "Evaluator-optimiser", "path": "patterns/agents/evaluator_optimizer.ipynb", "note": "Generate → critique → loop to a quality bar. Twin: code-snippets/evaluator_optimizer.py"},
+        {"slug": "wf-async", "title": "Async multi-agent orchestration", "path": "patterns/agents/async_multi_agent_orchestration.ipynb", "note": "Fan-out with asyncio; the ~15× token-cost reality of multi-agent."},
+        {"slug": "sdk-oneliner", "title": "The one-liner research agent (Agent SDK)", "path": "claude_agent_sdk/00_The_one_liner_research_agent.ipynb", "note": "Smallest end-to-end Agent SDK build."},
+        {"slug": "sdk-cos", "title": "The chief-of-staff agent", "path": "claude_agent_sdk/01_The_chief_of_staff_agent.ipynb", "note": "Subagents, memory, CLAUDE.md in a real multi-step agent."},
+        {"slug": "sdk-sre", "title": "The site-reliability agent", "path": "claude_agent_sdk/03_The_site_reliability_agent.ipynb", "note": "Tools + guardrails on an ops workflow."},
+        {"slug": "sdk-openai", "title": "Migrating from the OpenAI Agents SDK", "path": "claude_agent_sdk/04_migrating_from_openai_agents_sdk.ipynb", "note": "Maps OpenAI-isms (tool_call, function_call) to the Claude way — the exam's 'wrong-system' distractors."},
+        {"slug": "sdk-host", "title": "Hosting your agent (Docker · K8s · Modal)", "path": "claude_agent_sdk/07_Hosting_the_agent.ipynb", "note": "Deployment for the Agent SDK — the 'implement = deploy where users are' step."},
+        {"slug": "subagents-haiku", "title": "Using Haiku as a sub-agent", "path": "multimodal/using_sub_agents.ipynb", "note": "Cheap-model workers under a capable coordinator — specialisation by cost."}
+      ]
+    },
+    {
+      "domain": "D1 Managed Agents · D2 Configuration Management · D7",
+      "day": "Day 4–5",
+      "items": [
+        {"slug": "cma-tut", "title": "Managed Agents tutorial — fix a failing test suite", "path": "managed_agents/CMA_iterate_fix_failing_tests.ipynb", "note": "Entry point: agent / environment / session, file mounts, the streaming event loop."},
+        {"slug": "cma-prod", "title": "Managed Agents — production setup", "path": "managed_agents/CMA_operate_in_production.ipynb", "note": "Vault-backed MCP creds, session.status_idled / budget_reached webhooks, inference_geo pinning."},
+        {"slug": "cma-version", "title": "Prompt versioning and rollback", "path": "managed_agents/CMA_prompt_versioning_and_rollback.ipynb", "note": "D2 Configuration Management, exactly: pin, promote on eval, roll back."},
+        {"slug": "cma-budget", "title": "Cap what a session can spend", "path": "managed_agents/CMA_cap_session_spend.ipynb", "note": "The budget guardrail as a mechanism (Rule 1)."},
+        {"slug": "cma-geo", "title": "Data residency — pin an agent's inference geography", "path": "managed_agents/CMA_pin_inference_geo.ipynb", "note": "The residency axis of infrastructure requirements, in code."},
+        {"slug": "cma-hitl", "title": "Human-in-the-loop gate", "path": "managed_agents/CMA_gate_human_in_the_loop.ipynb", "note": "Gate before an irreversible action — the safe-deployment pattern."},
+        {"slug": "cma-outcome", "title": "Agents that verify their own work (outcome grader)", "path": "managed_agents/CMA_verify_with_outcome_grader.ipynb", "note": "Eval baked into the loop."},
+        {"slug": "cma-skills", "title": "Pick up a repo's .claude/skills automatically", "path": "managed_agents/CMA_use_skills_from_a_repo.ipynb", "note": "Skills discovery — ties to Day 3 Claude Code operation."}
+      ]
+    },
+    {
+      "domain": "D8 · Tools & MCPs (10.6%)",
+      "day": "Day 2–3",
+      "items": [
+        {"slug": "tool-choice", "title": "Tool choice", "path": "tool_use/tool_choice.ipynb", "note": "auto / any / tool / none — and when to force a call."},
+        {"slug": "tool-parallel", "title": "Parallel tool calls", "path": "tool_use/parallel_tools.ipynb", "note": "One user turn of tool_result blocks; readOnlyHint for concurrency."},
+        {"slug": "tool-json", "title": "Extracting structured JSON with tool use", "path": "tool_use/extracting_structured_json.ipynb", "note": "strict tools as the output contract."},
+        {"slug": "tool-pydantic", "title": "Note-saving tool with Pydantic", "path": "tool_use/tool_use_with_pydantic.ipynb", "note": "Schema from a Pydantic model; typed args."},
+        {"slug": "tool-cs", "title": "Customer-service agent (client-side tools)", "path": "tool_use/customer_service_agent.ipynb", "note": "The classic multi-tool loop; description-as-interface."},
+        {"slug": "tool-ptc", "title": "Programmatic tool calling", "path": "tool_use/programmatic_tool_calling_ptc.ipynb", "note": "Model writes code that calls your tools."},
+        {"slug": "tool-memory", "title": "Memory & context management", "path": "tool_use/memory_cookbook.ipynb", "note": "External memory vs in-context; agent memory scopes."},
+        {"slug": "ctx-eng", "title": "Context engineering — memory, compaction, tool clearing", "path": "tool_use/context_engineering/context_engineering_tools.ipynb", "note": "Prune (re-fetchable) vs compact (reasoning) in practice."},
+        {"slug": "skills-intro", "title": "Introduction to Claude Skills", "path": "skills/notebooks/01_skills_introduction.ipynb", "note": "SKILL.md; a process, not a data source."},
+        {"slug": "skills-custom", "title": "Building custom Skills", "path": "skills/notebooks/03_skills_custom_development.ipynb", "note": "Authoring + packaging a Skill."}
+      ]
+    },
+    {
+      "domain": "D6 · Prompt & Context Engineering · RAG (11%)",
+      "day": "Day 2 & 4",
+      "items": [
+        {"slug": "rag", "title": "Retrieval augmented generation", "path": "capabilities/retrieval_augmented_generation/guide.ipynb", "note": "chunk → embed → retrieve → grounded prompt → cite. Mirrors Day 4 Lab 3."},
+        {"slug": "rag-context", "title": "Enhancing RAG with contextual retrieval", "path": "capabilities/contextual-embeddings/guide.ipynb", "note": "Prepend chunk context before embedding — big recall win."},
+        {"slug": "metaprompt", "title": "Metaprompt", "path": "misc/metaprompt.ipynb", "note": "Have Claude draft the first prompt."},
+        {"slug": "json-mode", "title": "Prompting for “JSON mode”", "path": "misc/how_to_enable_json_mode.ipynb", "note": "Pre-`output_config` technique; still a referenced idea."},
+        {"slug": "citations", "title": "Citations", "path": "misc/using_citations.ipynb", "note": "citations:{enabled:true} on document blocks."},
+        {"slug": "classify", "title": "Classification with Claude", "path": "capabilities/classification/guide.ipynb", "note": "The 'classify then specialise' half of routing."},
+        {"slug": "summarize", "title": "Summarization with Claude", "path": "capabilities/summarization/guide.ipynb", "note": "Prompt patterns + eval for summaries."}
+      ]
+    },
+    {
+      "domain": "D5 · Model Selection & Optimisation (16.8%)",
+      "day": "Day 5",
+      "items": [
+        {"slug": "caching", "title": "Prompt caching through the API", "path": "misc/prompt_caching.ipynb", "note": "Measured cache_read / cache_write; the prefix rule. Twin: code-snippets/prompt_caching.py"},
+        {"slug": "caching-spec", "title": "Speculative prompt caching", "path": "misc/speculative_prompt_caching.ipynb", "note": "Warm the cache before the user finishes typing."},
+        {"slug": "batch", "title": "Batch processing (Message Batches API)", "path": "misc/batch_processing.ipynb", "note": "Submit → poll → match by custom_id. Twin: code-snippets/batch_custom_id.py"},
+        {"slug": "cost-opt", "title": "Cost optimisation on the Claude API", "path": "cost_optimization/cost_optimization.ipynb", "note": "The lever order, measured end-to-end."},
+        {"slug": "usage-cost", "title": "Usage & cost Admin API cookbook", "path": "observability/usage_cost_api.ipynb", "note": "usage_report/messages + cost_report. Twin: code-snippets/usage_cost_api.py"},
+        {"slug": "thinking", "title": "Extended thinking", "path": "extended_thinking/extended_thinking.ipynb", "note": "thinking={\"type\":\"enabled\"} on Haiku 4.5. Twin: code-snippets/extended_thinking.py"},
+        {"slug": "thinking-tools", "title": "Extended thinking with tool use", "path": "extended_thinking/extended_thinking_with_tool_use.ipynb", "note": "Thinking blocks + signatures across tool turns — pass back unchanged."},
+        {"slug": "fable-fallback", "title": "Classifier fallback & billing for Fable 5", "path": "fable_5_fallback_billing/guide.ipynb", "note": "Cascade: cheap first, escalate on failure."},
+        {"slug": "max-tokens", "title": "Sampling past the max-tokens limit", "path": "misc/sampling_past_max_tokens.ipynb", "note": "Continue a response truncated by max_tokens (stop_reason handling)."}
+      ]
+    },
+    {
+      "domain": "D4 · Eval, Testing & Debugging (2.6%)",
+      "day": "Day 4",
+      "items": [
+        {"slug": "build-evals", "title": "Building evals", "path": "misc/building_evals.ipynb", "note": "Code-graded vs model-graded; judge reasoning before score. Twin: code-snippets/cookbook_building_evals.py"},
+        {"slug": "gen-tests", "title": "Generate synthetic test data", "path": "misc/generate_test_cases.ipynb", "note": "Bootstrap a golden set with Claude."},
+        {"slug": "tool-eval", "title": "Tool evaluation", "path": "tool_evaluation/tool_evaluation.ipynb", "note": "Score whether the model picked and called the right tool."},
+        {"slug": "agentic-bench", "title": "Reproduce agentic-search benchmark scores", "path": "evals/agentic_search/reproduce_agentic_search_benchmarks.ipynb", "note": "A rigorous eval harness end-to-end."}
+      ]
+    },
+    {
+      "domain": "D2 · Claude API Mechanics — vision & documents (6.8%)",
+      "day": "Day 5",
+      "items": [
+        {"slug": "vision-start", "title": "Getting started with vision", "path": "multimodal/getting_started_with_vision.ipynb", "note": "base64 / url / file_id source types."},
+        {"slug": "vision-best", "title": "Best practices for vision", "path": "multimodal/best_practices_for_vision.ipynb", "note": "Resolution vs token cost — the ⌈w/28⌉×⌈h/28⌉ budget."},
+        {"slug": "pdf", "title": "Uploading PDFs to Claude", "path": "misc/pdf_upload_summarization.ipynb", "note": "document block; billed as text + page images."},
+        {"slug": "charts", "title": "Charts, graphs & slide decks", "path": "multimodal/reading_charts_graphs_powerpoints.ipynb", "note": "Extracting structure from visual documents."}
+      ]
+    },
+    {
+      "domain": "D7 · Security & Safety (8.1%)",
+      "day": "Day 5",
+      "items": [
+        {"slug": "moderation", "title": "Building a moderation filter", "path": "misc/building_moderation_filter.ipynb", "note": "Screen input before the model acts — defence-in-depth."},
+        {"slug": "content-policy", "title": "Content-policy enforcement", "path": "capabilities/content_moderation/guide.ipynb", "note": "A full policy-classifier build with evals."},
+        {"slug": "vuln-agent", "title": "The vulnerability-detection agent", "path": "claude_agent_sdk/06_The_vulnerability_detection_agent.ipynb", "note": "Least-privilege tools on a security workflow."},
+        {"slug": "threat-intel", "title": "Threat-intelligence enrichment agent", "path": "tool_use/threat_intel_enrichment_agent.ipynb", "note": "Tools + agent pattern on untrusted external data."}
+      ]
+    }
+  ]
+}
