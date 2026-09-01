@@ -1,0 +1,324 @@
+{
+  "source": "https://github.com/pjmgomez/claude-certified-developer-foundations",
+  "commit": "796012540e396e0cccf612bf7cd94b4e48c36c59",
+  "license": "Apache-2.0",
+  "lessons": [
+    {
+      "file": "lessons/0001-setup-and-first-contact.html",
+      "n": 1,
+      "title": "Your first words with Claude",
+      "phase": "Phase 0 \u00b7 Setup & First Contact",
+      "day": "Day 0"
+    },
+    {
+      "file": "lessons/0002-messages-api-anatomy.html",
+      "n": 2,
+      "title": "The shape of a Message",
+      "phase": "Phase 1 \u00b7 Core API Mechanics",
+      "day": "Day 1"
+    },
+    {
+      "file": "lessons/0003-streaming-sse.html",
+      "n": 3,
+      "title": "Streaming, event by event",
+      "phase": "Phase 1 \u00b7 Core API Mechanics",
+      "day": "Day 1"
+    },
+    {
+      "file": "lessons/0004-multimodal-input.html",
+      "n": 4,
+      "title": "Images and documents in, text out",
+      "phase": "Phase 1 \u00b7 Core API Mechanics",
+      "day": "Day 1"
+    },
+    {
+      "file": "lessons/0005-errors-and-recovery.html",
+      "n": 5,
+      "title": "When calls go wrong",
+      "phase": "Phase 1 \u00b7 Core API Mechanics",
+      "day": "Day 1"
+    },
+    {
+      "file": "lessons/0006-tool-use-loop.html",
+      "n": 6,
+      "title": "The tool-use loop",
+      "phase": "Phase 2 \u00b7 Tools & MCP",
+      "day": "Day 2\u20133"
+    },
+    {
+      "file": "lessons/0007-directing-tools.html",
+      "n": 7,
+      "title": "Directing tools",
+      "phase": "Phase 2 \u00b7 Tools & MCP",
+      "day": "Day 2\u20133"
+    },
+    {
+      "file": "lessons/0008-writing-good-tools.html",
+      "n": 8,
+      "title": "Writing tools Claude uses well",
+      "phase": "Phase 2 \u00b7 Tools & MCP",
+      "day": "Day 2\u20133"
+    },
+    {
+      "file": "lessons/0009-mcp-server.html",
+      "n": 9,
+      "title": "Build an MCP server",
+      "phase": "Phase 2 \u00b7 Tools & MCP",
+      "day": "Day 2\u20133"
+    },
+    {
+      "file": "lessons/0010-choosing-your-mechanism.html",
+      "n": 10,
+      "title": "Choosing your mechanism",
+      "phase": "Phase 2 \u00b7 Tools & MCP",
+      "day": "Day 2\u20133"
+    },
+    {
+      "file": "lessons/0011-model-selection.html",
+      "n": 11,
+      "title": "Choosing a model",
+      "phase": "Phase 3 \u00b7 Models & Optimization",
+      "day": "Day 5"
+    },
+    {
+      "file": "lessons/0012-thinking-and-effort.html",
+      "n": 12,
+      "title": "Thinking & effort",
+      "phase": "Phase 3 \u00b7 Models & Optimization",
+      "day": "Day 5"
+    },
+    {
+      "file": "lessons/0013-tokens-and-sampling.html",
+      "n": 13,
+      "title": "Tokens, sampling & non-determinism",
+      "phase": "Phase 3 \u00b7 Models & Optimization",
+      "day": "Day 5"
+    },
+    {
+      "file": "lessons/0014-prompt-caching.html",
+      "n": 14,
+      "title": "Prompt caching",
+      "phase": "Phase 3 \u00b7 Models & Optimization",
+      "day": "Day 5"
+    },
+    {
+      "file": "lessons/0015-batch-api.html",
+      "n": 15,
+      "title": "The Batch API",
+      "phase": "Phase 3 \u00b7 Models & Optimization",
+      "day": "Day 5"
+    },
+    {
+      "file": "lessons/0016-prompt-engineering.html",
+      "n": 16,
+      "title": "Prompt engineering essentials",
+      "phase": "Phase 4 \u00b7 Prompt & Context Engineering",
+      "day": "Day 2"
+    },
+    {
+      "file": "lessons/0017-steering-output.html",
+      "n": 17,
+      "title": "Steering output",
+      "phase": "Phase 4 \u00b7 Prompt & Context Engineering",
+      "day": "Day 2"
+    },
+    {
+      "file": "lessons/0018-structured-outputs.html",
+      "n": 18,
+      "title": "Structured outputs",
+      "phase": "Phase 4 \u00b7 Prompt & Context Engineering",
+      "day": "Day 2"
+    },
+    {
+      "file": "lessons/0019-context-engineering.html",
+      "n": 19,
+      "title": "Context engineering",
+      "phase": "Phase 4 \u00b7 Prompt & Context Engineering",
+      "day": "Day 2"
+    },
+    {
+      "file": "lessons/0020-context-editing-memory.html",
+      "n": 20,
+      "title": "Context editing, compaction & memory",
+      "phase": "Phase 4 \u00b7 Prompt & Context Engineering",
+      "day": "Day 2"
+    },
+    {
+      "file": "lessons/0021-workflow-vs-agent.html",
+      "n": 21,
+      "title": "Workflow vs agent",
+      "phase": "Phase 5 \u00b7 Agents & Workflows",
+      "day": "Day 3"
+    },
+    {
+      "file": "lessons/0022-workflow-patterns.html",
+      "n": 22,
+      "title": "The five workflow patterns",
+      "phase": "Phase 5 \u00b7 Agents & Workflows",
+      "day": "Day 3"
+    },
+    {
+      "file": "lessons/0023-agent-sdk.html",
+      "n": 23,
+      "title": "The Claude Agent SDK",
+      "phase": "Phase 5 \u00b7 Agents & Workflows",
+      "day": "Day 3"
+    },
+    {
+      "file": "lessons/0024-subagents-and-hooks.html",
+      "n": 24,
+      "title": "Subagents & hooks",
+      "phase": "Phase 5 \u00b7 Agents & Workflows",
+      "day": "Day 3"
+    },
+    {
+      "file": "lessons/0025-agent-frameworks.html",
+      "n": 25,
+      "title": "Agent frameworks",
+      "phase": "Phase 5 \u00b7 Agents & Workflows",
+      "day": "Day 3"
+    },
+    {
+      "file": "lessons/0026-claude-md-hierarchy.html",
+      "n": 26,
+      "title": "The CLAUDE.md hierarchy",
+      "phase": "Phase 6 \u00b7 Claude Code",
+      "day": "Day 3\u20134"
+    },
+    {
+      "file": "lessons/0027-rules-skills-commands.html",
+      "n": 27,
+      "title": "Rules, Skills & Commands",
+      "phase": "Phase 6 \u00b7 Claude Code",
+      "day": "Day 3\u20134"
+    },
+    {
+      "file": "lessons/0028-agents-and-memory.html",
+      "n": 28,
+      "title": "Agents & Agent Memory",
+      "phase": "Phase 6 \u00b7 Claude Code",
+      "day": "Day 3\u20134"
+    },
+    {
+      "file": "lessons/0029-configuration-management.html",
+      "n": 29,
+      "title": "Configuration management",
+      "phase": "Phase 6 \u00b7 Configuration",
+      "day": "Day 3\u20134"
+    },
+    {
+      "file": "lessons/0030-application-design.html",
+      "n": 30,
+      "title": "Application design across interfaces",
+      "phase": "Phase 6 \u00b7 Claude Application Design",
+      "day": "Day 3\u20134"
+    },
+    {
+      "file": "lessons/0031-prompt-injection.html",
+      "n": 31,
+      "title": "Prompt injection & jailbreaks",
+      "phase": "Phase 7 \u00b7 Security & Safety",
+      "day": "Day 5"
+    },
+    {
+      "file": "lessons/0032-guardrails.html",
+      "n": 32,
+      "title": "Guardrails & safe deployment",
+      "phase": "Phase 7 \u00b7 Security & Safety",
+      "day": "Day 5"
+    },
+    {
+      "file": "lessons/0033-claude-hooks.html",
+      "n": 33,
+      "title": "Claude hooks for guardrails",
+      "phase": "Phase 7 \u00b7 Security & Safety",
+      "day": "Day 5"
+    },
+    {
+      "file": "lessons/0034-data-leakage-pii.html",
+      "n": 34,
+      "title": "Data leakage & PII",
+      "phase": "Phase 7 \u00b7 Security & Safety",
+      "day": "Day 5"
+    },
+    {
+      "file": "lessons/0035-secrets-and-keys.html",
+      "n": 35,
+      "title": "Identity, secrets & keys",
+      "phase": "Phase 7 \u00b7 Security & Safety",
+      "day": "Day 5"
+    },
+    {
+      "file": "lessons/0036-capstone.html",
+      "n": 36,
+      "title": "Capstone: build & operate one app",
+      "phase": "Phase 8 \u00b7 Capstone & Readiness",
+      "day": "Day 5"
+    },
+    {
+      "file": "lessons/0037-exam-readiness.html",
+      "n": 37,
+      "title": "Exam readiness",
+      "phase": "Phase 8 \u00b7 Capstone & Readiness",
+      "day": "Day 5"
+    }
+  ],
+  "references": [
+    {
+      "file": "reference/agent-sdk.html",
+      "title": "Claude Agent SDK"
+    },
+    {
+      "file": "reference/caching-batch.html",
+      "title": "Cost levers: caching & batch"
+    },
+    {
+      "file": "reference/claude-code-config.html",
+      "title": "Claude Code config & modes"
+    },
+    {
+      "file": "reference/claude-code-files.html",
+      "title": "Claude Code files & loading"
+    },
+    {
+      "file": "reference/context-management.html",
+      "title": "Context management"
+    },
+    {
+      "file": "reference/hooks.html",
+      "title": "Claude Code hooks"
+    },
+    {
+      "file": "reference/http-errors.html",
+      "title": "HTTP & error taxonomy"
+    },
+    {
+      "file": "reference/mcp.html",
+      "title": "MCP essentials"
+    },
+    {
+      "file": "reference/models-pricing.html",
+      "title": "Models & pricing"
+    },
+    {
+      "file": "reference/prompt-injection.html",
+      "title": "Prompt injection & security"
+    },
+    {
+      "file": "reference/streaming-events.html",
+      "title": "Streaming (SSE) event flow"
+    },
+    {
+      "file": "reference/structured-outputs.html",
+      "title": "Structured outputs"
+    },
+    {
+      "file": "reference/tool-choice.html",
+      "title": "Directing tools: tool_choice & tool types"
+    },
+    {
+      "file": "reference/workflow-patterns.html",
+      "title": "Workflow patterns"
+    }
+  ]
+}
