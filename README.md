@@ -149,7 +149,8 @@ your browser; `--lan` to share on Wi-Fi), or host on GitHub Pages — see `porta
 | `code-snippets/` — 12 runnable references keyed to exam question types | ✅ |
 | `day0-prework/` (primer, `check_env.py`, `hello_claude.py`) | ✅ |
 | `day1-foundations/` — **deck (visual layer: chips · SVG diagrams · focus-code · ReAct · CoT)** · `recap.html` · trainer guide · 4 labs · exercises · quiz · exam questions | ✅ |
-| `day2`–`day5` — **decks (pass-A visual) + `recap.html` + trainer-guide + quiz + exam-style-questions** | ✅ |
+| `day2`–`day5` — **decks (pass-A visual, briefing-enriched) + `recap.html` + trainer-guide + quiz + exam-style-questions** | ✅ |
+| Day 2–3 labs — **flagship + non-flagship all starter+solution** (prompt-surgery+rubric, tool-description A/B, sdk-port, subagent-auditor, mcp-server); Day 4 flagship RAG; Day 5 tasks-over-snippets | ✅ |
 | `capstone-support-assistant/` (README+4-week plan · `assistant.py` + `starter/` · `tools.py` · `config.toml` · `golden_set.jsonl`) | ✅ |
 | `evals/` (harness · checks · example golden set · pytest wrapper) | ✅ |
 | `day5-.../mock-exam/` — **`mock-exam-A.md` (53) + key + `exam-day-strategy.md`** | ✅ |
