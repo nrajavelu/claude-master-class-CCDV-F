@@ -116,12 +116,12 @@ aizentify-cdf-bootcamp/
 │   ├── 04-cohort-runbook.md
 │   └── 05-exam-method.md ............. the "four decisions + two rules" — the spine
 ├── day0-prework/ ............... send to candidates 2 weeks out
-├── day1-foundations/ .......... slides/ · trainer-guide.md · labs/ · exercises.md · quiz.md · exam-style-questions.md
-├── day2-prompt-tools-output/ ... (outline + lab specs — full build in pass 2)
-├── day3-agents-claude-code/ .... (outline + lab specs)
-├── day4-applications-integration/ (outline + lab specs)
-├── day5-optimisation-security-cert/ (outline + lab specs + mock-exam/)
-└── question-bank/ ............. certification-style questions, tagged to exam sub-areas
+├── day1-foundations/ .......... slides/ · recap.html · trainer-guide.md · labs/ (4, starter+solution) · exercises.md · quiz.md · exam-style-questions.md
+├── day2-prompt-tools-output/ ... deck · recap · trainer-guide · quiz · exam-Qs · labs/ (flagship: lab3_strict_output)
+├── day3-agents-claude-code/ .... deck · recap · trainer-guide · quiz · exam-Qs · labs/ (flagship: lab2_blocking_hook)
+├── day4-applications-integration/ deck · recap · trainer-guide · quiz · exam-Qs · labs/ (flagship: lab3_rag_cited)
+├── day5-optimisation-security-cert/ deck · recap · trainer-guide · quiz · exam-Qs · labs/ · mock-exam/ (53-item A + key + strategy)
+└── question-bank/ ............. certification-style questions, tagged to exam sub-areas (178 items)
 ```
 
 **Trainer reading order:** `logistics/01` → `logistics/00` → `logistics/02` →
