@@ -143,6 +143,7 @@
     </div>
     <p class="muted">The description is an <b>interface for a reader</b> (the model), not documentation for a human. Say what it does, <b>when to use it, and when NOT to</b>; name parameters unambiguously.</p>
     <p class="muted">Tool called at the wrong time? Fix the description before reaching for bigger machinery (a routing model / fine-tune is the <b>overbuild</b>). Parallel <code>tool_use</code> → one user message of <code>tool_result</code> blocks, ids matching.</p>
+    <p class="muted">Two tools both "use this to find information" → the model can't route. Fix: <b>one exclusion sentence per tool</b> ("…use <code>search_customers</code> instead for people"), or if they don't cleanly separate, <b>merge them behind a <code>type</code> parameter</b>. <code>readOnlyHint</code> lets a read-only tool run concurrently; a failed tool returns <code>tool_result</code> with <code>is_error:true</code>.</p>
     <a class="watch-chip" href="../../portal/watch.html?l=12" target="_blank">1:51:50 · L12</a>
   </section>
 
@@ -192,6 +193,19 @@
 <span class="keep">        errors.append("severity must be one of ... — got %r" % args.get("severity"))</span>
 <span class="keep">    return errors</span></code></pre>
     <p class="muted">On the SDK's <code>@tool</code> path <code>strict</code> isn't forwarded yet — the schema <i>guides</i>, <code>validate()</code> <i>enforces</i>. Send precise errors back so the model can fix and resubmit.</p>
+  </section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch · Output Handling · D6</span>
+    <h2>The schema is a <span class="accent">grammar</span>, not a guarantee</h2>
+    <ul class="clean">
+      <li>Two mechanisms, both <b>constrained decoding</b>: <code>output_config.format</code> (<code>json_schema</code>) constrains the <b>final response</b>; <code>strict:true</code> on a tool constrains <b>tool arguments</b>.</li>
+      <li><b>Still check <code>stop_reason</code>.</b> A <b>refusal</b> or a <b>truncation</b> (<code>max_tokens</code>) produces non-parsing output <i>despite</i> the schema.</li>
+      <li>First request on a new schema pays a one-off <b>grammar-compile latency</b> (cached ~24 h).</li>
+      <li><b>Incompatible with prefilling</b> — and prefilling is rejected on the newest models anyway.</li>
+      <li>No "optional" in strict mode → use a <b>nullable</b> type. Unsupported schema features are <b>rejected, not ignored</b>.</li>
+    </ul>
+    <p class="refs">Briefing: <code>topic-briefings.md</code> · Day 2 · "Structured outputs" · <code>blueprint-mastery-map.md</code> 6.3</p>
   </section>
 
   <section class="slide">

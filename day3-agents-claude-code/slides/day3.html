@@ -141,8 +141,9 @@
     </div>
     <ul class="clean">
       <li>A <b>blocking <code>PreToolUse</code> hook</b> is the mechanism answer to a <i>must / never</i> security stem.</li>
-      <li><code>PostToolUse</code> tags fetched external text as untrusted, reformats results.</li>
-      <li><code>Stop</code> reads the transcript — a review can't END until a comment was posted.</li>
+      <li><b>Exit code 2 blocks. Exit code 1 only warns</b> — the frequent "the hook didn't actually stop it" bug. A code-2 deny short-circuits the loop <b>even under <code>bypassPermissions</code></b>.</li>
+      <li>Also fires: <code>UserPromptSubmit</code> · <code>SubagentStart/Stop</code>. Hooks run <b>in-process, zero context cost</b>, synchronously — keep them &lt; ~500 ms.</li>
+      <li><code>PostToolUse</code> tags fetched external text as untrusted, reformats results. <code>Stop</code> reads the transcript — a review can't END until a comment was posted.</li>
     </ul>
     <a class="watch-chip" href="../../portal/watch.html?s=build&e=4" target="_blank">Build-along · Ep 04</a>
   </section>
@@ -178,6 +179,7 @@
       </svg>
     </div>
     <p class="muted"><b>Usually fewer agents.</b> Each one adds context, latency, cost. A single loop is easier to debug and eval. Fan out only when the work truly parallelises or one loop would fill its context with reading.</p>
+    <p class="muted">Anthropic's own multi-agent research system runs at <b>~15× the token cost</b> of a single-agent chat — worth it only when the task genuinely splits into <b>independent parallel</b> parts. On tightly-coupled work (coding) subagents mostly wait on each other. The three axes a subagent buys: <b>context isolation</b> · <b>parallelisation</b> · <b>specialisation</b>.</p>
     <a class="watch-chip" href="../../portal/watch.html?s=build&e=5" target="_blank">Build-along · Ep 05</a>
   </section>
 
@@ -220,6 +222,18 @@
   </section>
 
   <section class="slide">
+    <span class="chip exam">Exam watch · Claude Code Operation · D3</span>
+    <h2><code>settings.json</code> precedence — and the <span class="accent">one exception</span></h2>
+    <p class="focus-code"><b>managed</b> &nbsp;&gt;&nbsp; CLI flags &nbsp;&gt;&nbsp; <b>local</b> (<code>.claude/settings.local.json</code>, gitignored) &nbsp;&gt;&nbsp; <b>project</b> (<code>.claude/settings.json</code>, checked in) &nbsp;&gt;&nbsp; <b>user</b> (<code>~/.claude/settings.json</code>)</p>
+    <ul class="clean">
+      <li><b>Exception:</b> <code>permissions</code> (allow / deny / ask) <b>accumulate across every scope</b> — they don't follow override precedence. <b>Deny always beats allow</b>, at every mode and scope.</li>
+      <li><b>Six permission modes</b> — a risk decision, not convenience: <code>default</code> · <code>plan</code> · <code>acceptEdits</code> · <code>auto</code> (classifier-reviewed) · <code>dontAsk</code> (allow-list only) · <code>bypassPermissions</code> (<b>isolated environments only</b> — uniquely skips the protected-path guard).</li>
+      <li><code>CLAUDE.md</code> fails by <b>dilution</b>, not by being wrong — a correct rule buried in 300 lines gets less attention. Scope the rest into <code>.claude/rules/*.md</code> with a <code>paths</code> glob.</li>
+    </ul>
+    <p class="refs">Briefing: <code>topic-briefings.md</code> · Day 3 · "Claude Code operation" · <code>blueprint-mastery-map.md</code> 3.1</p>
+  </section>
+
+  <section class="slide">
     <span class="chip lab">Do this now · 40 min</span>
     <h2>Lab · <span class="accent">operate Claude Code</span></h2>
     <ul class="clean">
@@ -252,6 +266,24 @@
       <li>Secrets via <code>${ENV_VAR}</code> expansion — never hardcoded. A plugin runs code with <b>your privileges</b> — a trust decision.</li>
     </ul>
     <a class="watch-chip" href="../../portal/watch.html?l=13" target="_blank">2:02:43 · L13</a>
+  </section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch · Agentic Customisation · D8</span>
+    <h2>Four ways to extend an agent — <span class="accent">pick one</span></h2>
+    <table class="k">
+      <tr><th>Mechanism</th><th>Reach for it when…</th></tr>
+      <tr><td><b>Built-in tool</b></td><td>a generic, already-available capability — file I/O, shell, web</td></tr>
+      <tr><td><b>Custom tool</b></td><td>one app, one specific function, no reuse elsewhere</td></tr>
+      <tr><td><b>Skill</b></td><td>a repeatable <i>process / judgement call</i> — <b>no new live data</b></td></tr>
+      <tr><td><b>MCP server</b></td><td>multiple apps need the <b>same live/dynamic data or action</b>, maintained independently</td></tr>
+    </table>
+    <ul class="clean">
+      <li>"MCP connects Claude to <b>data</b>; Skills teach Claude <b>what to do</b> with it." A production agent usually uses <b>all of them together</b>.</li>
+      <li>Scenario needs fresh or external data → it's a tool or an MCP, <b>never</b> a Skill.</li>
+      <li>MCP tool schemas are <b>deferred by default</b> — loaded on demand, so they don't cost context until used.</li>
+    </ul>
+    <p class="refs">Briefing: <code>topic-briefings.md</code> · Day 3 · "MCP &amp; the tool-choice framework" · <code>blueprint-mastery-map.md</code> 8.3</p>
   </section>
 
   <section class="slide">

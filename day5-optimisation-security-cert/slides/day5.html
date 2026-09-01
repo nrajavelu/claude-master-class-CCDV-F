@@ -154,6 +154,7 @@
       <li>Silent invalidators: <code>datetime.now()</code> in the system prompt, unsorted <code>json.dumps</code>, a varying tool set.</li>
       <li>Verify with <code>usage.cache_read_input_tokens</code> — 0 across repeats = something's invalidating.</li>
       <li>Cache read ≈ 0.1× input price · cache write ≈ 1.25×.</li>
+      <li><b>Automatic</b> = one top-level breakpoint that slides forward. <b>Explicit</b> = up to <b>4 breakpoints</b>, a <b>20-block lookback</b>, a <b>minimum token threshold</b> per block (shorter prefixes silently don't cache), <b>5-min</b> or <b>1-hr</b> TTL (1-hr costs more to write).</li>
     </ul>
     <a class="watch-chip" href="../../portal/watch.html?s=build&e=11" target="_blank">Build-along · Ep 11</a>
   </section>
@@ -183,6 +184,7 @@
       </svg>
     </div>
     <p class="muted">~50% cost, non-latency-sensitive. "10,000 documents overnight, cost matters, nobody waits" → Batch. Not "run in parallel", not "cap tokens".</p>
+    <p class="muted"><b>Limits:</b> ≤ <b>100,000 requests</b> or <b>256 MB</b> per batch · ≤ <b>24 h</b> turnaround. <b>Chunking a loop over the sync endpoint is not batching</b> — the API sees one request per item, same rate limits, same per-request cost. The Message Batches API is a different submission model.</p>
     <a class="watch-chip" href="../../portal/watch.html?l=11" target="_blank">1:40:56 · L11</a>
   </section>
 
@@ -207,9 +209,9 @@
     <h2>An image is <span class="accent">built-in tokens</span></h2>
     <ul class="clean">
       <li>An image rides as another content block in the same <code>messages</code> list — no separate endpoint.</li>
-      <li>It's cut into patches → a bigger picture is a bigger bill. <b>If you have the text, send the text.</b></li>
-      <li>A PDF is billed <b>twice</b> — once as its text, once as each page rendered to an image.</li>
-      <li>Animations count by their first frame. Citations: set <code>citations:{enabled:true}</code> on each <code>document</code> block.</li>
+      <li>Cut into <b>28×28-pixel patches</b>: <code>tokens ≈ ⌈w/28⌉ × ⌈h/28⌉</code>. A <b>1000×1000 image ≈ 1,296 tokens</b> — ten hi-res screenshots ≈ a detailed system prompt. <b>If you have the text, send the text.</b></li>
+      <li>Source types: <code>base64</code> (re-sent every turn) · <code>url</code> · Files API <code>file_id</code> (upload once — best for multi-image). A PDF uses a <code>document</code> block, billed <b>twice</b> — as text and as each page rendered to an image.</li>
+      <li>Measure typical production images against the context budget <b>at design time</b> — a resize is a 10-minute pre-deploy fix. Citations: <code>citations:{enabled:true}</code> per <code>document</code> block.</li>
     </ul>
     <a class="watch-chip" href="../../portal/watch.html?l=3" target="_blank">18:40 · L3</a>
   </section>

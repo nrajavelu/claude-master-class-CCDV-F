@@ -59,7 +59,8 @@
         <text class="d-sub" x="512" y="202">any engineer can deploy + roll back</text>
       </svg>
     </div>
-    <p class="muted">Infrastructure = what it runs on <i>and</i> what the team must be able to do to it. Every stem in this skill asks you to sort or derive one list.</p>
+    <p class="muted">Infrastructure requirements sit on <b>four axes</b>: <b>latency</b> (measured from the <i>user's</i> region) · <b>scale</b> (peak volume) · <b>residency</b> (where data is processed / which regulation) · <b>identity</b> (credential model + audit trail).</p>
+    <p class="muted"><b>"Help agents respond faster" is a business problem, not a requirement.</b> Requirements are <i>derived</i> from it, are verifiable, and trace back to a regulation or a stakeholder — and they become your <b>eval criteria + design constraints</b>. Every stem in this skill asks you to sort or derive one list.</p>
     <a class="watch-chip" href="../../portal/watch.html?l=4" target="_blank">28:36 · L4</a>
   </section>
 
@@ -81,6 +82,7 @@
       </svg>
     </div>
     <p class="muted">"Implement" ≠ write the code. Who deploys → implement. Who gets the 2 a.m. call → operate. When it's retired → maintain.</p>
+    <p class="muted">The guide's fuller arc: <b>Requirements → Design → Build → Test → Deploy → Operate → Iterate</b>, with <b>gates</b> — residency clears <i>Design</i>; a new model version passes the <b>eval baseline</b> before <i>Deploy</i>. <b>Build the eval suite during Build</b> — it gates deploys and validates every later change. Claude apps need <b>continuous</b> monitoring: model behaviour can shift on a version bump, prompts drift with usage.</p>
   </section>
 
   <section class="slide section"><div class="num">Module 3</div><h1>Software-engineering foundations</h1></section>
@@ -140,6 +142,19 @@
       <li>Output shape — prose for a human, a schema for a dashboard. Session hygiene — one session per task (<code>clear</code> / <code>compact</code> / <code>inspect</code>).</li>
     </ul>
     <p class="muted">Application design is the single biggest D2 sub-skill — worth more than Claude Code + Debugging combined.</p>
+  </section>
+
+  <section class="slide">
+    <span class="chip exam">Exam watch · Claude Application Design · D2 (8.6%)</span>
+    <h2>Where the model <span class="accent">runs</span> — and what that rules out</h2>
+    <p class="focus-code">first-party Claude API &nbsp;·&nbsp; Claude Platform on AWS &nbsp;·&nbsp; Amazon Bedrock (Messages API) &nbsp;·&nbsp; Bedrock legacy &nbsp;·&nbsp; Google Vertex AI &nbsp;·&nbsp; third-party (e.g. Microsoft Foundry)</p>
+    <ul class="clean">
+      <li>Choice follows the <b>customer's cloud + compliance posture</b>, not the developer's familiarity. Measure on <b>three</b>: latency (from the customer's actual region, actual payload) · compliance (<b>pass/fail at scoping</b>) · total cost per call (tokens + egress + integration).</li>
+      <li><b>Regulated-data routes decide endpoint / credentials / log destination before any prompt or tool is designed:</b></li>
+      <li><b>Direct API has no EU residency</b> → route via Bedrock/Vertex with the region pinned. <b>HIPAA BAA excludes</b> Console / Workbench / beta / consumer. <b>FedRAMP</b> only via C4G / Bedrock GovCloud / Vertex Assured Workloads. <b>Managed Agents</b> — not ZDR / HIPAA-BAA eligible.</li>
+      <li>A strict system prompt is <b>not</b> a residency or compliance control.</li>
+    </ul>
+    <p class="refs">Briefing: <code>topic-briefings.md</code> · Day 4 · "Deployment platforms &amp; regulated data" · <code>blueprint-mastery-map.md</code> 2.5</p>
   </section>
 
   <section class="slide">
@@ -255,6 +270,7 @@
       </svg>
     </div>
     <p class="muted">Output wording varies by design — test the contract. Introduce a regression (drop the citation instruction) → tests go red, each naming the case + failed check.</p>
+    <p class="muted"><b>Grading method is a decision tree:</b> one exact label → string match · structured output → a code-graded check · open-ended quality → <b>LLM-as-judge</b> (calibrate against human labels first). <b>Judge technique:</b> ask for strengths / weaknesses / reasoning <i>before</i> the score, or it drifts to a safe ~6. The golden set runs on <b>every</b> prompt or model change.</p>
   </section>
 
   <section class="slide">
