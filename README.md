@@ -153,7 +153,7 @@ your browser; `--lan` to share on Wi-Fi), or host on GitHub Pages — see `porta
 | `capstone-support-assistant/` (README+4-week plan · `assistant.py` + `starter/` · `tools.py` · `config.toml` · `golden_set.jsonl`) | ✅ |
 | `evals/` (harness · checks · example golden set · pytest wrapper) | ✅ |
 | `day5-.../mock-exam/` — **`mock-exam-A.md` (53) + key + `exam-day-strategy.md`** | ✅ |
-| `question-bank/` — README (8 domains) + Domain 2 pool (28) + **scenario-questions (16 worked)** + domains 1,3–8 seeded | 🟡 domains 3–8 to full count |
+| `question-bank/` — **domains 1, 3, 4, 5, 6, 7, 8 filled to target (114 items)** + Domain 2 pool (28) + **scenario-questions (16 worked)** | 🟡 D2 non-API sub-areas to fill |
 
 Follow-up build passes are listed at the end of `logistics/03` and in the plan.
 

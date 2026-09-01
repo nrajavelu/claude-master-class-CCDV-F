@@ -30,19 +30,20 @@ JDG (best-practice judgement).
 
 | File | Domain | Weight | Sub-areas | Item target | Status |
 |---|---|---:|---|---:|---|
-| `domain-1-agents-workflows.md` | D1 Agents and Workflows | 14.7% | Agent Architecture · Agent Construction · Patterns & Frameworks | 24 | 🟡 blueprint |
-| `domain-2-applications-integration.md` | D2 Applications and Integration | **33.1%** | Understanding Requirements · Systems Life Cycle · **Claude API Mechanics** · Software Engineering Foundations · Application Design · Configuration Management | 48 | ✅ API-Mechanics pool done (28); other sub-areas 🟡 |
-| `domain-3-claude-code.md` | D3 Claude Code | 3.1% | Claude Code Operation | 8 | 🟡 blueprint |
-| `domain-4-eval-testing-debugging.md` | D4 Eval, Testing, and Debugging | 2.6% | Debugging & Error Handling | 8 | 🟡 blueprint |
-| `domain-5-model-selection-optimisation.md` | D5 Model Selection and Optimisation | 16.8% | LLM Fundamentals · Technical Fundamentals · Model Selection & Trade-offs · Cost & Token Management | 26 | 🟡 blueprint |
-| `domain-6-prompt-context-engineering.md` | D6 Prompt and Context Engineering | 11% | Context Engineering · Prompt Engineering · Output Handling | 18 | 🟡 blueprint |
-| `domain-7-security-safety.md` | D7 Security and Safety | 8.1% | AI Application Security · Guardrails & Safe Deployment · Claude Hooks · Identity/Secrets/Key Mgmt | 14 | 🟡 blueprint |
-| `domain-8-tools-mcps.md` | D8 Tools and MCPs | 10.6% | Tool Implementation · MCP Server Development · Agentic Customisation | 16 | 🟡 blueprint |
-| `scenario-questions.md` | cross-domain "what next" | — | — | 15 | 🟡 blueprint |
+| `domain-1-agents-workflows.md` | D1 Agents and Workflows | 14.7% | Agent Architecture · Agent Construction · Patterns & Frameworks | 24 | ✅ 24/24 |
+| `domain-2-applications-integration.md` | D2 Applications and Integration | **33.1%** | Understanding Requirements · Systems Life Cycle · **Claude API Mechanics** · Software Engineering Foundations · Application Design · Configuration Management | 48 | 🟡 28/48 — API-Mechanics pool done; other sub-areas to fill |
+| `domain-3-claude-code.md` | D3 Claude Code | 3.1% | Claude Code Operation | 8 | ✅ 8/8 |
+| `domain-4-eval-testing-debugging.md` | D4 Eval, Testing, and Debugging | 2.6% | Debugging & Error Handling | 8 | ✅ 8/8 |
+| `domain-5-model-selection-optimisation.md` | D5 Model Selection and Optimisation | 16.8% | LLM Fundamentals · Technical Fundamentals · Model Selection & Trade-offs · Cost & Token Management | 26 | ✅ 26/26 |
+| `domain-6-prompt-context-engineering.md` | D6 Prompt and Context Engineering | 11% | Context Engineering · Prompt Engineering · Output Handling | 18 | ✅ 18/18 |
+| `domain-7-security-safety.md` | D7 Security and Safety | 8.1% | AI Application Security · Guardrails & Safe Deployment · Claude Hooks · Identity/Secrets/Key Mgmt | 14 | ✅ 14/14 |
+| `domain-8-tools-mcps.md` | D8 Tools and MCPs | 10.6% | Tool Implementation · MCP Server Development · Agentic Customisation | 16 | ✅ 16/16 |
+| `scenario-questions.md` | cross-domain "what next" | — | — | 15 | 🟡 16 worked |
 
-**~185 items** at target, allocated ≈ to domain weight. Domain 2's **Claude API Mechanics**
-sub-pool (28 items, from Day 1) is complete and is the writing pattern for the rest — built
-in follow-up passes alongside Days 2–5.
+**~185 items** at target, allocated ≈ to domain weight. **158 written** so far
+(24+28+8+8+26+18+14+16 domain items + 16 scenarios); the remaining gap is Domain 2's
+non-API-Mechanics sub-areas (Requirements · Life Cycle · SW-Eng · App Design · Config Mgmt),
+whose facts are already carried by `../blueprint-mastery-map.md` and the 53-item mock.
 
 ---
 
