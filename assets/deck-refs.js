@@ -21,23 +21,29 @@
     var seg = location.pathname.split('/').filter(Boolean);          // …/dayN-x/slides/dayN.html
     var dayFolder = seg.length >= 3 ? seg[seg.length - 3] : '';       // "day1-foundations"
     var ROOT_FILES = ['topic-briefings.md', 'blueprint-mastery-map.md', 'curriculum-map.md',
-      'reasoning-patterns.md', 'video-companion.md', 'THEME.md', 'README.md'];
+      'reasoning-patterns.md', 'video-companion.md'];
     var ROOT_DIRS = ['question-bank/', 'code-snippets/', 'logistics/', 'evals/',
-      'capstone-support-assistant/', 'day0-prework/', 'portal/', 'assets/'];
-    var DAY_FILES = ['quiz.md', 'exercises.md', 'exam-style-questions.md', 'recap.html'];
+      'capstone-support-assistant/', 'day0-prework/', 'portal/', 'tools/'];
+    var DAY_DIRS = ['labs/', 'mock-exam/', 'slides/'];               // live inside dayN-*/
+    var DAY_FILES = ['quiz.md', 'exercises.md', 'exam-style-questions.md',
+      'trainer-guide.md', 'recap.html'];
     var pathRe = /^(?:[\w.@-]+\/)*[\w.@-]+\.(md|py|html|jsonl|txt|toml|json|sh)$/;
 
     function toPortalRel(p) {                       // -> path relative to portal/ (null = can't link)
+      if (/^[.~]/.test(p)) return null;                              // .claude/…, ~/…, .mcp.json
       if (/^ep\d\d\//.test(p)) return null;                          // parent repo — not served here
-      if (/^day[0-9]/.test(p.split('/')[0])) return '../' + p;       // day4-…/labs/…
-      if (p.indexOf('labs/') === 0 && dayFolder) return '../' + dayFolder + '/' + p;
-      for (var i = 0; i < ROOT_DIRS.length; i++) if (p.indexOf(ROOT_DIRS[i]) === 0) return '../' + p;
+      if (/^day[0-9]/.test(p.split('/')[0])) return '../' + p;       // already day-prefixed
+      var i;
+      for (i = 0; i < DAY_DIRS.length; i++)
+        if (p.indexOf(DAY_DIRS[i]) === 0) return dayFolder ? '../' + dayFolder + '/' + p : null;
+      for (i = 0; i < ROOT_DIRS.length; i++)
+        if (p.indexOf(ROOT_DIRS[i]) === 0) return '../' + p;
+      if (/^domain-[0-9].*\.md$/.test(p)) return '../question-bank/' + p;   // bare domain-N-*.md
       if (p.indexOf('/') === -1) {
         if (ROOT_FILES.indexOf(p) > -1) return '../' + p;
-        if (DAY_FILES.indexOf(p) > -1 && dayFolder) return '../' + dayFolder + '/' + p;
-        return null;
+        if (DAY_FILES.indexOf(p) > -1) return dayFolder ? '../' + dayFolder + '/' + p : null;
       }
-      return '../' + p;                                             // default: bootcamp-root relative
+      return null;                                                  // unknown shape — don't guess
     }
 
     document.querySelectorAll('.slide code').forEach(function (el) {
